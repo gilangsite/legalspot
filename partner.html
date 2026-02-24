@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Partner — Legalspot</title>
+    <link rel="icon" type="image/png" href="/assets/images/legalspot-logo.png" />
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+</head>
+
+<body data-page="partner">
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="section-label">Program Kemitraan</div>
+            <h1 class="section-title">
+                <span class="text-gradient-gray">Bangun Karir</span><br />
+                <span class="text-gradient-navy">Sebagai Agen Pajak</span>
+            </h1>
+            <p class="section-subtitle">
+                Bergabunglah dengan ekosistem Legalspot dan jadilah solusi bagi wajib pajak di seluruh Indonesia.
+            </p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container" style="max-width:800px;">
+            <div class="card" style="padding:var(--space-2xl); text-align:center;">
+                <h2 style="color:var(--white); margin-bottom:1rem;">Daftar Menjadi Mitra</h2>
+                <p style="color:var(--gray-mid); margin-bottom:2rem;">Dapatkan akses ke platform, sertifikasi, dan
+                    komisi menarik dari setiap klien yang Anda tangani.</p>
+
+                <form id="partnerForm" style="display:grid; gap:1.5rem; text-align:left;">
+                    <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                        <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nama Lengkap</label>
+                        <input type="text" id="namaLengkap" placeholder="Masukkan nama lengkap Anda" required
+                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                        <label style="color:var(--gray-light); font-size:var(--fs-sm);">Background Pendidikan</label>
+                        <select id="pendidikan" required
+                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%; appearance:none;">
+                            <option value="" disabled selected>Pilih Background Pendidikan</option>
+                            <option value="Mahasiswa Aktif">Mahasiswa Aktif</option>
+                            <option value="Sarjana Akuntansi">Sarjana Akuntansi</option>
+                            <option value="Sarjana Perpajakan">Sarjana Perpajakan</option>
+                            <option value="Sarjana Ekonomi">Sarjana Ekonomi</option>
+                        </select>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                        <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nama Universitas</label>
+                        <input type="text" id="universitas" placeholder="Contoh: Universitas Indonesia" required
+                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                        <label style="color:var(--gray-light); font-size:var(--fs-sm);">Usia</label>
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <span style="color:var(--gray-mid); font-size:var(--fs-sm);">(</span>
+                            <input type="number" id="usia" placeholder="25" required min="17" max="99"
+                                style="background:var(--black-soft); border:1px solid var(--border); padding:0.8rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:80px; text-align:center;">
+                            <span style="color:var(--gray-mid); font-size:var(--fs-sm);">) Tahun</span>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                        <label style="color:var(--gray-light); font-size:var(--fs-sm);">Domisili</label>
+                        <input type="text" id="domisili" placeholder="Kota/Kabupaten" required
+                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                            <label style="color:var(--gray-light); font-size:var(--fs-sm);">Email Aktif</label>
+                            <input type="email" id="email" placeholder="email@address.com" required
+                                style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                            <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nomor WhatsApp</label>
+                            <input type="tel" id="whatsapp" placeholder="08..." required
+                                style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                        <label style="color:var(--gray-light); font-size:var(--fs-sm);">Mengetahui Informasi Legalspot
+                            Dari</label>
+                        <select id="infoSource" required onchange="toggleRefferalInput()"
+                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%; appearance:none;">
+                            <option value="" disabled selected>Pilih Sumber Informasi</option>
+                            <option value="Social Media">Social Media</option>
+                            <option value="WA Group">WA Group</option>
+                            <option value="Google">Google</option>
+                            <option value="Iklan">Iklan</option>
+                            <option value="Refferal">Refferal</option>
+                        </select>
+                    </div>
+
+                    <div id="refferalBox" style="display:none; grid-template-columns:1fr; gap:0.5rem;">
+                        <label style="color:var(--gray-light); font-size:var(--fs-sm);">Sebutkan Nama orang yang
+                            memberitahu informasi</label>
+                        <input type="text" id="refferalName" placeholder="Nama Refferal"
+                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg"
+                        style="width:100%; justify-content:center; margin-top:1rem;">Submit Pendaftaran</button>
+
+                    <div id="formStatus"
+                        style="display:none; margin-top:1rem; padding:1rem; border-radius:var(--radius-sm); font-size:var(--fs-sm); text-align:center;">
+                    </div>
+                </form>
+
+                <script>
+                    function toggleRefferalInput() {
+                        const infoSource = document.getElementById('infoSource').value;
+                        const refferalBox = document.getElementById('refferalBox');
+                        if (infoSource === 'Refferal') {
+                            refferalBox.style.display = 'grid';
+                            document.getElementById('refferalName').required = true;
+                        } else {
+                            refferalBox.style.display = 'none';
+                            document.getElementById('refferalName').required = false;
+                        }
+                    }
+
+                    document.getElementById('partnerForm').addEventListener('submit', async function (e) {
+                        e.preventDefault();
+                        const btn = this.querySelector('button[type="submit"]');
+                        const status = document.getElementById('formStatus');
+
+                        btn.innerHTML = 'Memproses...';
+                        btn.disabled = true;
+
+                        const formData = {
+                            nama: document.getElementById('namaLengkap').value,
+                            pendidikan: document.getElementById('pendidikan').value,
+                            universitas: document.getElementById('universitas').value,
+                            usia: document.getElementById('usia').value,
+                            domisili: document.getElementById('domisili').value,
+                            email: document.getElementById('email').value,
+                            whatsapp: document.getElementById('whatsapp').value,
+                            sumberInfo: document.getElementById('infoSource').value,
+                            refferalName: document.getElementById('refferalName').value
+                        };
+
+                        try {
+                            await LegalspotAPI.registerPartner(formData);
+
+                            status.style.display = 'block';
+                            status.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+                            status.style.color = '#10b981';
+                            status.style.border = '1px solid #10b981';
+                            status.innerHTML = 'Pendaftaran berhasil disubmit. Silakan cek email Anda untuk konfirmasi.';
+
+                            this.reset();
+                            toggleRefferalInput();
+                        } catch (err) {
+                            status.style.display = 'block';
+                            status.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                            status.style.color = '#ef4444';
+                            status.style.border = '1px solid #ef4444';
+                            status.innerHTML = 'Terjadi kesalahan. Silakan coba lagi nanti.';
+                        } finally {
+                            btn.innerHTML = 'Submit Pendaftaran';
+                            btn.disabled = false;
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/navbar.js"></script>
+</body>
+
+</html>

@@ -34,10 +34,10 @@
         </div>
     </section>
 
-    <section class="section">
+    <section class="section section-light">
         <div class="container" style="max-width:800px;">
-            <div class="card" style="padding:var(--space-2xl); text-align:center;">
-                <h2 style="color:var(--white); margin-bottom:1rem;">Daftar Menjadi Mitra</h2>
+            <div class="card card-light" style="padding:var(--space-2xl); text-align:center;">
+                <h2 style="margin-bottom:1rem;">Daftar Menjadi Mitra</h2>
                 <p style="color:var(--gray-mid); margin-bottom:2rem;">Dapatkan akses ke platform, sertifikasi, dan
                     komisi menarik dari setiap klien yang Anda tangani.</p>
 
@@ -45,13 +45,12 @@
                     <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                         <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nama Lengkap</label>
                         <input type="text" id="namaLengkap" placeholder="Masukkan nama lengkap Anda" required
-                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                            class="form-input">
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                         <label style="color:var(--gray-light); font-size:var(--fs-sm);">Background Pendidikan</label>
-                        <select id="pendidikan" required
-                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%; appearance:none;">
+                        <select id="pendidikan" required class="form-select">
                             <option value="" disabled selected>Pilih Background Pendidikan</option>
                             <option value="Mahasiswa Aktif">Mahasiswa Aktif</option>
                             <option value="Sarjana Akuntansi">Sarjana Akuntansi</option>
@@ -63,7 +62,7 @@
                     <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                         <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nama Universitas</label>
                         <input type="text" id="universitas" placeholder="Contoh: Universitas Indonesia" required
-                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                            class="form-input">
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
@@ -71,27 +70,24 @@
                         <div style="display:flex; align-items:center; gap:0.5rem;">
                             <span style="color:var(--gray-mid); font-size:var(--fs-sm);">(</span>
                             <input type="number" id="usia" placeholder="25" required min="17" max="99"
-                                style="background:var(--black-soft); border:1px solid var(--border); padding:0.8rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:80px; text-align:center;">
+                                class="form-input" style="width:80px; text-align:center;">
                             <span style="color:var(--gray-mid); font-size:var(--fs-sm);">) Tahun</span>
                         </div>
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                         <label style="color:var(--gray-light); font-size:var(--fs-sm);">Domisili</label>
-                        <input type="text" id="domisili" placeholder="Kota/Kabupaten" required
-                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                        <input type="text" id="domisili" placeholder="Kota/Kabupaten" required class="form-input">
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
                         <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                             <label style="color:var(--gray-light); font-size:var(--fs-sm);">Email Aktif</label>
-                            <input type="email" id="email" placeholder="email@address.com" required
-                                style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                            <input type="email" id="email" placeholder="email@address.com" required class="form-input">
                         </div>
                         <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                             <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nomor WhatsApp</label>
-                            <input type="tel" id="whatsapp" placeholder="08..." required
-                                style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                            <input type="tel" id="whatsapp" placeholder="08..." required class="form-input">
                         </div>
                     </div>
 

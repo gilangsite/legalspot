@@ -137,7 +137,7 @@
 
 /* ---- ABOUT SECTION ---- */
 .about-section {
-    background: var(--black-soft);
+    /* Background handled by section-light utility if applied */
 }
 
 .about-grid {
@@ -361,7 +361,7 @@
 
 /* ---- VISION & MISSION ---- */
 .vm-section {
-    background: var(--black-soft);
+    /* Background handled by section-light utility if applied */
 }
 
 .vm-grid {

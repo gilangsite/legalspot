@@ -58,10 +58,16 @@
   /* Gradient presets - More Dramatic */
   --grad-headline-gray: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
   --grad-headline-navy: linear-gradient(135deg, #ffffff 0%, #3b82f6 100%);
+  --grad-headline-dark: linear-gradient(135deg, #030303 0%, #475569 100%);
+  --grad-headline-navy-dark: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
   --grad-navy-button: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
   --grad-glow: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
   --grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
 
+  /* Light mode tokens */
+  --white-bg: #ffffff;
+  --white-card: #fdfdfd;
+  --border-light: rgba(0, 0, 0, 0.08);
   /* Typography scale */
   --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;
@@ -95,6 +101,69 @@
   /* Transitions */
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- LIGHT SECTION UTILITIES ---------- */
+.section-light {
+  background-color: var(--white-bg) !important;
+  color: var(--black) !important;
+}
+
+.section-light .section-title .text-gradient-gray {
+  background: var(--grad-headline-dark) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.section-light .section-title .text-gradient-navy {
+  background: var(--grad-headline-navy-dark) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.section-light .section-subtitle {
+  color: var(--gray-dark);
+}
+
+.section-light .card:not(.card-light) {
+  background: var(--black-card);
+  color: var(--white-muted);
+}
+
+.card-light {
+  background: var(--white-card) !important;
+  border: 1px solid var(--border-light) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  color: var(--black) !important;
+}
+
+.card-light h3,
+.card-light h4 {
+  color: var(--black) !important;
+}
+
+.card-light p {
+  color: var(--gray-dark) !important;
+}
+
+.section-light .form-label {
+  color: var(--gray-dark) !important;
+}
+
+.section-light .form-input,
+.section-light .form-select,
+.section-light .form-textarea {
+  background: var(--white) !important;
+  border-color: var(--border-light) !important;
+  color: var(--black) !important;
+}
+
+.section-light .form-input:focus,
+.section-light .form-select:focus,
+.section-light .form-textarea:focus {
+  border-color: var(--navy-bright) !important;
 }
 
 /* ---------- RESET ---------- */

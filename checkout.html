@@ -25,44 +25,39 @@
         </div>
     </section>
 
-    <section class="section">
+    <section class="section section-light">
         <div class="container" style="max-width:800px;">
-            <div class="card" style="padding:var(--space-2xl);">
+            <div class="card card-light" style="padding:var(--space-2xl);">
                 <form id="checkoutForm" style="display:grid; gap:1.5rem; text-align:left;">
-                    <h3
-                        style="color:var(--white); border-bottom:1px solid var(--border); padding-bottom:1rem; margin-bottom:0.5rem;">
+                    <h3 style="border-bottom:1px solid var(--border-light); padding-bottom:1rem; margin-bottom:0.5rem;">
                         Data Klien</h3>
 
                     <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                         <label style="color:var(--gray-light); font-size:var(--fs-sm);">Product yang Dipilih</label>
-                        <input type="text" id="productName" readonly
-                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%; cursor:not-allowed; opacity:0.8;">
+                        <input type="text" id="productName" readonly class="form-input"
+                            style="cursor:not-allowed; opacity:0.8;">
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
                         <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                             <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nama Lengkap</label>
-                            <input type="text" id="namaLengkap" required
-                                style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                            <input type="text" id="namaLengkap" required class="form-input">
                         </div>
                         <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                             <label style="color:var(--gray-light); font-size:var(--fs-sm);">Email Aktif</label>
-                            <input type="email" id="email" required
-                                style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                            <input type="email" id="email" required class="form-input">
                         </div>
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                         <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nama Bisnis</label>
-                        <input type="text" id="namaBisnis" required
-                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                        <input type="text" id="namaBisnis" required class="form-input">
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
                         <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                             <label style="color:var(--gray-light); font-size:var(--fs-sm);">Omzet Bisnis 1 Tahun</label>
-                            <select id="omzet" required
-                                style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%; appearance:none;">
+                            <select id="omzet" required class="form-select">
                                 <option value="" disabled selected>Pilih Omzet</option>
                                 <option value="< 100 Juta">&lt; 100 Juta</option>
                                 <option value="100 Juta - 1 Miliyar">100 Juta - 1 Miliyar</option>
@@ -71,8 +66,7 @@
                         </div>
                         <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                             <label style="color:var(--gray-light); font-size:var(--fs-sm);">Bisnis Kategori</label>
-                            <select id="kategori" required
-                                style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%; appearance:none;">
+                            <select id="kategori" required class="form-select">
                                 <option value="" disabled selected>Pilih Kategori</option>
                                 <option value="Retail">Retail</option>
                                 <option value="FMCG">FMCG</option>
@@ -89,10 +83,10 @@
                         Order Summary</h3>
 
                     <div
-                        style="background:var(--black-soft); border:1px solid var(--border); border-radius:var(--radius-md); padding:1.5rem; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+                        style="background:var(--white-muted); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:1.5rem;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
-                            <span style="color:var(--gray-light);">Subtotal</span>
-                            <span style="color:var(--white); font-weight:600;" id="subtotal">Rp 0</span>
+                            <span style="color:var(--gray-dark);">Subtotal</span>
+                            <span style="font-weight:600;" id="subtotal">Rp 0</span>
                         </div>
                         <div
                             style="display:grid; grid-template-columns:1fr auto; gap:0.5rem; margin-bottom:1rem; align-items:center;">
@@ -107,13 +101,13 @@
                             <span id="discountVal">- Rp 0</span>
                         </div>
                         <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
-                            <span style="color:var(--gray-light);">PPN (11%)</span>
-                            <span style="color:var(--white);" id="taxVal">Rp 0</span>
+                            <span style="color:var(--gray-dark);">PPN (11%)</span>
+                            <span id="taxVal">Rp 0</span>
                         </div>
                         <div style="height:1px; background:var(--border); margin:1rem 0;"></div>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <span
-                                style="color:var(--white); font-weight:600; font-size:1.1rem; text-transform:uppercase; letter-spacing:0.05em;">Total
+                                style="font-weight:600; font-size:1.1rem; text-transform:uppercase; letter-spacing:0.05em;">Total
                                 Pembayaran</span>
                             <span style="color:var(--navy-bright); font-weight:600; font-size:1.75rem;"
                                 id="finalPrice">Rp
@@ -126,14 +120,14 @@
                         Metode Pembayaran (Transfer Bank)</h3>
 
                     <div
-                        style="background:rgba(30, 64, 175, 0.1); border:1px solid var(--border-navy); border-radius:var(--radius-md); padding:1.5rem; display:flex; flex-direction:column; gap:0.5rem; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+                        style="background:rgba(30, 64, 175, 0.05); border:1px solid var(--border-navy); border-radius:var(--radius-md); padding:1.5rem; display:flex; flex-direction:column; gap:0.5rem;">
                         <div style="display:flex; align-items:center; justify-content:space-between;">
                             <div>
                                 <div
                                     style="color:var(--gray-mid); font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.2rem;">
                                     Bank
                                     Tujuan</div>
-                                <div style="color:var(--white); font-weight:600; font-size:1.5rem;">Bank BRI</div>
+                                <div style="font-weight:600; font-size:1.5rem;">Bank BRI</div>
                             </div>
                         </div>
                         <div style="margin-top:0.5rem;">
@@ -142,12 +136,11 @@
                                 Nomor
                                 Rekening</div>
                             <div
-                                style="display:flex; align-items:center; justify-content:space-between; background:var(--black); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-navy);">
-                                <span
-                                    style="color:var(--white); font-weight:600; letter-spacing:2px; font-size:1.25rem;"
+                                style="display:flex; align-items:center; justify-content:space-between; background:var(--white); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-navy);">
+                                <span style="font-weight:600; letter-spacing:2px; font-size:1.25rem;"
                                     id="rekNumber">114801010102504</span>
                                 <button type="button" onclick="copyRekening()"
-                                    style="background:var(--navy); color:white; border:none; padding:0.4rem 1rem; border-radius:var(--radius-sm); cursor:pointer; font-weight:600; font-size:var(--fs-xs);">Copy</button>
+                                    class="btn btn-primary btn-sm">Copy</button>
                             </div>
                         </div>
                         <div style="margin-top:0.5rem;">
@@ -155,7 +148,7 @@
                                 style="color:var(--gray-mid); font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.2rem;">
                                 Atas
                                 Nama</div>
-                            <div style="color:var(--white); font-weight:600; font-size:1.1rem;">Zain Patra Caraka</div>
+                            <div style="font-weight:600; font-size:1.1rem;">Zain Patra Caraka</div>
                         </div>
                     </div>
 

@@ -80,7 +80,7 @@ Font Family:
 
 Font Usage:
 
-* Garet SemiBold: headline, section title
+* Garet SemiBold / Bold: headline, section title (slimmer for minimalist look)
 * Garet Regular: body text, form, label
 
 Headline wajib menggunakan gradient:

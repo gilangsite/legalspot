@@ -80,7 +80,7 @@ Font Family:
 
 Font Usage:
 
-* Garet Black: headline, section title
+* Garet SemiBold: headline, section title
 * Garet Regular: body text, form, label
 
 Headline wajib menggunakan gradient:

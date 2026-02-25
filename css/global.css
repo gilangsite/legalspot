@@ -20,7 +20,7 @@
   src: url('../assets/fonts/Garet-Heavy.woff2') format('woff2'),
     url('../assets/fonts/Garet-Heavy.woff') format('woff'),
     url('../assets/fonts/Garet-Heavy.ttf') format('truetype');
-  font-weight: 900;
+  font-weight: 600 900;
   font-style: normal;
   font-display: swap;
 }
@@ -169,7 +169,7 @@ textarea {
 
 .section-label {
   font-size: var(--fs-xs);
-  font-weight: 900;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--navy-bright);
@@ -178,7 +178,7 @@ textarea {
 
 .section-title {
   font-size: clamp(var(--fs-2xl), 4vw, var(--fs-3xl));
-  font-weight: 900;
+  font-weight: 600;
   line-height: 1.15;
   margin-bottom: var(--space-md);
 }
@@ -286,7 +286,7 @@ textarea {
   padding: 0.75rem 1.75rem;
   border-radius: var(--radius-md);
   font-size: var(--fs-sm);
-  font-weight: 900;
+  font-weight: 600;
   letter-spacing: 0.04em;
   transition: var(--transition);
   cursor: pointer;
@@ -368,7 +368,7 @@ textarea {
 
 .form-label {
   font-size: var(--fs-sm);
-  font-weight: 900;
+  font-weight: 600;
   color: var(--gray-light);
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -489,7 +489,7 @@ textarea {
   padding: 0.25rem 0.65rem;
   border-radius: var(--radius-xl);
   font-size: var(--fs-xs);
-  font-weight: 900;
+  font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -582,7 +582,7 @@ textarea {
 
 .modal-title {
   font-size: var(--fs-lg);
-  font-weight: 900;
+  font-weight: 600;
 }
 
 .modal-close {

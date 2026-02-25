@@ -40,7 +40,7 @@
 
 .navbar-brand-name {
     font-size: var(--fs-lg);
-    font-weight: 900;
+    font-weight: 600;
     color: var(--white);
     letter-spacing: -0.02em;
 }
@@ -180,7 +180,7 @@
 
 .footer-col-title {
     font-size: var(--fs-sm);
-    font-weight: 900;
+    font-weight: 600;
     color: var(--white);
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -326,7 +326,7 @@
     align-items: center;
     justify-content: center;
     font-size: var(--fs-xs);
-    font-weight: 900;
+    font-weight: 600;
     color: var(--gray-mid);
     flex-shrink: 0;
     transition: var(--transition);
@@ -387,7 +387,7 @@
     border-radius: var(--radius-sm);
     color: var(--gray-light);
     font-size: var(--fs-xs);
-    font-weight: 900;
+    font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
 }

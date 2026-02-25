@@ -427,6 +427,12 @@ textarea {
   transform: translateY(-5px);
 }
 
+/* ---------- FORM CARDS ---------- */
+.page-card-form {
+  padding: var(--space-2xl);
+  text-align: left;
+}
+
 .glass-card {
   background-color: rgba(22, 22, 24, 0.75);
   background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
@@ -958,6 +964,10 @@ textarea {
 
   .section {
     padding: var(--space-xl) 0;
+  }
+
+  .page-card-form {
+    padding: var(--space-md) !important;
   }
 
   .grid-2,

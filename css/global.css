@@ -192,7 +192,9 @@
 }
 
 .card-light {
-  background: var(--white-bg) !important;
+  background-color: var(--white-bg) !important;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px) !important;
+  background-size: 20px 20px !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04) !important;
   color: #000000 !important;
@@ -401,7 +403,9 @@ textarea {
 
 /* ---------- CARDS ---------- */
 .card {
-  background: var(--black-card);
+  background-color: var(--black-card);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
@@ -418,7 +422,9 @@ textarea {
 }
 
 .glass-card {
-  background: rgba(22, 22, 24, 0.75);
+  background-color: rgba(22, 22, 24, 0.75);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);

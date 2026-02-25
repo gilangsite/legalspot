@@ -278,9 +278,12 @@
     max-width: 1000px;
     margin: 0 auto;
     padding: var(--space-xl);
-    background: var(--black-card);
-    border: 1px solid var(--border);
+    background-color: var(--white-bg);
+    background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: var(--radius-xl);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
 }
 
 .ceo-identity-aside {
@@ -312,13 +315,13 @@
 .ceo-name-small {
     font-size: var(--fs-base);
     font-weight: 700;
-    color: var(--white);
+    color: var(--black);
     margin-bottom: 0.2rem;
 }
 
 .ceo-role-small {
     font-size: var(--fs-xs);
-    color: var(--navy-bright);
+    color: var(--navy);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -349,7 +352,7 @@
 .ceo-quote-text {
     font-size: var(--fs-base);
     line-height: 1.8;
-    color: var(--white);
+    color: var(--black);
     font-style: italic;
     opacity: 0.9;
 }
@@ -544,7 +547,9 @@
 .testimonial-card {
     width: 340px;
     padding: var(--space-lg);
-    background: rgba(255, 255, 255, 0.03);
+    background-color: rgba(255, 255, 255, 0.03);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     display: flex;
@@ -555,7 +560,7 @@
 }
 
 .testimonial-card:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.05);
     border-color: var(--navy-bright);
     transform: translateY(-5px);
 }

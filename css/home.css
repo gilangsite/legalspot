@@ -590,7 +590,6 @@
     font-size: var(--fs-sm);
     color: var(--gray-light);
     line-height: 1.7;
-    font-style: italic;
     opacity: 0.85;
 }
 

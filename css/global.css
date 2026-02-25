@@ -109,22 +109,17 @@
   color: var(--black) !important;
 }
 
-.section-light .section-title .text-gradient-gray,
-.section-light h1 .text-gradient-gray,
-.section-light h2 .text-gradient-gray,
-.section-light h3 .text-gradient-gray,
-.section-light h4 .text-gradient-gray {
+/* Target the classes directly on the elements themselves */
+.section-light .text-gradient-gray,
+.card-light .text-gradient-gray {
   background: var(--grad-headline-dark) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
 }
 
-.section-light .section-title .text-gradient-navy,
-.section-light h1 .text-gradient-navy,
-.section-light h2 .text-gradient-navy,
-.section-light h3 .text-gradient-navy,
-.section-light h4 .text-gradient-navy {
+.section-light .text-gradient-navy,
+.card-light .text-gradient-navy {
   background: var(--grad-headline-navy-dark) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
@@ -139,6 +134,26 @@
 .card-light h2,
 .card-light h3,
 .card-light h4 {
+  color: #000000 !important;
+}
+
+.section-light .section-subtitle,
+.section-light .section-desc,
+.section-light .feature-text p,
+.section-light .vm-mission-item,
+.section-light li,
+.section-light p,
+.card-light p {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+/* Fix for VM Mission Bullets in Light Mode */
+.section-light .vm-mission-item::before {
+  background: var(--navy) !important;
+}
+
+.section-light .vm-mission-item {
   color: #000000 !important;
 }
 

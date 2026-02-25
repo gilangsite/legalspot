@@ -137,7 +137,7 @@
 
 /* ---- ABOUT SECTION ---- */
 .about-section {
-    /* Background handled by section-light utility if applied */
+    position: relative;
 }
 
 .about-grid {
@@ -372,7 +372,7 @@
 
 /* ---- VISION & MISSION ---- */
 .vm-section {
-    /* Background handled by section-light utility if applied */
+    position: relative;
 }
 
 .vm-grid {
@@ -504,6 +504,89 @@
     background: var(--white-muted);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ---- TESTIMONIALS ---- */
+.testimonials-section {
+    padding: var(--space-2xl) 0;
+    background: var(--black);
+    overflow: hidden;
+}
+
+.marquee-container {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-lg) 0;
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.marquee-track {
+    display: flex;
+    gap: var(--space-md);
+    animation: marquee 80s linear infinite;
+    width: max-content;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-50% - var(--space-md) / 2));
+    }
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+.testimonial-card {
+    width: 340px;
+    padding: var(--space-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.testimonial-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--navy-bright);
+    transform: translateY(-5px);
+}
+
+.testimonial-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-info .user-name {
+    font-size: var(--fs-base);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.1rem;
+}
+
+.user-info .user-role {
+    font-size: 11px;
+    color: var(--navy-bright);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.testimonial-text {
+    font-size: var(--fs-sm);
+    color: var(--gray-light);
+    line-height: 1.7;
+    font-style: italic;
+    opacity: 0.85;
 }
 
 /* Responsive */

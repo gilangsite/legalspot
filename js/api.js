@@ -53,29 +53,42 @@ const LegalspotAPI = {
      * @param {string} auth - Admin password for server-side validation
      */
     async getDashboardData(auth) {
-        try {
-            if (!auth) throw new Error('Sesi login tidak ditemukan. Silakan login kembali.');
+        if (!auth) throw new Error('Sesi login tidak ditemukan. Silakan login kembali.');
 
+        try {
+            // Coba GET dulu (paling cepat)
             const url = `${LEGALSPOT_CONFIG.GAS_ENDPOINT}?action=getDashboardData&auth=${encodeURIComponent(auth)}`;
             const response = await fetch(url);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const text = await response.text();
-            try {
-                return JSON.parse(text);
-            } catch (e) {
-                if (text === 'Unauthorized') {
-                    throw new Error('Sesi tidak valid atau password salah. Silakan login kembali.');
+            if (response.ok) {
+                const text = await response.text();
+                // Google Apps Script sering mengembalikan HTML atau text jika ada eror
+                if (text === 'Unauthorized') throw new Error('Password salah atau sesi tidak valid.');
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error('Bukan JSON (GET):', text);
+                    throw new Error('Format data tidak valid.');
                 }
-                console.error('Non-JSON response:', text);
-                throw new Error('Format data dari server tidak valid.');
             }
-        } catch (error) {
-            console.error('Fetch Dashboard Error:', error);
-            throw error;
+            throw new Error('Gagal memanggil server (GET).');
+        } catch (getErr) {
+            console.warn('GET gagal, mencoba POST fallback...', getErr);
+
+            // Fallback ke POST — biasanya jauh lebih stabil melewati CORS di Apps Script
+            try {
+                const postResponse = await fetch(LEGALSPOT_CONFIG.GAS_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'getDashboardData', auth: auth })
+                });
+
+                const postText = await postResponse.text();
+                return JSON.parse(postText);
+            } catch (postErr) {
+                console.error('Semua metode gagal:', postErr);
+                throw new Error('Terjadi kesalahan koneksi ke backend. Mohon pastikan AppScript sudah dideploy sebagai "Anyone".');
+            }
         }
     },
 

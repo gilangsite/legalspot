@@ -59,6 +59,11 @@ function doPost(e) {
       return registerPartner(data);
     } else if (action === "submitOrder") {
       return submitOrder(data);
+    } else if (action === "getDashboardData") {
+      const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
+      const partners = getSheetData(ss, "mitra_submissions");
+      const orders = getSheetData(ss, "client_orders");
+      return successResponse({ partners, orders });
     }
     
     return errorResponse("Action '" + action + "' tidak valid.");

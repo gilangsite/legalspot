@@ -94,8 +94,7 @@
                     <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
                         <label style="color:var(--gray-light); font-size:var(--fs-sm);">Mengetahui Informasi Legalspot
                             Dari</label>
-                        <select id="infoSource" required onchange="toggleRefferalInput()"
-                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%; appearance:none;">
+                        <select id="infoSource" required onchange="toggleRefferalInput()" class="form-select">
                             <option value="" disabled selected>Pilih Sumber Informasi</option>
                             <option value="Social Media">Social Media</option>
                             <option value="WA Group">WA Group</option>
@@ -108,8 +107,7 @@
                     <div id="refferalBox" style="display:none; grid-template-columns:1fr; gap:0.5rem;">
                         <label style="color:var(--gray-light); font-size:var(--fs-sm);">Sebutkan Nama orang yang
                             memberitahu informasi</label>
-                        <input type="text" id="refferalName" placeholder="Nama Refferal"
-                            style="background:var(--black-soft); border:1px solid var(--border); padding:1rem; border-radius:var(--radius-sm); color:var(--white); outline:none; width:100%;">
+                        <input type="text" id="refferalName" placeholder="Nama Refferal" class="form-input">
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-lg"

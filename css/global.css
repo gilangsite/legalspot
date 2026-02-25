@@ -105,6 +105,15 @@
 
 /* ---------- LIGHT SECTION UTILITIES ---------- */
 .section-light {
+  /* Cascade Theme Redefinition for Light Mode */
+  --gray-light: #475569;
+  --gray-mid: #64748b;
+  --gray-dark: #1e293b;
+  --white: #000000;
+  --white-muted: #334155;
+  --border: rgba(0, 0, 0, 0.1);
+  --border-light: rgba(0, 0, 0, 0.05);
+
   background-color: var(--white-bg) !important;
   background-image:
     radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
@@ -192,6 +201,15 @@
 }
 
 .card-light {
+  /* Cascade Theme Redefinition for Light Mode */
+  --gray-light: #475569;
+  --gray-mid: #64748b;
+  --gray-dark: #1e293b;
+  --white: #000000;
+  --white-muted: #334155;
+  --border: rgba(0, 0, 0, 0.1);
+  --border-light: rgba(0, 0, 0, 0.05);
+
   background-color: var(--white-bg) !important;
   background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px) !important;
   background-size: 20px 20px !important;

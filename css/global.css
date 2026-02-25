@@ -256,6 +256,13 @@
   padding: 0;
 }
 
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -268,7 +275,6 @@ body {
   color: var(--white-muted);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 img,

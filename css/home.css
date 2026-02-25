@@ -607,11 +607,20 @@
 
     .cta-banner-inner {
         flex-direction: column;
-        text-align: center;
+        align-items: flex-start;
+        text-align: left;
+        padding: var(--space-lg);
+        gap: var(--space-md);
+    }
+
+    .cta-banner-text h2 {
+        font-size: var(--fs-xl);
     }
 
     .cta-banner-btns {
-        justify-content: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        width: 100%;
     }
 }
 

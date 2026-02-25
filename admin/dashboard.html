@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Admin — Legalspot</title>
+    <link rel="icon" type="image/png" href="/assets/images/legalspot-logo.png" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <style>
+        :root {
+            --sidebar-width: 260px;
+        }
+
+        body {
+            background-color: var(--black);
+            display: flex;
+            min-height: 100vh;
+            color: var(--white);
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--black-soft);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: var(--space-md);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: var(--space-xl);
+            padding: 0 0.5rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.85rem 1rem;
+            color: var(--gray-mid);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            margin-bottom: 0.4rem;
+            cursor: pointer;
+            font-size: var(--fs-sm);
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--white);
+        }
+
+        .nav-item svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid var(--border);
+            padding-top: var(--space-md);
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: var(--space-lg);
+            max-width: calc(100vw - var(--sidebar-width));
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.5rem 1rem;
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+        }
+
+        .user-pill .avatar {
+            width: 28px;
+            height: 28px;
+            background: var(--grad-navy-button);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* --- Dashboard Stats --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+
+        .stat-card {
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+        }
+
+        .stat-card .label {
+            font-size: var(--fs-xs);
+            color: var(--gray-mid);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: var(--fs-xl);
+            font-weight: 700;
+        }
+
+        /* --- Data Tables --- */
+        .table-container {
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: var(--space-xl);
+        }
+
+        .table-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--fs-sm);
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            color: var(--gray-mid);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* --- Sections Visibility --- */
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: block;
+        }
+
+        /* Loading Overlay */
+        #loadingOverlay {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(59, 130, 246, 0.1);
+            border-top-color: var(--navy-bright);
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+            }
+
+            .sidebar .sidebar-brand-name,
+            .sidebar .nav-item span {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 80px;
+                max-width: calc(100vw - 80px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+        <p style="color:var(--gray-mid); font-size:var(--fs-sm);">Menyiapkan Dashboard...</p>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <img src="/assets/images/legalspot-logo.png" style="width:30px;" alt="Logo" />
+            <span class="navbar-brand-name sidebar-brand-name">Legal<span>spot</span></span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-item active" onclick="switchSection('overview')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="14" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                </svg>
+                <span>Overview</span>
+            </div>
+            <div class="nav-item" onclick="switchSection('partners')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                </svg>
+                <span>Partners</span>
+            </div>
+            <div class="nav-item" onclick="switchSection('orders')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 01-8 0" />
+                </svg>
+                <span>Orders</span>
+            </div>
+            <div class="nav-item" onclick="switchSection('logs')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z" />
+                    <polyline points="13 2 13 9 20 9" />
+                </svg>
+                <span>Admin Logs</span>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="nav-item" onclick="logout()" style="color:#f87171;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                <span>Logout</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="header">
+            <div>
+                <h2 style="font-size:var(--fs-xl); font-weight:600;">Dashboard Admin</h2>
+                <p style="color:var(--gray-mid); font-size:var(--fs-sm);">Selamat datang kembali, <span
+                        id="adminRole">Admin</span>.</p>
+            </div>
+            <div class="user-pill">
+                <div class="avatar">A</div>
+                <div style="font-size:var(--fs-xs);">admin@legalspot.id</div>
+            </div>
+        </header>
+
+        <!-- OVERVIEW SECTION -->
+        <section id="overviewSection" class="dashboard-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">Total Partners</div>
+                    <div class="value" id="statsTotalPartners">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Pending Orders</div>
+                    <div class="value" style="color:var(--navy-bright);" id="statsTotalOrders">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Today's Activity</div>
+                    <div class="value" style="color:#28a05a;">Running</div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 style="font-size:var(--fs-base);">Pendaftaran Menunggu Review</h3>
+                    <a href="javascript:void(0)" onclick="switchSection('partners')" class="btn btn-ghost btn-sm">Lihat
+                        Semua</a>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table id="overviewPartnersTable">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Nama</th>
+                                <th>Domisili</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PARTNERS SECTION -->
+        <section id="partnersSection" class="dashboard-section">
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 style="font-size:var(--fs-base);">Data Pendaftar Mitra</h3>
+                    <button onclick="fetchData()" class="btn btn-outline btn-sm">Refresh Data</button>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table id="fullPartnersTable">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Nama</th>
+                                <th>Kontak</th>
+                                <th>Background</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ORDERS SECTION -->
+        <section id="ordersSection" class="dashboard-section">
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 style="font-size:var(--fs-base);">Daftar Transaksi Client</h3>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table id="fullOrdersTable">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Nama / Bisnis</th>
+                                <th>Layanan</th>
+                                <th>Omzet</th>
+                                <th>Total Bayar</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOGS SECTION -->
+        <section id="logsSection" class="dashboard-section">
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 style="font-size:var(--fs-base);">Activity Logs</h3>
+                </div>
+                <div style="padding: 2rem; color:var(--gray-mid); text-align:center;">
+                    Fitur monitoring log real-time akan tersedia segera.
+                    <br>Cek log sistem saat ini di Google Sheets `admin_logs`.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script>
+        // Check Auth
+        const auth = localStorage.getItem('adminAuth');
+        if (auth !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        const adminPass = localStorage.getItem('adminPass') || "";
+        // Actual password stored in backend is "Legalspot2026$$"
+
+        let cachedData = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('adminRole').innerText = localStorage.getItem('adminRole') || 'Admin';
+            fetchData();
+        });
+
+        async function fetchData() {
+            try {
+                // We use the password from the backend script guide
+                const data = await LegalspotAPI.getDashboardData(adminPass);
+                if (data.status === 'success') {
+                    cachedData = data;
+                    renderDashboard(data);
+                } else {
+                    alert('Gagal mengambil data dari server: ' + data.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Terjadi kesalahan koneksi ke backend.');
+            } finally {
+                document.getElementById('loadingOverlay').style.opacity = '0';
+                setTimeout(() => document.getElementById('loadingOverlay').style.display = 'none', 500);
+            }
+        }
+
+        function renderDashboard(data) {
+            const partners = data.partners || [];
+            const orders = data.orders || [];
+
+            // Stats
+            document.getElementById('statsTotalPartners').innerText = partners.length;
+            document.getElementById('statsTotalOrders').innerText = orders.filter(o => o.status === 'PENDING').length;
+
+            // Overview Table (Top 5 Pending)
+            const pendingPartners = partners.filter(p => p.status === 'PENDING').slice(0, 5);
+            renderTable('overviewPartnersTable', pendingPartners, 'overview');
+
+            // Full Tables
+            renderTable('fullPartnersTable', partners, 'full-partners');
+            renderTable('fullOrdersTable', orders, 'full-orders');
+        }
+
+        function renderTable(id, data, type) {
+            const tb = document.querySelector(`#${id} tbody`);
+            tb.innerHTML = '';
+
+            if (data.length === 0) {
+                tb.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 2rem; color:var(--gray-mid);">Tidak ada data ditemukan.</td></tr>`;
+                return;
+            }
+
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                const date = new Date(item.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+
+                if (type === 'overview') {
+                    tr.innerHTML = `
+                        <td>${date}</td>
+                        <td>${item.nama}</td>
+                        <td>${item.domisili}</td>
+                        <td><span class="status-pill badge-${item.status.toLowerCase()}">${item.status}</span></td>
+                    `;
+                } else if (type === 'full-partners') {
+                    tr.innerHTML = `
+                        <td>${date}</td>
+                        <td>${item.nama}</td>
+                        <td>${item.email}<br><span style="color:var(--navy-bright); font-size:11px;">${item.whatsapp}</span></td>
+                        <td>${item.pendidikan}<br><span style="color:var(--gray-mid); font-size:11px;">${item.universitas}</span></td>
+                        <td><span class="status-pill badge-${item.status.toLowerCase()}">${item.status}</span></td>
+                        <td>
+                            <div class="actions">
+                                ${item.status === 'PENDING' ? `
+                                    <button class="btn btn-primary btn-sm" onclick="updateMitra('${item.email}', 'ACCEPTED')">Accept</button>
+                                    <button class="btn btn-outline btn-sm" onclick="updateMitra('${item.email}', 'DECLINED')">Decline</button>
+                                ` : '-'}
+                            </div>
+                        </td>
+                    `;
+                } else if (type === 'full-orders') {
+                    const price = Number(item.harga_final).toLocaleString('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 });
+                    tr.innerHTML = `
+                        <td>${date}</td>
+                        <td>${item.nama}<br><span style="color:var(--gray-mid); font-size:11px;">${item.bisnis}</span></td>
+                        <td>${item.produk}</td>
+                        <td>${item.omzet}</td>
+                        <td style="font-weight:700; color:var(--white);">${price}</td>
+                        <td><span class="status-pill badge-pending">${item.status}</span></td>
+                    `;
+                }
+                tb.appendChild(tr);
+            });
+        }
+
+        async function updateMitra(email, status) {
+            if (!confirm(`Apakah Anda yakin ingin mengubah status pendaftar ini menjadi ${status}?`)) return;
+
+            try {
+                const res = await LegalspotAPI.adminAction({
+                    actionType: 'updateMitraStatus',
+                    userEmail: email,
+                    status: status,
+                    auth: adminPass
+                });
+                alert('Berhasil memperbarui status. Email notifikasi akan dikirimkan.');
+                fetchData();
+            } catch (err) {
+                alert('Gagal memperbarui status.');
+            }
+        }
+
+        function switchSection(id) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.dashboard-section').forEach(el => el.classList.remove('active'));
+
+            event.currentTarget.classList.add('active');
+            document.getElementById(id + 'Section').classList.add('active');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

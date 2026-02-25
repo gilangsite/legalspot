@@ -120,10 +120,12 @@
 
             // Simulate Auth call
             setTimeout(() => {
-                if (mail === 'admin@legalspot.id' && pass === 'BismillahCuan2026') {
+                const VALID_PASS = "Legalspot2026$$";
+                if (mail === 'admin@legalspot.id' && pass === VALID_PASS) {
                     // Success
                     localStorage.setItem('adminAuth', 'true');
                     localStorage.setItem('adminRole', 'Super Visior');
+                    localStorage.setItem('adminPass', pass);
                     window.location.href = 'dashboard.html';
                 } else {
                     // Failed

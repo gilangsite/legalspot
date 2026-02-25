@@ -13,15 +13,15 @@
 
 // --- CONFIGURATION (Do NOT expose to client) ---
 const CONFIG = {
-  SS_ID: "YOUR_SPREADSHEET_ID_HERE", // Admin needs to update this
-  DRIVE_FOLDER_ID: "YOUR_DRIVE_FOLDER_ID_HERE", // Admin needs to update this
+  SS_ID: "1INUYQ8KXnTGvvM3Nnm8B2U5i6oPACXTBCmNcp0G80Tc",
+  DRIVE_FOLDER_ID: "1MxxVOuSCsId2VyS5oMSnLR8WxWiiK_qY",
   ADMIN: {
     EMAIL: "admin@legalspot.id",
-    PASSWORD: "BismillahCuan2026",
+    PASSWORD: "Legalspot2026$$",
     ROLE: "SUPER_VISIOR"
   },
-  WA_ADMIN_LINK: "https://chat.whatsapp.com/EXAMPLE_GROUP_LINK",
-  WA_CS_NUMBER: "6281234567890" // For checkout redirection
+  WA_ADMIN_LINK: "",
+  WA_CS_NUMBER: "6287893268929" // For checkout redirection
 };
 
 // --- MAIN HANDLERS ---
@@ -29,20 +29,24 @@ const CONFIG = {
 function doPost(e) {
   try {
     if (!e || !e.postData || !e.postData.contents) {
-      throw new Error("No Post Data received");
+      throw new Error("Data tidak diterima oleh server.");
     }
     
-    // Validate Input JSON
     let data;
     try {
+      // Mencoba parse JSON
       data = JSON.parse(e.postData.contents);
     } catch (parseErr) {
-      throw new Error("Invalid JSON Format");
+      // Jika gagal JSON, coba parse as form parameters (fallback)
+      data = e.parameter;
     }
     
+    if (!data || !data.action) {
+      throw new Error("Action tidak ditentukan.");
+    }
+
     const action = data.action;
     
-    // Auth validation for admin actions
     if (action === "adminAction") {
       if (data.auth !== CONFIG.ADMIN.PASSWORD) {
         logEvent("UNAUTHORIZED_ACCESS", "Failed admin POST authentication attempt", null);
@@ -51,14 +55,13 @@ function doPost(e) {
       return handleAdminAction(data);
     }
     
-    // Public actions
     if (action === "registerPartner") {
       return registerPartner(data);
     } else if (action === "submitOrder") {
       return submitOrder(data);
     }
     
-    return errorResponse("Invalid action");
+    return errorResponse("Action '" + action + "' tidak valid.");
   } catch (err) {
     logEvent("DO_POST_ERROR", err.message, err.stack);
     return errorResponse("Internal server error: " + err.message);
@@ -95,110 +98,85 @@ function doGet(e) {
 
 function registerPartner(data) {
   try {
-    const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
-    const sheet = ss.getSheetByName("mitra_submissions");
-    if (!sheet) throw new Error("Sheet mitra_submissions not found");
-    
-    const timestamp = new Date();
-    
-    // Append to Sheet
-    sheet.appendRow([
-      timestamp,
-      data.nama_lengkap || "",
-      data.background_pendidikan || "",
-      data.universitas || "",
-      data.usia || "",
-      data.domisili || "",
-      data.sumber_info || "",
-      data.referral_name || "",
-      data.email || "", // Crucial for emailing
-      data.whatsapp || "", 
-      "PENDING"
+    const sheet = getOrCreateSheet("mitra_submissions", [
+      "timestamp", "nama", "pendidikan", "universitas", "usia", "domisili", "sumber_info", "referral", "email", "whatsapp", "status"
     ]);
     
-    // Email Notification
-    sendEmail(
-      data.email, 
-      "Konfirmasi Pendaftaran Mitra Legalspot", 
-      buildPartnerRegistrationEmail(data.nama_lengkap)
-    );
+    const timestamp = new Date();
+    const nama = data.nama_lengkap || data.nama || "";
+    const pendidikan = data.background_pendidikan || data.pendidikan || "";
+    const universitas = data.universitas || "";
+    const usia = data.usia || "";
+    const domisili = data.domisili || "";
+    const sumber = data.sumber_info || data.sumberInfo || "";
+    const referral = data.referral_name || data.refferalName || data.referral || "";
+    const email = data.email || "";
+    const wa = data.whatsapp || "";
+
+    sheet.appendRow([
+      timestamp, nama, pendidikan, universitas, usia, domisili, sumber, referral, email, wa, "PENDING"
+    ]);
+    
+    if (email) {
+      sendEmail(email, "Konfirmasi Pendaftaran Mitra Legalspot", buildPartnerRegistrationEmail(nama));
+    }
     
     return successResponse("Data berhasil disimpan");
   } catch (err) {
     logEvent("REGISTER_PARTNER_ERROR", err.message, err.stack);
-    return errorResponse("Gagal menyimpan data");
+    return errorResponse("Gagal menyimpan data mitra: " + err.message);
   }
 }
 
 function submitOrder(data) {
   try {
-    const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
-    const sheet = ss.getSheetByName("client_orders");
-    if (!sheet) throw new Error("Sheet client_orders not found");
+    const sheet = getOrCreateSheet("client_orders", [
+      "timestamp", "nama", "bisnis", "omzet", "kategori", "produk", "harga_awal", "diskon", "harga_final", "email", "whatsapp", "file_url", "status"
+    ]);
     
     const timestamp = new Date();
+    const nama = data.nama_lengkap || data.nama || "";
+    const bisnis = data.nama_bisnis || data.bisnis || "";
+    const omzet = data.omzet_tahunan || data.omzet || "";
+    const kategori = data.kategori_bisnis || data.kategori || "";
+    const produk = data.product_name || data.product || data.produk || "";
+    const email = data.email || "";
+    const wa = data.whatsapp || "";
+    const promoCode = data.promo_code || data.discountCode || data.promoCode || "";
     
-    let harga_awal = Number(data.harga_awal) || 0;
+    let harga_awal = Number(data.harga_awal) || Number(data.subtotal) || 0;
     let diskonValue = 0;
     
-    // Evaluate promo_codes if provided
-    if (data.promo_code) {
-      const promoSheet = ss.getSheetByName("promo_codes");
-      if (promoSheet) {
-        const promos = getSheetData(ss, "promo_codes");
-        const promo = promos.find(p => p.kode === data.promo_code && String(p.active).toUpperCase() === "TRUE");
-        if (promo) {
-          diskonValue = Number(promo.discount_value) || 0;
-        }
-      }
+    if (promoCode) {
+      const promos = getSheetData(SpreadsheetApp.openById(CONFIG.SS_ID), "promo_codes");
+      const promo = promos.find(p => p.kode === promoCode && String(p.active).toUpperCase() === "TRUE");
+      if (promo) diskonValue = Number(promo.discount_value) || 0;
     }
     
-    let harga_final = harga_awal - diskonValue;
+    let harga_final = Number(data.harga_final) || Number(data.total) || (harga_awal - diskonValue);
     if (harga_final < 0) harga_final = 0;
     
-    // Handle File Upload to Drive
     let fileUrl = "";
     if (data.payment_proof_base64) {
       fileUrl = uploadFileToDrive(data.payment_proof_base64, data.payment_proof_name || "payment_proof.jpg", data.payment_proof_mime || "image/jpeg");
     }
     
-    // Formatting IDR
-    const formatRp = (num) => "Rp " + num.toLocaleString('id-ID');
-
     sheet.appendRow([
-      timestamp,
-      data.nama_lengkap || "",
-      data.nama_bisnis || "",
-      data.omzet_tahunan || "",
-      data.kategori_bisnis || "",
-      data.product_name || "",
-      harga_awal,
-      diskonValue,
-      harga_final,
-      data.email || "",
-      data.whatsapp || "",
-      fileUrl,
-      "PENDING"
+      timestamp, nama, bisnis, omzet, kategori, produk, harga_awal, diskonValue, harga_final, email, wa, fileUrl, "PENDING"
     ]);
     
-    // Email Notification
-    sendEmail(
-      data.email,
-      "Order Konfirmasi - Legalspot",
-      buildOrderEmail(data.nama_lengkap, data.product_name, formatRp(harga_final))
-    );
+    const formatRp = (num) => "Rp " + num.toLocaleString('id-ID');
+    if (email) {
+      sendEmail(email, "Order Konfirmasi - Legalspot", buildOrderEmail(nama, produk, formatRp(harga_final)));
+    }
     
-    // Return standard WhatsApp redirect link
-    const waMessage = encodeURIComponent(`Halo Tim Legalspot,\nSaya ${data.nama_lengkap} telah memesan layanan ${data.product_name}.\nTotal Pembayaran: ${formatRp(harga_final)}\nMohon bantuannya untuk verifikasi.`);
-    const waLink = \`https://wa.me/\${CONFIG.WA_CS_NUMBER}?text=\${waMessage}\`;
+    const waMessage = encodeURIComponent(`Halo Tim Legalspot,\nSaya ${nama} telah memesan layanan ${produk}.\nTotal Pembayaran: ${formatRp(harga_final)}\nMohon bantuannya untuk verifikasi.`);
+    const waLink = `https://wa.me/${CONFIG.WA_CS_NUMBER}?text=${waMessage}`;
     
-    return successResponse({ 
-      message: "Data berhasil disimpan",
-      wa_link: waLink 
-    });
+    return successResponse({ message: "Data berhasil disimpan", wa_link: waLink });
   } catch (err) {
     logEvent("SUBMIT_ORDER_ERROR", err.message, err.stack);
-    return errorResponse("Gagal memproses order");
+    return errorResponse("Gagal memproses order: " + err.message);
   }
 }
 
@@ -255,6 +233,20 @@ function handleAdminAction(data) {
 
 // --- UTILS & HELPERS ---
 
+function getOrCreateSheet(name, headers) {
+  const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
+  let sheet = ss.getSheetByName(name);
+  
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+    sheet.appendRow(headers);
+    // Format header
+    sheet.getRange(1, 1, 1, headers.length).setBackground("#1e40af").setFontColor("white").setFontWeight("bold");
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
 function uploadFileToDrive(base64Data, fileName, mimeType) {
   try {
     const folder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
@@ -300,7 +292,7 @@ function sendEmail(to, subject, htmlBody) {
     });
   } catch (err) {
     // Failing to send email should NOT crash the request, but MUST be logged
-    logEvent("EMAIL_ERROR", \`Failed sending to \${to}: \` + err.message, err.stack);
+    logEvent("EMAIL_ERROR", `Failed sending to ${to}: ` + err.message, err.stack);
   }
 }
 
@@ -348,44 +340,44 @@ function errorResponse(msg) {
 // --- HTML EMAIL TEMPLATES ---
 
 function buildPartnerRegistrationEmail(nama) {
-  return \`
+  return `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
     <div style="background-color: #1e40af; padding: 24px; text-align: center;">
       <h2 style="color: #ffffff; margin: 0; font-size: 20px;">Pendaftaran Diterima</h2>
     </div>
     <div style="padding: 32px; color: #1e293b;">
-      <p style="font-size: 16px;">Halo <strong>\${nama}</strong>,</p>
+      <p style="font-size: 16px;">Halo <strong>${nama}</strong>,</p>
       <p style="line-height: 1.6;">Terima kasih telah mendaftar sebagai mitra Legalspot. Kami telah menerima data Anda dengan baik.</p>
       <div style="background-color: #f8fafc; border-left: 4px solid #3b82f6; padding: 16px; margin: 24px 0;">
         <p style="margin: 0; color: #475569; font-size: 14px;">Saat ini pendaftaran Anda berstatus <strong>PENDING</strong> dan sedang dikurasi oleh tim Legalspot. Informasi lebih lanjut akan kami kirimkan ke email ini.</p>
       </div>
       <p>Salam hangat,<br>Tim Legalspot Indonesia</p>
     </div>
-  </div>\`;
+  </div>`;
 }
 
 function buildMitraAcceptedEmail(nama) {
-  return \`
+  return `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
     <div style="background-color: #16a34a; padding: 24px; text-align: center;">
       <h2 style="color: #ffffff; margin: 0; font-size: 20px;">Selamat Bergabung! 🎉</h2>
     </div>
     <div style="padding: 32px; color: #1e293b;">
-      <p style="font-size: 16px;">Halo <strong>\${nama}</strong>,</p>
+      <p style="font-size: 16px;">Halo <strong>${nama}</strong>,</p>
       <p style="line-height: 1.6;">Kami sangat gembira memberitahukan bahwa pendaftaran Anda diterima! Anda kini resmi tergabung dan memiliki status <strong>ACCEPTED</strong>.</p>
       <div style="text-align: center; margin: 32px 0;">
-        <a href="\${CONFIG.WA_ADMIN_LINK}" style="background-color: #1e40af; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Masuk Grup WhatsApp Mitra</a>
+        <a href="${CONFIG.WA_ADMIN_LINK}" style="background-color: #1e40af; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Masuk Grup WhatsApp Mitra</a>
       </div>
       <p>Kami tunggu partisipasinya dan mari bersinergi bersama Legalspot!</p>
     </div>
-  </div>\`;
+  </div>`;
 }
 
 function buildMitraDeclinedEmail(nama) {
-  return \`
+  return `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
     <div style="padding: 32px; color: #1e293b;">
-      <p style="font-size: 16px;">Halo <strong>\${nama}</strong>,</p>
+      <p style="font-size: 16px;">Halo <strong>${nama}</strong>,</p>
       <p style="line-height: 1.6;">Terima kasih atas minat dan antusiasme Anda untuk bergabung sebagai mitra Legalspot.</p>
       <div style="background-color: #fff1f2; padding: 16px; border-radius: 6px; margin: 24px 0;">
         <p style="margin: 0; color: #be123c;">Mohon maaf, saat ini pendaftaran Mitra Legalspot sedang <strong>Over Demand</strong>. Kami terpaksa membatasi kuota agar kualitas pelayanan tetap terjaga, sehingga kami belum bisa memproses aplikasi Anda lebih lanjut.</p>
@@ -393,26 +385,26 @@ function buildMitraDeclinedEmail(nama) {
       <p>Data Anda telah tercatat dengan aman, dan kami akan menghubungi Anda kembali di kesempatan pembukaan pendaftaran berikutnya.</p>
       <p>Sukses selalu,<br>Tim Legalspot Indonesia</p>
     </div>
-  </div>\`;
+  </div>`;
 }
 
 function buildOrderEmail(nama, product, price) {
-  return \`
+  return `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
     <div style="background-color: #1e40af; padding: 24px; text-align: center;">
       <h2 style="color: #ffffff; margin: 0; font-size: 20px;">Menunggu Pembayaran</h2>
     </div>
     <div style="padding: 32px; color: #1e293b;">
-      <p style="font-size: 16px;">Halo <strong>\${nama}</strong>,</p>
+      <p style="font-size: 16px;">Halo <strong>${nama}</strong>,</p>
       <p style="line-height: 1.6;">Pesanan Anda telah berhasil direkam oleh sistem kami.</p>
       <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 16px; border-radius: 6px; margin: 24px 0;">
         <ul style="list-style-type: none; padding: 0; margin: 0;">
-          <li style="margin-bottom: 8px;"><strong>Layanan:</strong> \${product}</li>
-          <li style="margin-bottom: 8px;"><strong>Total:</strong> <span style="color: #1e40af; font-weight: bold;">\${price}</span></li>
+          <li style="margin-bottom: 8px;"><strong>Layanan:</strong> ${product}</li>
+          <li style="margin-bottom: 8px;"><strong>Total:</strong> <span style="color: #1e40af; font-weight: bold;">${price}</span></li>
           <li><strong>Status:</strong> PENDING</li>
         </ul>
       </div>
       <p style="line-height: 1.6;">Tim Legalspot saat ini sedang mengecek dan memverifikasi data serta bukti pembayaran Anda. Kami akan menghubungi Anda kembali sebentar lagi bila verifikasi berhasil.</p>
     </div>
-  </div>\`;
+  </div>`;
 }

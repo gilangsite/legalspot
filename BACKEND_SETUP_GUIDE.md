@@ -1,91 +1,84 @@
-# 🛠️ Legalspot Backend Setup Guide
+# 🛠️ Legalspot Backend Setup Guide (v2.0)
 
-Dokumen ini berisi langkah-langkah lengkap untuk menghubungkan website Legalspot dengan **Google Spreadsheet, Apps Script, dan Google Drive**.
+Dokumen ini berisi langkah-langkah lengkap untuk menghubungkan website Legalspot dengan **Google Spreadsheet, Apps Script, dan Google Drive**. Versi ini mendukung pendaftaran mitra, order produk, promo code, dan sistem log admin.
 
 ---
 
 ## 1. Persiapan Google Spreadsheet
 
 1. Buka [Google Sheets](https://sheets.new).
-2. Beri nama file: `Legalspot_Database`.
-3. Buat 3 Tab (Sheets) di bagian bawah dengan nama persis seperti berikut:
-   *   **Mitra** (Untuk data pendaftar mitra)
-   *   **Orders** (Untuk data checkout product)
-   *   **Settings** (Untuk kode diskon & info dashboard)
+2. Beri nama file: `Legalspot_Database_2026`.
+3. Buat 4 Tab (Sheets) di bagian bawah dengan nama **persis** (case-sensitive) seperti berikut:
+   *   **mitra_submissions** (Untuk data pendaftar mitra)
+   *   **client_orders** (Untuk data checkout product)
+   *   **promo_codes** (Untuk sistem diskon)
+   *   **admin_logs** (Untuk tracking error & aktivitas)
 
 ### Header Kolom (Baris 1):
-*   **Tab Mitra**: `ID`, `Timestamp`, `Nama`, `Pendidikan`, `Universitas`, `Usia`, `Domisili`, `Email`, `WhatsApp`, `Sumber_Info`, `Refferal`, `Status`
-*   **Tab Orders**: `ID`, `Timestamp`, `Product`, `Nama`, `Email`, `Bisnis`, `Omzet`, `Kategori`, `Subtotal`, `Discount_Code`, `Total`, `Status`
+*   **Tab mitra_submissions**: `timestamp`, `nama`, `pendidikan`, `universitas`, `usia`, `domisili`, `sumber_info`, `referral`, `email`, `whatsapp`, `status`
+*   **Tab client_orders**: `timestamp`, `nama`, `bisnis`, `omzet`, `kategori`, `produk`, `harga_awal`, `diskon`, `harga_final`, `email`, `whatsapp`, `file_url`, `status`
+*   **Tab promo_codes**: `kode`, `discount_value`, `active` (Isi contoh: `LEGAL2026`, `50000`, `TRUE`)
+*   **Tab admin_logs**: `timestamp`, `event_type`, `message`, `error_stack`
 
 ---
 
-## 2. Setup Google Apps Script (Backend API)
+## 2. Setup Google Drive (Storage)
 
-1. Di dalam Google Sheets, klik menu **Extensions** > **Apps Script**.
-2. Hapus semua kode di editor `Code.gs` dan paste kode dari file `backend/code.gs` yang sudah saya buatkan.
-3. **Konfigurasi Variabel**:
-   *   Cari baris `const SS_ID = "...";`
-   *   Ganti dengan ID Spreadsheet Anda (ambil dari URL Sheets Anda: `docs.google.com/spreadsheets/d/ID_DISINI/edit`).
-   *   Cari baris `const WA_ADMIN_LINK = "...";` dan masukkan link grup WhatsApp Anda.
-4. Klik icon **Save** (diskette).
+1. Buka [Google Drive](https://drive.google.com).
+2. Buat folder baru bernama `Legalspot_Uploads`.
+3. Buka folder tersebut, lihat URL di browser.
+4. Salin ID folder (karakter setelah `/folders/...`).
+   * *Contoh ID:* `1A2b3C4d5E6f_G7h8I9j0K...`
 
 ---
 
-## 3. Deploy sebagai Web App
+## 3. Setup Google Apps Script
+
+1. Di dalam Google Sheets tadi, klik menu **Extensions** > **Apps Script**.
+2. Beri nama project: `Legalspot_Backend`.
+3. Hapus semua kode di editor `Code.gs` dan paste kode dari file `backend/code.gs` yang terbaru.
+4. **Konfigurasi CONFIG (Baris 15-25)**:
+   *   `SS_ID`: Masukkan ID Spreadsheet Anda.
+   *   `DRIVE_FOLDER_ID`: Masukkan ID Folder Drive yang tadi disalin.
+   *   `ADMIN.PASSWORD`: Ganti jika ingin password admin dashboard berbeda.
+   *   `WA_CS_NUMBER`: Nomor WhatsApp CS (format `62...`).
+5. Klik icon **Save** (diskette).
+
+---
+
+## 4. Deploy sebagai Web App
 
 1. Klik tombol biru **Deploy** > **New Deployment**.
 2. Pilih type: **Web App**.
-3. Isi kolom:
-   *   **Description**: `Legalspot Backend v1`
-   *   **Execute as**: `Me` (Email Anda)
-   *   **Who has access**: `Anyone` (PENTING: Agar website bisa mengirim data).
+3. Konfigurasi:
+   *   **Description**: `Legalspot Production v2`
+   *   **Execute as**: `Me`
+   *   **Who has access**: `Anyone` (PENTING).
 4. Klik **Deploy**.
-5. Salin **Web App URL** yang muncul (ujungnya `/exec`).
+5. Muncul popup **Authorize Access**, klik **Allow** agar script bisa mengakses Sheet, Email, dan Drive Anda.
+6. Salin **Web App URL** (ujungnya `/exec`).
 
 ---
 
-## 4. Hubungkan ke Website (Frontend)
+## 5. Hubungkan ke Website (Frontend)
 
 1. Buka file `js/config.js` di folder project Anda.
-2. Paste URL yang Anda salin tadi ke bagian `GAS_ENDPOINT`:
-   ```javascript
-   const LEGALSPOT_CONFIG = {
-     GAS_ENDPOINT: 'https://script.google.com/macros/s/PASTE_ID_DISINI/exec',
-     // ...
-   };
-   ```
+2. Paste URL yang Anda salin ke bagian `GAS_ENDPOINT`.
+3. Simpan file dan upload/push ke server/GitHub.
 
 ---
 
-## 5. Integrasi Google Drive (File Storage)
+## 6. Verifikasi & Testing
 
-Jika nanti Anda ingin mengupload file (misal: Bukti Transfer atau CV Mitra), ikuti pola ini di `code.gs`:
-
-1. Cari ID Folder Drive Anda.
-2. Gunakan fungsi `DriveApp.getFolderById(FOLDER_ID).createFile(blob)`.
-3. Pastikan izin Apps Script sudah di-authorize untuk mengakses Drive saat pertama kali running.
-
----
-
-## 6. Cyber Security (Obfuscation)
-
-Setelah sistem backend berjalan lancar:
-1. Anda bisa menggunakan tools seperti [javascript-obfuscator](https://obfuscator.io/) untuk file `.js` di frontend.
-2. **Kelebihan**: Membuat source code sulit dibaca orang awam/malware.
-3. **Penting**: Simpan file original di folder private (jangan di-commit ke public repo).
+### Cara Test:
+1. Isi form pendaftaran mitra di website.
+2. Cek apakah data masuk ke tab `mitra_submissions`.
+3. Cek apakah Anda menerima email konfirmasi.
+4. Jika gagal, cek tab `admin_logs` untuk melihat detail erornya.
 
 ---
 
-## 7. Verifikasi Email Konfirmasi
-
-Aplikasi ini menggunakan `MailApp.sendEmail`. 
-*   Email akan dikirim atas nama akun Google Anda.
-*   Template email sudah menggunakan **Electric Navy & Blue Theme** yang kontras dan premium.
-
----
-
-### Tips Error Handling
-Jika data tidak masuk ke sheet:
-1. Check **Browser Console (F12)** untuk melihat apakah ada error `CORS` atau `404`.
-2. Pastikan Status Deployment Apps Script adalah **Anyone**.
-3. Pastikan ID Spreadsheet sudah benar.
+### Tips Troubleshooting
+*   **Data tidak masuk?** Pastikan nama tab di Sheet sama persis dengan yang ada di code.gs.
+*   **Error 401/Unauthorized?** Pastikan URL yang dipanggil di frontend adalah URL `/exec` yang terbaru setelah dideploy.
+*   **Drive Error?** Pastikan Anda sudah klik "Allow" saat otorisasi DriveApp.

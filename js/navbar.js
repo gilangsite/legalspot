@@ -16,6 +16,16 @@
       <li><a href="/product.html" class="nav-link" data-page="product">Service</a></li>
       <li><a href="/partner.html" class="nav-link" data-page="partner">Partner</a></li>
       <li><a href="/insight.html" class="nav-link" data-page="insight">Insight</a></li>
+      <li class="nav-dropdown">
+        <a class="nav-link dropdown-toggle">
+          Akses
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </a>
+        <div class="dropdown-menu">
+          <a href="/admin/login.html" class="dropdown-item">Login Admin</a>
+          <a href="/partner.html" class="dropdown-item">Partner Portal</a>
+        </div>
+      </li>
     </ul>
 
     <div class="navbar-cta">
@@ -38,6 +48,8 @@
     <a href="/product.html" class="nav-link" data-page="product">Service</a>
     <a href="/partner.html" class="nav-link" data-page="partner">Partner</a>
     <a href="/insight.html" class="nav-link" data-page="insight">Insight</a>
+    <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin:0.5rem 0;">
+    <a href="/admin/login.html" class="nav-link">Login Admin</a>
     <a href="/partner.html" class="btn btn-outline">Partner</a>
     <a href="/product.html" class="btn btn-primary">Service</a>
   </div>

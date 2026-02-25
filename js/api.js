@@ -9,17 +9,21 @@ const LegalspotAPI = {
      */
     async post(data) {
         try {
-            const response = await fetch(LEGALSPOT_CONFIG.GAS_ENDPOINT, {
+            // Google Apps Script doesn't play well with CORS and JSON headers
+            // We use 'no-cors' and send basic text to bypass browser pre-flight checks
+            await fetch(LEGALSPOT_CONFIG.GAS_ENDPOINT, {
                 method: 'POST',
-                mode: 'no-cors', // Apps Script handles POST via redirect which causes CORS issues in browsers, no-cors is a common workaround if return data isn't critical
+                mode: 'no-cors',
+                cache: 'no-cache',
                 headers: {
-                    'Content-Type': 'application/json',
+                    // Do NOT use application/json with no-cors as it's a forbidden header
+                    'Content-Type': 'text/plain;charset=utf-8',
                 },
                 body: JSON.stringify(data),
             });
 
-            // Since we use no-cors, we can't read the response body. 
-            // We assume success if no error is thrown by fetch.
+            // Since mode is no-cors, the response is opaque. 
+            // We assume delivery if no network error occurred.
             return { status: 'success' };
         } catch (error) {
             console.error('API Error:', error);
@@ -41,6 +45,32 @@ const LegalspotAPI = {
         return await this.post({
             action: 'submitOrder',
             ...orderData
+        });
+    },
+
+    /**
+     * Fetch dashboard data (Partners & Orders)
+     * @param {string} auth - Admin password for server-side validation
+     */
+    async getDashboardData(auth) {
+        try {
+            const url = `${LEGALSPOT_CONFIG.GAS_ENDPOINT}?action=getDashboardData&auth=${encodeURIComponent(auth)}`;
+            const response = await fetch(url);
+            return await response.json();
+        } catch (error) {
+            console.error('Fetch Dashboard Error:', error);
+            throw error;
+        }
+    },
+
+    /**
+     * Send admin action (e.g. update status)
+     * @param {Object} actionConfig - { actionType, ...data, auth }
+     */
+    async adminAction(actionConfig) {
+        return await this.post({
+            action: 'adminAction',
+            ...actionConfig
         });
     }
 };

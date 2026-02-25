@@ -79,78 +79,90 @@
                     </div>
 
                     <h3
-                        style="color:var(--white); border-bottom:1px solid var(--border); padding-bottom:1rem; margin-top:1rem; margin-bottom:0.5rem;">
+                        style="border-bottom:1px solid var(--border-light); padding-bottom:1rem; margin-top:1rem; margin-bottom:0.5rem;">
                         Order Summary</h3>
 
                     <div
-                        style="background:var(--white-muted); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:1.5rem;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                        style="background:var(--white-bg); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:1rem; width:100%; box-sizing:border-box;">
+                        <div
+                            style="display:flex; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
                             <span style="color:var(--gray-dark);">Subtotal</span>
                             <span style="font-weight:600;" id="subtotal">Rp 0</span>
                         </div>
-                        <div
-                            style="display:grid; grid-template-columns:1fr auto; gap:0.5rem; margin-bottom:1rem; align-items:center;">
-                            <input type="text" id="kodeDiskon" placeholder="Kode Diskon"
-                                style="background:var(--black); border:1px solid var(--border); padding:0.8rem; border-radius:var(--radius-sm); color:var(--white); outline:none;">
-                            <button type="button" onclick="applyDiscount()"
-                                class="btn btn-primary btn-sm">Apply</button>
+                        <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem;">
+                            <div style="display:flex; gap:0.5rem;">
+                                <input type="text" id="kodeDiskon" placeholder="Kode Diskon"
+                                    style="background:var(--white); border:1px solid var(--border-light); padding:0.8rem; border-radius:var(--radius-sm); color:var(--black); outline:none; flex:1; min-width:0;">
+                                <button type="button" onclick="applyDiscount()" class="btn btn-primary btn-sm"
+                                    style="flex-shrink:0;">Apply</button>
+                            </div>
                         </div>
                         <div
-                            style="display:flex; justify-content:space-between; margin-bottom:1rem; color:#4ade80; font-weight:600;">
+                            style="display:flex; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem; color:#4ade80; font-weight:600;">
                             <span>Diskon</span>
                             <span id="discountVal">- Rp 0</span>
                         </div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                        <div
+                            style="display:flex; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
                             <span style="color:var(--gray-dark);">PPN (11%)</span>
                             <span id="taxVal">Rp 0</span>
                         </div>
-                        <div style="height:1px; background:var(--border); margin:1rem 0;"></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="height:1px; background:var(--border-light); margin:1rem 0;"></div>
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:flex-end; gap:0.5rem; flex-wrap:wrap;">
                             <span
-                                style="font-weight:600; font-size:1.1rem; text-transform:uppercase; letter-spacing:0.05em;">Total
-                                Pembayaran</span>
-                            <span style="color:var(--navy-bright); font-weight:600; font-size:1.75rem;"
-                                id="finalPrice">Rp
-                                0</span>
+                                style="font-weight:600; font-size:var(--fs-sm); text-transform:uppercase; letter-spacing:0.05em; color:var(--black);">
+                                Total Pembayaran
+                            </span>
+                            <span
+                                style="color:var(--navy-bright); font-weight:700; font-size:var(--fs-xl); line-height:1;"
+                                id="finalPrice">
+                                Rp 0
+                            </span>
                         </div>
                     </div>
 
                     <h3
-                        style="color:var(--white); border-bottom:1px solid var(--border); padding-bottom:1rem; margin-top:1rem; margin-bottom:0.5rem;">
+                        style="border-bottom:1px solid var(--border-light); padding-bottom:1rem; margin-top:1rem; margin-bottom:0.5rem;">
                         Metode Pembayaran (Transfer Bank)</h3>
 
                     <div
-                        style="background:rgba(30, 64, 175, 0.05); border:1px solid var(--border-navy); border-radius:var(--radius-md); padding:1.5rem; display:flex; flex-direction:column; gap:0.5rem;">
-                        <div style="display:flex; align-items:center; justify-content:space-between;">
+                        style="background:rgba(30, 64, 175, 0.05); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:1rem; display:flex; flex-direction:column; gap:0.5rem;">
+                        <div
+                            style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
                             <div>
                                 <div
-                                    style="color:var(--gray-mid); font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.2rem;">
-                                    Bank
-                                    Tujuan</div>
-                                <div style="font-weight:600; font-size:1.5rem;">Bank BRI</div>
+                                    style="color:var(--gray-dark); font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.2rem;">
+                                    Bank Tujuan</div>
+                                <div style="font-weight:600; font-size:var(--fs-lg); color:var(--black);">Bank BRI</div>
                             </div>
                         </div>
                         <div style="margin-top:0.5rem;">
                             <div
-                                style="color:var(--gray-mid); font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem;">
-                                Nomor
-                                Rekening</div>
+                                style="color:var(--gray-dark); font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem;">
+                                Nomor Rekening</div>
                             <div
-                                style="display:flex; align-items:center; justify-content:space-between; background:var(--white); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-navy);">
-                                <span style="font-weight:600; letter-spacing:2px; font-size:1.25rem;"
-                                    id="rekNumber">114801010102504</span>
-                                <button type="button" onclick="copyRekening()"
-                                    class="btn btn-primary btn-sm">Copy</button>
+                                style="display:flex; align-items:center; justify-content:space-between; background:var(--white); padding:0.8rem; border-radius:var(--radius-sm); border:1px solid var(--border-light); flex-wrap:wrap; gap:0.5rem;">
+                                <span
+                                    style="font-weight:600; letter-spacing:1px; font-size:var(--fs-base); color:var(--black);"
+                                    id="accountNumber">0123-4567-8910-111</span>
+                                <button type="button" onclick="handleCopy()" class="btn btn-outline btn-sm"
+                                    style="padding:0.4rem 0.8rem; border-color:var(--border-light); color:var(--navy);">
+                                    Copy
+                                </button>
                             </div>
                         </div>
                         <div style="margin-top:0.5rem;">
                             <div
-                                style="color:var(--gray-mid); font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.2rem;">
-                                Atas
-                                Nama</div>
+                                style="color:var(--gray-dark); font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.2rem;">
+                                Atas Nama</div>
                             <div style="font-weight:600; font-size:1.1rem;">Zain Patra Caraka</div>
                         </div>
                     </div>
+
+                    <h3
+                        style="border-bottom:1px solid var(--border-light); padding-bottom:1rem; margin-top:1rem; margin-bottom:0.5rem;">
+                        Upload Bukti Pembayaran</h3>
 
                     <div style="display:flex; align-items:center; gap:0.8rem; margin-top:1rem;">
                         <input type="checkbox" id="confirmPayment" required

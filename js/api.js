@@ -54,9 +54,25 @@ const LegalspotAPI = {
      */
     async getDashboardData(auth) {
         try {
+            if (!auth) throw new Error('Sesi login tidak ditemukan. Silakan login kembali.');
+
             const url = `${LEGALSPOT_CONFIG.GAS_ENDPOINT}?action=getDashboardData&auth=${encodeURIComponent(auth)}`;
             const response = await fetch(url);
-            return await response.json();
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const text = await response.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                if (text === 'Unauthorized') {
+                    throw new Error('Sesi tidak valid atau password salah. Silakan login kembali.');
+                }
+                console.error('Non-JSON response:', text);
+                throw new Error('Format data dari server tidak valid.');
+            }
         } catch (error) {
             console.error('Fetch Dashboard Error:', error);
             throw error;

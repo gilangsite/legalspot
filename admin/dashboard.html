@@ -441,8 +441,8 @@
     <script src="../js/api.js"></script>
     <script>
         // Check Auth
-        const auth = localStorage.getItem('adminAuth');
-        if (auth !== 'true') {
+        const authStat = localStorage.getItem('adminAuth');
+        if (authStat !== 'true') {
             window.location.href = 'login.html';
         }
 
@@ -458,17 +458,19 @@
 
         async function fetchData() {
             try {
-                // We use the password from the backend script guide
                 const data = await LegalspotAPI.getDashboardData(adminPass);
                 if (data.status === 'success') {
                     cachedData = data;
                     renderDashboard(data);
                 } else {
-                    alert('Gagal mengambil data dari server: ' + data.message);
+                    alert('Gagal: ' + data.message);
                 }
             } catch (err) {
                 console.error(err);
-                alert('Terjadi kesalahan koneksi ke backend.');
+                alert(err.message || 'Terjadi kesalahan koneksi ke backend.');
+                if (err.message.includes('login kembali')) {
+                    logout();
+                }
             } finally {
                 document.getElementById('loadingOverlay').style.opacity = '0';
                 setTimeout(() => document.getElementById('loadingOverlay').style.display = 'none', 500);

@@ -466,9 +466,10 @@
                     alert('Gagal: ' + data.message);
                 }
             } catch (err) {
-                console.error(err);
-                alert(err.message || 'Terjadi kesalahan koneksi ke backend.');
-                if (err.message.includes('login kembali')) {
+                console.error('Detailed Error:', err);
+                const errorDetail = err.message || 'Terjadi kesalahan koneksi ke backend.';
+                alert(`Error: ${errorDetail}\n\nTips:\n1. Pastikan AppScript sudah dideploy sebagai "Anyone".\n2. Gunakan "Manage Deployments" > "Edit" > "New Version" agar URL tetap sama.`);
+                if (err.message && err.message.includes('login kembali')) {
                     logout();
                 }
             } finally {

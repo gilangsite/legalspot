@@ -106,13 +106,13 @@
 /* ---------- LIGHT SECTION UTILITIES ---------- */
 .section-light {
   /* Cascade Theme Redefinition for Light Mode */
-  --gray-light: #475569;
-  --gray-mid: #64748b;
-  --gray-dark: #1e293b;
+  --gray-light: #000000;
+  --gray-mid: #000000;
+  --gray-dark: #000000;
   --white: #000000;
-  --white-muted: #334155;
-  --border: rgba(0, 0, 0, 0.1);
-  --border-light: rgba(0, 0, 0, 0.05);
+  --white-muted: #000000;
+  --border: rgba(0, 0, 0, 0.2);
+  --border-light: rgba(0, 0, 0, 0.1);
 
   background-color: var(--white-bg) !important;
   background-image:
@@ -202,13 +202,13 @@
 
 .card-light {
   /* Cascade Theme Redefinition for Light Mode */
-  --gray-light: #475569;
-  --gray-mid: #64748b;
-  --gray-dark: #1e293b;
+  --gray-light: #000000;
+  --gray-mid: #000000;
+  --gray-dark: #000000;
   --white: #000000;
-  --white-muted: #334155;
-  --border: rgba(0, 0, 0, 0.1);
-  --border-light: rgba(0, 0, 0, 0.05);
+  --white-muted: #000000;
+  --border: rgba(0, 0, 0, 0.2);
+  --border-light: rgba(0, 0, 0, 0.1);
 
   background-color: var(--white-bg) !important;
   background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px) !important;
@@ -253,16 +253,27 @@
 
 .section-light .form-input,
 .section-light .form-select,
-.section-light .form-textarea {
-  background: var(--white) !important;
-  border-color: var(--border-light) !important;
-  color: var(--black) !important;
+.section-light .form-textarea,
+.card-light .form-input,
+.card-light .form-select,
+.card-light .form-textarea {
+  background: transparent !important;
+  border: 1px solid var(--border) !important;
+  color: #000000 !important;
 }
 
 .section-light .form-input:focus,
 .section-light .form-select:focus,
-.section-light .form-textarea:focus {
+.section-light .form-textarea:focus,
+.card-light .form-input:focus,
+.card-light .form-select:focus,
+.card-light .form-textarea:focus {
   border-color: var(--navy-bright) !important;
+}
+
+.section-light .btn-primary,
+.card-light .btn-primary {
+  color: #ffffff !important;
 }
 
 /* ---------- RESET ---------- */

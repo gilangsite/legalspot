@@ -58,8 +58,8 @@
   /* Gradient presets - More Dramatic */
   --grad-headline-gray: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
   --grad-headline-navy: linear-gradient(135deg, #ffffff 0%, #3b82f6 100%);
-  --grad-headline-dark: linear-gradient(135deg, #030303 0%, #475569 100%);
-  --grad-headline-navy-dark: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  --grad-headline-dark: linear-gradient(135deg, #030303 0%, #1e293b 100%);
+  --grad-headline-navy-dark: linear-gradient(135deg, #030303 0%, #1e40af 100%);
   --grad-navy-button: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
   --grad-glow: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
   --grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
@@ -123,33 +123,72 @@
   -webkit-text-fill-color: transparent !important;
 }
 
-.section-light .section-subtitle {
-  color: var(--gray-dark);
+.section-light .section-subtitle,
+.section-light .section-desc,
+.section-light .feature-text p,
+.section-light p {
+  color: #000000 !important;
+  opacity: 0.95;
 }
 
-.section-light .card:not(.card-light) {
-  background: var(--black-card);
-  color: var(--white-muted);
+.section-light .section-label {
+  color: var(--navy);
+}
+
+.section-light h1,
+.section-light h2,
+.section-light h3,
+.section-light h4 {
+  color: #000000;
+}
+
+.section-light .feature-icon-wrap {
+  background: rgba(30, 64, 175, 0.08);
+  border-color: rgba(30, 64, 175, 0.2);
+}
+
+.section-light .feature-text h4 {
+  color: #000000 !important;
 }
 
 .card-light {
-  background: var(--white-card) !important;
-  border: 1px solid var(--border-light) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
-  color: var(--black) !important;
+  background: var(--white-bg) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04) !important;
+  color: #000000 !important;
 }
 
 .card-light h3,
 .card-light h4 {
-  color: var(--black) !important;
+  color: #000000 !important;
 }
 
 .card-light p {
-  color: var(--gray-dark) !important;
+  color: #000000 !important;
 }
 
-.section-light .form-label {
-  color: var(--gray-dark) !important;
+.section-light .feature-icon-wrap svg {
+  stroke: var(--navy) !important;
+}
+
+.section-light .about-card-main {
+  background: var(--white) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08) !important;
+}
+
+.section-light .about-card-title {
+  color: #000000 !important;
+}
+
+.section-light .about-tag {
+  background: rgba(30, 64, 175, 0.05) !important;
+  color: var(--navy) !important;
+  border-color: rgba(30, 64, 175, 0.2) !important;
+}
+
+.section-light .about-tag svg {
+  stroke: var(--navy) !important;
 }
 
 .section-light .form-input,

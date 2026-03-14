@@ -6,31 +6,31 @@
 
   const NAVBAR_HTML = `
   <nav class="navbar" id="mainNav">
-    <a href="/index.html" class="navbar-brand">
+    <a href="/" class="navbar-brand">
       <img src="/assets/images/legalspot-logo.png" alt="Legalspot Logo" class="navbar-logo-img">
       <span class="navbar-brand-name">Legal<span>spot</span></span>
     </a>
 
     <ul class="navbar-nav">
-      <li><a href="/index.html" class="nav-link" data-page="home">Main</a></li>
-      <li><a href="/product.html" class="nav-link" data-page="product">Service</a></li>
-      <li><a href="/partner.html" class="nav-link" data-page="partner">Partner</a></li>
-      <li><a href="/insight.html" class="nav-link" data-page="insight">Insight</a></li>
+      <li><a href="/" class="nav-link" data-page="home">Main</a></li>
+      <li><a href="/product" class="nav-link" data-page="product">Service</a></li>
+      <li><a href="/partner" class="nav-link" data-page="partner">Partner</a></li>
+      <li><a href="/insight" class="nav-link" data-page="insight">Insight</a></li>
       <li class="nav-dropdown">
         <a class="nav-link dropdown-toggle">
           Akses
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </a>
         <div class="dropdown-menu">
-          <a href="/admin/login.html" class="dropdown-item">Login Admin</a>
-          <a href="/partner.html" class="dropdown-item">Partner Portal</a>
+          <a href="/admin/login" class="dropdown-item">Login Admin</a>
+          <a href="/partner" class="dropdown-item">Partner Portal</a>
         </div>
       </li>
     </ul>
 
     <div class="navbar-cta">
-      <a href="/partner.html" class="btn btn-outline btn-sm">Partner</a>
-      <a href="/product.html" class="btn btn-primary btn-sm">
+      <a href="/partner" class="btn btn-outline btn-sm">Partner</a>
+      <a href="/product" class="btn btn-primary btn-sm">
         <svg class="btn-icon" viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         Service
       </a>
@@ -44,14 +44,14 @@
   </nav>
 
   <div class="navbar-mobile" id="navMobile">
-    <a href="/index.html" class="nav-link" data-page="home">Main</a>
-    <a href="/product.html" class="nav-link" data-page="product">Service</a>
-    <a href="/partner.html" class="nav-link" data-page="partner">Partner</a>
-    <a href="/insight.html" class="nav-link" data-page="insight">Insight</a>
+    <a href="/" class="nav-link" data-page="home">Main</a>
+    <a href="/product" class="nav-link" data-page="product">Service</a>
+    <a href="/partner" class="nav-link" data-page="partner">Partner</a>
+    <a href="/insight" class="nav-link" data-page="insight">Insight</a>
     <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin:0.5rem 0;">
-    <a href="/admin/login.html" class="nav-link">Login Admin</a>
-    <a href="/partner.html" class="btn btn-outline">Partner</a>
-    <a href="/product.html" class="btn btn-primary">Service</a>
+    <a href="/admin/login" class="nav-link">Login Admin</a>
+    <a href="/partner" class="btn btn-outline">Partner</a>
+    <a href="/product" class="btn btn-primary">Service</a>
   </div>
   `;
 
@@ -60,7 +60,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="/index.html" class="navbar-brand" style="margin-bottom:0.75rem; display:inline-flex;">
+          <a href="/" class="navbar-brand" style="margin-bottom:0.75rem; display:inline-flex;">
             <img src="/assets/images/legalspot-logo.png" alt="Legalspot Logo" style="width: 32px; height: 32px; object-fit: contain;">
             <span class="navbar-brand-name" style="margin-left:0.5rem;">Legal<span>spot</span></span>
           </a>
@@ -80,20 +80,20 @@
         <div>
           <h4 class="footer-col-title">Service</h4>
           <ul class="footer-links">
-            <li><a href="/product.html">Konsultasi Pajak</a></li>
-            <li><a href="/product.html">Pelaporan SPT</a></li>
-            <li><a href="/product.html">Pendampingan Coretax</a></li>
-            <li><a href="/product.html">Semua Layanan</a></li>
+            <li><a href="/product">Konsultasi Pajak</a></li>
+            <li><a href="/product">Pelaporan SPT</a></li>
+            <li><a href="/product">Pendampingan Coretax</a></li>
+            <li><a href="/product">Semua Layanan</a></li>
           </ul>
         </div>
 
         <div>
           <h4 class="footer-col-title">Company</h4>
           <ul class="footer-links">
-            <li><a href="/index.html#about">Tentang Kami</a></li>
-            <li><a href="/index.html#vision">Visi &amp; Misi</a></li>
-            <li><a href="/partner.html">Program Kemitraan</a></li>
-            <li><a href="/insight.html">Tax Insight</a></li>
+            <li><a href="/#about">Tentang Kami</a></li>
+            <li><a href="/#vision">Visi &amp; Misi</a></li>
+            <li><a href="/partner">Program Kemitraan</a></li>
+            <li><a href="/insight">Tax Insight</a></li>
           </ul>
         </div>
 

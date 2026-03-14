@@ -78,12 +78,13 @@
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 700;
     line-height: 1.1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em; /* Arial needs less negative kern than Garet */
     margin-bottom: var(--space-md);
 }
 
 .hero-desc {
     font-size: var(--fs-md);
+    font-weight: 400;  /* Arial Regular for body-level hero description */
     color: var(--gray-light);
     max-width: 560px;
     margin: 0 auto var(--space-xl);
@@ -344,16 +345,18 @@
     top: -30px;
     left: -10px;
     font-size: 5rem;
-    font-family: serif;
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
     color: var(--navy);
     opacity: 0.3;
 }
 
 .ceo-quote-text {
-    font-size: var(--fs-base);
-    line-height: 1.8;
+    font-size: var(--fs-md); /* slightly larger than base for readability */
+    line-height: 1.85;
     color: var(--black);
-    font-style: italic;
+    font-style: italic; /* Arial Italic for elegant quote styling */
+    font-weight: 400;
     opacity: 0.9;
 }
 

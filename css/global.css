@@ -1,29 +1,16 @@
 /* ===================================================
    LEGALSPOT — Global Design System
-   Font: Garet (self-hosted). Place woff2 files in assets/fonts/
+   Font: Arial (system) — Bold / Italic / Regular
+   Typography Scale:
+     Hero Title      → Arial Bold 700, clamp(2rem–3.5rem)
+     Section Title   → Arial Bold 700, clamp(1.85rem–2.5rem)
+     Section Label   → Arial Bold 700, 0.75rem, letter-spaced
+     Body / Desc     → Arial Regular 400, 1rem–1.125rem
+     Captions/Meta   → Arial Regular 400, 0.75rem–0.875rem
+     Quotes/Emphasis → Arial Italic 400
+     Buttons/Labels  → Arial Bold 700, 0.875rem
    Color: Black dominant, Navy accent, Gray neutrals
    =================================================== */
-
-/* ---------- FONT FACE ---------- */
-@font-face {
-  font-family: 'Garet';
-  src: url('../assets/fonts/Garet-Book.woff2') format('woff2'),
-    url('../assets/fonts/Garet-Book.woff') format('woff'),
-    url('../assets/fonts/Garet-Book.ttf') format('truetype');
-  font-weight: 100 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Garet';
-  src: url('../assets/fonts/Garet-Heavy.woff2') format('woff2'),
-    url('../assets/fonts/Garet-Heavy.woff') format('woff'),
-    url('../assets/fonts/Garet-Heavy.ttf') format('truetype');
-  font-weight: 800 900;
-  font-style: normal;
-  font-display: swap;
-}
 
 .navbar-logo-img {
   height: 32px;
@@ -298,7 +285,7 @@ html {
 }
 
 body {
-  font-family: 'Garet', 'Inter', 'Segoe UI', sans-serif;
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
   font-weight: 400;
   background-color: var(--black);
   color: var(--white-muted);

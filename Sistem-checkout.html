@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout — Legalspot</title>
+    <link rel="icon" type="image/png" href="/assets/images/legalspot-logo.png" />
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+</head>
+
+<body data-page="checkout">
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="section-label">Pemesanan</div>
+            <h1 class="section-title">
+                <span class="text-gradient-gray">Checkout</span><br />
+                <span class="text-gradient-navy">Service Legalspot</span>
+            </h1>
+        </div>
+    </section>
+
+    <section class="section section-light">
+        <div class="container" style="max-width:800px;">
+            <div class="card card-light page-card-form">
+                <form id="checkoutForm" style="display:grid; gap:1.5rem; text-align:left;">
+                    <h3 style="border-bottom:1px solid var(--border-light); padding-bottom:1rem; margin-bottom:0.5rem;">
+                        Data Klien</h3>
+
+                    <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                        <label style="color:var(--gray-light); font-size:var(--fs-sm);">Product yang Dipilih</label>
+                        <input type="text" id="productName" readonly class="form-input"
+                            style="cursor:not-allowed; opacity:0.8;">
+                    </div>
+
+                    <div class="grid-2" style="gap:1rem;">
+                        <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                            <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nama Lengkap</label>
+                            <input type="text" id="namaLengkap" required class="form-input">
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                            <label style="color:var(--gray-light); font-size:var(--fs-sm);">Email Aktif</label>
+                            <input type="email" id="email" required class="form-input">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                        <label style="color:var(--gray-light); font-size:var(--fs-sm);">Nama Bisnis</label>
+                        <input type="text" id="namaBisnis" required class="form-input">
+                    </div>
+
+                    <div class="grid-2" style="gap:1rem;">
+                        <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                            <label style="color:var(--gray-light); font-size:var(--fs-sm);">Omzet Bisnis 1 Tahun</label>
+                            <select id="omzet" required class="form-select">
+                                <option value="" disabled selected>Pilih Omzet</option>
+                                <option value="< 100 Juta">&lt; 100 Juta</option>
+                                <option value="100 Juta - 1 Miliyar">100 Juta - 1 Miliyar</option>
+                                <option value="> 1 Miliyar">&gt; 1 Miliyar</option>
+                            </select>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;">
+                            <label style="color:var(--gray-light); font-size:var(--fs-sm);">Bisnis Kategori</label>
+                            <select id="kategori" required class="form-select">
+                                <option value="" disabled selected>Pilih Kategori</option>
+                                <option value="Retail">Retail</option>
+                                <option value="FMCG">FMCG</option>
+                                <option value="F&B">F&B</option>
+                                <option value="Jasa">Jasa</option>
+                                <option value="Manufaktur">Manufaktur</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3
+                        style="border-bottom:1px solid var(--border-light); padding-bottom:1rem; margin-top:1rem; margin-bottom:0.5rem;">
+                        Order Summary</h3>
+
+                    <div
+                        style="background:var(--white-bg); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:1rem; width:100%; box-sizing:border-box;">
+                        <div
+                            style="display:flex; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+                            <span style="color:var(--gray-dark);">Subtotal</span>
+                            <span style="font-weight:700;" id="subtotal">Rp 0</span>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem;">
+                            <div style="display:flex; gap:0.5rem;">
+                                <input type="text" id="kodeDiskon" placeholder="Kode Diskon"
+                                    style="background:transparent; border:1px solid var(--border-light); padding:0.8rem; border-radius:var(--radius-sm); color:var(--black); outline:none; flex:1; min-width:0;">
+                                <button type="button" onclick="applyDiscount()" class="btn btn-primary btn-sm"
+                                    style="flex-shrink:0;">Apply</button>
+                            </div>
+                        </div>
+                        <div
+                            style="display:flex; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem; color:#4ade80; font-weight:700;">
+                            <span>Diskon</span>
+                            <span id="discountVal">- Rp 0</span>
+                        </div>
+                        <div
+                            style="display:flex; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+                            <span style="color:var(--gray-dark);">PPN (11%)</span>
+                            <span id="taxVal">Rp 0</span>
+                        </div>
+                        <div style="height:1px; background:var(--border-light); margin:1rem 0;"></div>
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:flex-end; gap:0.5rem; flex-wrap:wrap;">
+                            <span
+                                style="font-weight:700; font-size:var(--fs-sm); text-transform:uppercase; letter-spacing:0.05em; color:var(--black);">
+                                Total Pembayaran
+                            </span>
+                            <span
+                                style="color:var(--navy-bright); font-weight:700; font-size:var(--fs-xl); line-height:1;"
+                                id="finalPrice">
+                                Rp 0
+                            </span>
+                        </div>
+                    </div>
+
+                    <h3
+                        style="border-bottom:1px solid var(--border-light); padding-bottom:1rem; margin-top:1rem; margin-bottom:0.5rem;">
+                        Metode Pembayaran (Transfer Bank)</h3>
+
+                    <div
+                        style="background:rgba(30, 64, 175, 0.05); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:1rem; display:flex; flex-direction:column; gap:0.5rem;">
+                        <div
+                            style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+                            <div>
+                                <div
+                                    style="color:var(--gray-dark); font-size:var(--fs-xs); font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.2rem;">
+                                    Bank Tujuan</div>
+                                <div style="font-weight:700; font-size:var(--fs-lg); color:var(--black);">Bank BRI</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:0.5rem;">
+                            <div
+                                style="color:var(--gray-dark); font-size:var(--fs-xs); font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem;">
+                                Nomor Rekening</div>
+                            <div
+                                style="display:flex; align-items:center; justify-content:space-between; background:transparent; padding:0.8rem; border-radius:var(--radius-sm); border:1px solid var(--border-light); flex-wrap:wrap; gap:0.5rem;">
+                                <span
+                                    style="font-weight:700; letter-spacing:1px; font-size:var(--fs-base); color:var(--black);"
+                                    id="accountNumber">0123-4567-8910-111</span>
+                                <button type="button" onclick="handleCopy()" class="btn btn-outline btn-sm"
+                                    style="padding:0.4rem 0.8rem; border-color:var(--border-light); color:var(--navy);">
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                        <div style="margin-top:0.5rem;">
+                            <div
+                                style="color:var(--gray-dark); font-size:var(--fs-xs); font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.2rem;">
+                                Atas Nama</div>
+                            <div style="font-weight:700; font-size:1.1rem;">Zain Patra Caraka</div>
+                        </div>
+                    </div>
+
+                    <h3
+                        style="border-bottom:1px solid var(--border-light); padding-bottom:1rem; margin-top:1rem; margin-bottom:0.5rem;">
+                        Upload Bukti Pembayaran</h3>
+
+                    <div style="display:flex; align-items:center; gap:0.8rem; margin-top:1rem;">
+                        <input type="checkbox" id="confirmPayment" required
+                            style="width:20px; height:20px; cursor:pointer; accent-color:var(--primary);">
+                        <label for="confirmPayment" style="color:var(--gray-light); cursor:pointer;">Saya sudah
+                            melakukan transfer sesuai Total Pembayaran ke rekening di atas.</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg"
+                        style="width:100%; justify-content:center; margin-top:1rem;">Confirm Order</button>
+
+                    <div id="formStatus"
+                        style="display:none; margin-top:1rem; padding:1rem; border-radius:var(--radius-sm); font-size:var(--fs-sm); text-align:center;">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        // Pricing Logic
+        const PRICES = {
+            'Konsultasi Pajak': 500000,
+            'Pelaporan SPT': 1500000,
+            'Coretax System': 3000000
+        };
+
+        let subtotal = 0;
+        let discountRate = 0; // percentage
+        let finalPrice = 0;
+
+        // Parse URL Param
+        const urlParams = new URLSearchParams(window.location.search);
+        let selectedProduct = urlParams.get('product') || 'Konsultasi Pajak';
+        document.getElementById('productName').value = selectedProduct;
+
+        if (PRICES[selectedProduct]) {
+            subtotal = PRICES[selectedProduct];
+        } else {
+            subtotal = 500000; // fallback
+        }
+
+        function formatRp(value) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
+        }
+
+        function calculateTotal() {
+            let discountAmount = subtotal * discountRate;
+            let priceAfterDiscount = subtotal - discountAmount;
+            let taxValue = priceAfterDiscount * 0.11;
+            finalPrice = priceAfterDiscount + taxValue;
+
+            document.getElementById('subtotal').innerText = formatRp(subtotal);
+            document.getElementById('discountVal').innerText = `- ${formatRp(discountAmount)}`;
+            document.getElementById('taxVal').innerText = formatRp(taxValue);
+            document.getElementById('finalPrice').innerText = formatRp(finalPrice);
+        }
+
+        function applyDiscount() {
+            const code = document.getElementById('kodeDiskon').value.toUpperCase();
+            // Simulation of Admin Dashboard settings. 
+            // Nanti di-fetch dari API. Saat ini hardcode
+            if (code === 'LEGALSPOT2026') {
+                discountRate = 0.2; // 20%
+                alert('Kode diskon berhasil diterapkan! 20%');
+            } else if (code === 'DISKON30') {
+                discountRate = 0.3; // 30%
+                alert('Kode diskon berhasil diterapkan! 30%');
+            } else {
+                discountRate = 0;
+                alert('Kode diskon tidak valid');
+            }
+            calculateTotal();
+        }
+
+        function copyRekening() {
+            const rek = document.getElementById('rekNumber').innerText;
+            navigator.clipboard.writeText(rek).then(() => {
+                alert('Nomor rekening berhasil disalin!');
+            });
+        }
+
+        // Init
+        calculateTotal();
+
+        // Submit form
+        document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            const status = document.getElementById('formStatus');
+
+            btn.innerHTML = 'Memproses...';
+            btn.disabled = true;
+
+            const name = document.getElementById('namaLengkap').value;
+            const business = document.getElementById('namaBisnis').value;
+            const product = document.getElementById('productName').value;
+
+            const orderData = {
+                product: product,
+                nama: name,
+                email: document.getElementById('email').value,
+                bisnis: business,
+                omzet: document.getElementById('omzet').value,
+                kategori: document.getElementById('kategori').value,
+                subtotal: subtotal,
+                discountCode: document.getElementById('kodeDiskon').value,
+                total: finalPrice
+            };
+
+            try {
+                // Submit to Apps Script
+                await LegalspotAPI.submitOrder(orderData);
+
+                status.style.display = 'block';
+                status.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+                status.style.color = '#10b981';
+                status.style.border = '1px solid #10b981';
+                status.innerHTML = 'Order berhasil dibuat. Anda akan diarahkan ke WhatsApp untuk konfirmasi tim kami.';
+
+                // Redirect to WA
+                const msg = `Halo Legalspot, Nama saya ${name} dari ${business}.%0ASaya baru aja checkout service Legalspot *${product}* dan sudah melakukan Pembayaran%0ATolong dibantu Proses lebih lanjut, Terima kasih.`;
+                const waNumber = LEGALSPOT_CONFIG.WHATSAPP_ADMIN;
+
+                setTimeout(() => {
+                    window.location.href = `https://wa.me/${waNumber}?text=${msg}`;
+                }, 2000);
+
+            } catch (err) {
+                status.style.display = 'block';
+                status.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                status.style.color = '#ef4444';
+                status.style.border = '1px solid #ef4444';
+                status.innerHTML = 'Terjadi kesalahan saat membuat order. Silakan coba lagi.';
+                btn.innerHTML = 'Confirm Order';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

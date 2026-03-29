@@ -22,5 +22,5 @@ const LEGALSPOT_CONFIG = {
   SUPABASE_ANON_KEY: 'GANTI_SUPABASE_ANON_KEY',
 
   // Centralized Apps Script (One for all events)
-  DEFAULT_GAS_ENDPOINT: 'https://script.google.com/macros/s/AKfycbwhORH0YnH6kasw773f1AJ65iqU1-IotgTvkMfc519NI-5Z2AfmfKgqbES1zeTvxrsJLg/exec',
+  DEFAULT_GAS_ENDPOINT: 'https://script.google.com/macros/s/AKfycbJ-6_SUuH5gPlfLRt0hblRK2YuoP-N_TvazcRB5qva-gQryyMT-q4Wh-NVxeFyQQ7V/exec',
 };

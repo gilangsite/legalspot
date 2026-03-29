@@ -9,152 +9,118 @@
     <link rel="stylesheet" href="/css/global.css" />
     <link rel="stylesheet" href="/css/components.css" />
     <style>
-        body { background: var(--black); color: var(--white); }
+        body { background: #ffffff; color: #111827; margin: 0; font-family: 'Garet', sans-serif; }
 
-        /* ---------- NAVBAR minimal ---------- */
+        /* ---------- LAYOUT: Fixed Left, Scroll Right ---------- */
+        .event-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* LEFT COLUMN (Fixed Poster) */
+        .poster-pane {
+            width: 42%;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            border-right: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .poster-img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 30px 60px rgba(0,0,0,.12);
+            object-fit: contain;
+            transition: transform .5s ease;
+        }
+        .poster-img:hover { transform: scale(1.02); }
+
+        /* RIGHT COLUMN (Scrollable Content) */
+        .content-pane {
+            width: 58%;
+            padding: 4rem 5rem;
+            background: #ffffff;
+        }
+
+        /* ---------- NAVBAR (Embedded) ---------- */
         .event-nav {
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(8,8,12,.92);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            padding: .9rem var(--space-lg);
+            margin-bottom: 3rem;
             display: flex; align-items: center; gap: 1rem;
         }
-        .event-nav a { color: var(--gray-mid); font-size: var(--fs-sm); text-decoration: none; transition: var(--transition); }
-        .event-nav a:hover { color: var(--white); }
-        .event-nav .sep { color: var(--gray-dark); }
+        .event-nav a { color: #64748b; font-size: var(--fs-xs); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+        .event-nav a:hover { color: var(--navy-bright); }
+        .event-nav .sep { color: #cbd5e1; font-size: 10px; }
 
-        /* ---------- LAYOUT ---------- */
-        .event-layout {
-            display: grid;
-            grid-template-columns: 1fr 1.1fr;
-            gap: 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem var(--space-lg);
-            align-items: start;
-        }
-
-        /* ---------- POSTER COLUMN ---------- */
-        .poster-col { position: sticky; top: 80px; }
-        .poster-img {
-            width: 100%; border-radius: var(--radius-lg);
-            box-shadow: 0 20px 60px rgba(0,0,0,.6), var(--shadow-navy);
-            display: block;
-        }
-        .poster-placeholder {
-            width: 100%; aspect-ratio: 3/4;
-            background: var(--black-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--gray-mid); font-size: var(--fs-sm);
-        }
-
-        /* ---------- CONTENT COLUMN ---------- */
+        /* ---------- CONTENT STYLES ---------- */
         .event-tag {
             display: inline-block;
-            background: rgba(26,61,143,.15);
+            background: rgba(26,61,143,.06);
             color: var(--navy-bright);
-            border: 1px solid rgba(26,61,143,.3);
+            padding: .4rem 1rem;
             border-radius: 50px;
-            padding: .3rem .85rem;
-            font-size: var(--fs-xs);
-            font-weight: 700;
-            letter-spacing: .08em;
+            font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-        .event-title { font-size: clamp(2rem,5vw,3.2rem); font-weight: 700; line-height: 1.1; margin-bottom: .5rem; }
-        .event-title span { background: var(--grad-headline-gray); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; }
-        .event-sub { font-size: var(--fs-lg); color: var(--navy-bright); font-weight: 600; margin-bottom: 1.5rem; }
-        .event-desc { color: var(--gray-light); line-height: 1.8; margin-bottom: 1.5rem; }
-        .event-desc h3 { color: var(--white); font-size: var(--fs-base); font-weight: 700; margin-bottom: .75rem; }
-        .benefit-list { list-style: none; margin: 0 0 1rem; padding: 0; }
-        .benefit-list li {
-            display: flex; gap: .75rem; align-items: flex-start;
-            color: var(--gray-light); font-size: var(--fs-sm); line-height: 1.6;
-            padding: .45rem 0; border-bottom: 1px solid rgba(255,255,255,.05);
-        }
-        .benefit-list li:last-child { border-bottom: none; }
-        .benefit-list li::before { content: ''; display: block; width: 16px; height: 16px; border-radius: 50%; background: rgba(26,61,143,.2); border: 1px solid rgba(26,61,143,.4); flex-shrink: 0; margin-top: 2px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a3d8f' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); background-size: 10px; background-repeat: no-repeat; background-position: center; }
-        .impact-note {
-            background: rgba(26,61,143,.08);
-            border: 1px solid rgba(26,61,143,.2);
-            border-radius: var(--radius-md);
-            padding: 1rem 1.25rem;
-            font-style: italic;
-            color: var(--gray-light);
-            font-size: var(--fs-sm);
-            line-height: 1.7;
+            letter-spacing: .1em;
             margin-bottom: 1.5rem;
+        }
+        .event-title { font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: .75rem; color: #0f172a; }
+        .event-sub { font-size: var(--fs-lg); color: var(--navy-bright); font-weight: 700; margin-bottom: 2rem; }
+        
+        .event-desc { font-size: var(--fs-base); color: #475569; line-height: 1.7; margin-bottom: 2.5rem; }
+        .event-desc h3 { color: #1e293b; font-size: var(--fs-base); font-weight: 800; margin: 2rem 0 1rem; }
+
+        .benefit-list { list-style: none; padding: 0; margin-bottom: 2.5rem; }
+        .benefit-list li {
+            position: relative; padding: .6rem 0 .6rem 2rem;
+            color: #475569; font-size: var(--fs-sm); border-bottom: 1px solid #f1f5f9;
+        }
+        .benefit-list li::before {
+            content: '✓'; position: absolute; left: 0; color: var(--navy-bright); font-weight: 900;
         }
 
         /* ---------- DETAILS GRID ---------- */
-        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 2rem; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 3rem; }
         .detail-item {
-            background: var(--black-card);
-            border: 1px solid var(--border);
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
             border-radius: var(--radius-md);
-            padding: 1rem;
-            display: flex; gap: .75rem; align-items: flex-start;
+            padding: 1.25rem;
+            display: flex; gap: 1rem; align-items: flex-start;
         }
-        .detail-item.highlight { border-color: rgba(26,61,143,.4); background: rgba(26,61,143,.08); }
-        .detail-icon { width: 36px; height: 36px; background: rgba(26,61,143,.15); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .detail-icon svg { width: 18px; height: 18px; stroke: var(--navy-bright); fill: none; stroke-width: 2; }
-        .detail-label { font-size: var(--fs-xs); color: var(--gray-mid); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
-        .detail-val { font-size: var(--fs-sm); color: var(--white); font-weight: 600; margin-top: .15rem; }
+        .detail-item.highlight { background: rgba(26,61,143,.04); border-color: rgba(26,61,143,.15); }
+        .detail-icon { width: 40px; height: 40px; background: #ffffff; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,.03); }
+        .detail-icon svg { width: 18px; height: 18px; stroke: var(--navy-bright); stroke-width: 2.5; }
+        .detail-label { font-size: 10px; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .15rem; }
+        .detail-val { font-size: 13px; color: #1e293b; font-weight: 700; }
 
         /* ---------- PAYMENT ---------- */
-        .payment-section { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem; }
-        .payment-section h3 { font-size: var(--fs-base); font-weight: 700; margin-bottom: .35rem; }
-        .payment-section > p { font-size: var(--fs-sm); color: var(--gray-mid); margin-bottom: 1rem; }
-        .bank-card { background: rgba(26,61,143,.08); border: 1px solid rgba(26,61,143,.25); border-radius: var(--radius-md); padding: 1rem 1.25rem; }
-        .bank-name { font-size: var(--fs-xs); font-weight: 700; letter-spacing: .15em; color: var(--navy-bright); margin-bottom: .5rem; }
-        .account-row { display: flex; align-items: center; gap: .75rem; }
-        .account-number { font-size: var(--fs-xl); font-weight: 700; letter-spacing: .05em; font-family: monospace; }
-        .copy-btn { background: rgba(26,61,143,.2); border: 1px solid rgba(26,61,143,.3); color: var(--navy-bright); padding: .4rem .85rem; border-radius: var(--radius-sm); cursor: pointer; font-size: var(--fs-xs); font-weight: 700; display: flex; align-items: center; gap: .35rem; transition: var(--transition); }
-        .copy-btn:hover { background: rgba(26,61,143,.35); }
-        .account-holder { font-size: var(--fs-sm); color: var(--gray-mid); margin-top: .5rem; }
-        .wa-confirm { display: inline-flex; align-items: center; gap: .5rem; color: #25D366; font-size: var(--fs-sm); text-decoration: none; font-weight: 600; margin-top: .75rem; }
-        .wa-confirm:hover { opacity: .8; }
-        .copy-toast { display: none; background: rgba(40,160,90,.15); border: 1px solid rgba(40,160,90,.3); color: #28a05a; padding: .4rem 1rem; border-radius: 50px; font-size: var(--fs-xs); margin-top: .5rem; }
-        .copy-toast.show { display: inline-block; }
+        .payment-card { background: #ffffff; border: 2px solid #f1f5f9; border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 3rem; }
+        .bank-info { background: #f8fafc; border-radius: var(--radius-md); padding: 1.25rem; margin: 1rem 0; }
+        .account-num { font-size: 1.5rem; font-weight: 800; color: #0f172a; font-family: monospace; letter-spacing: 1px; }
+        .copy-btn { border: none; background: var(--navy-bright); color: #fff; padding: .5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; }
 
         /* ---------- FORM ---------- */
-        .form-section { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.75rem; }
-        .form-section h2 { font-size: var(--fs-xl); font-weight: 700; margin-bottom: 1.25rem; }
-        .form-section .form-input,
-        .form-section .form-textarea {
-            background: var(--black) !important;
-            color: var(--white) !important;
-            border-color: var(--border) !important;
+        .form-section { background: #f8fafc; padding: 2.5rem; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; }
+        .form-section h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; color: #0f172a; }
+        .form-input, .form-select, .form-textarea {
+            background: #ffffff !important; border: 1px solid #cbd5e1 !important; color: #1e293b !important;
         }
-        .form-section .form-select {
-            background-color: var(--black) !important;
-            color: var(--white) !important;
-            border-color: var(--border) !important;
-        }
-        .form-section .form-select option {
-            background: var(--black-card) !important;
-            color: var(--white) !important;
-        }
-        .form-section .form-label { color: var(--gray-light) !important; }
-        .submit-btn { width: 100%; padding: 1rem; background: var(--grad-navy-button); color: #fff; border: none; border-radius: var(--radius-md); font-size: var(--fs-base); font-weight: 700; cursor: pointer; letter-spacing: .04em; transition: var(--transition); margin-top: .5rem; }
-        .submit-btn:hover { opacity: .9; transform: translateY(-2px); }
-        .submit-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-        .success-msg { display: none; background: rgba(40,160,90,.12); border: 1px solid rgba(40,160,90,.3); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; color: #28a05a; margin-top: 1rem; }
-        .success-msg h3 { font-size: var(--fs-lg); font-weight: 700; margin-bottom: .5rem; }
-        .error-msg { display: none; background: rgba(224,82,82,.1); border: 1px solid rgba(224,82,82,.3); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; color: #f08080; margin-top: 1rem; }
+        .form-label { color: #475569 !important; font-weight: 600 !important; }
+        .submit-btn { width: 100%; padding: 1.1rem; background: var(--navy-bright); color: #fff; border: none; border-radius: 8px; font-size: var(--fs-base); font-weight: 800; cursor: pointer; transition: all .3s; }
+        .submit-btn:hover { background: #16367a; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(26,61,143,.2); }
 
-        /* Loading state */
-        #eventLoadingState { padding: 6rem 2rem; text-align: center; color: var(--gray-mid); }
-        #eventContent { display: none; }
-
-        /* ---------- RESPONSIVE ---------- */
-        @media (max-width: 900px) {
-            .event-layout { grid-template-columns: 1fr; }
-            .poster-col { position: static; }
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .event-wrapper { flex-direction: column; }
+            .poster-pane { width: 100%; height: auto; position: static; padding: 2rem; }
+            .content-pane { width: 100%; padding: 3rem 2rem; box-sizing: border-box; }
             .details-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -167,90 +133,86 @@
         <img src="/assets/images/legalspot-logo.png" style="width:22px;vertical-align:middle;margin-right:4px" alt="Logo">
         Legalspot
     </a>
-    <span class="sep">›</span>
-    <a href="/product">Layanan</a>
-    <span class="sep">›</span>
-    <span id="navEventName" style="color:var(--white);font-size:var(--fs-sm)">Event</span>
-</nav>
-
-<!-- Loading State -->
-<div id="eventLoadingState">
-    <div style="width:36px;height:36px;border:3px solid rgba(59,130,246,.1);border-top-color:var(--navy-bright);border-radius:50%;animation:spin 1s infinite linear;margin:0 auto 1rem"></div>
-    <p>Memuat informasi event...</p>
-</div>
-
-<!-- Event Content (hidden until loaded) -->
-<div id="eventContent">
-<div class="event-layout">
-    <!-- LEFT: Poster -->
-    <div class="poster-col">
-        <div id="posterWrap">
-            <div class="poster-placeholder">Memuat poster...</div>
-        </div>
+    <div id="eventLoadingState" style="text-align:center;padding:10rem 2rem;color:#64748b;">
+        <div style="width:40px;height:40px;border:3px solid #f1f5f9;border-top-color:var(--navy-bright);border-radius:50%;margin:0 auto 1.5rem;animation:spin 1s linear infinite;"></div>
+        <p>Memuat data event...</p>
     </div>
 
-    <!-- RIGHT: Info + Form -->
-    <div class="content-col">
+    <div id="eventContent" style="display:none">
+        <div class="event-wrapper">
+            <!-- LEFT: Fixed Poster -->
+            <div class="poster-pane" id="posterWrap">
+                <!-- Poster injected here -->
+            </div>
 
-        <!-- Event Info -->
-        <div class="event-tag" id="eventTag">Event Legalspot</div>
-        <h1 class="event-title"><span id="eventTitle">—</span></h1>
-        <p class="event-sub" id="eventSubTitle"></p>
+            <!-- RIGHT: Scrollable Content -->
+            <div class="content-pane">
+                <!-- Navigation -->
+                <nav class="event-nav">
+                    <a href="/">BERANDA</a>
+                    <span class="sep">/</span>
+                    <a href="#" id="navEventName">EVENT</a>
+                </nav>
 
-        <div class="event-desc">
-            <p id="eventDesc"></p>
-            <div id="eventMaterials"></div>
-            <div id="eventImpactNote" class="impact-note" style="display:none"></div>
-        </div>
+                <!-- Header Info -->
+                <span class="event-tag">Event Legalspot</span>
+                <h1 class="event-title" id="eventTitle"></h1>
+                <p class="event-sub" id="eventSubTitle"></p>
+                
+                <div class="event-desc" id="eventDesc"></div>
+                <div id="eventMaterials"></div>
 
-        <!-- Detail Grid -->
-        <div class="details-grid" id="detailsGrid"></div>
+                <div id="eventImpactNote" style="background:#f1f5f9;border-left:4px solid var(--navy-bright);padding:1.5rem;margin-bottom:3rem;font-style:italic;color:#334155;border-radius:0 8px 8px 0;display:none"></div>
 
-        <!-- Payment -->
-        <div class="payment-section" id="paymentSection">
-            <h3>Metode Pembayaran</h3>
-            <p>Pendaftaran dilakukan dengan melakukan transfer ke:</p>
-            <div class="bank-card">
-                <div class="bank-name" id="payBankName">BANK BRI</div>
-                <div class="account-row">
-                    <span class="account-number" id="payAccountNum">—</span>
-                    <button class="copy-btn" onclick="copyAccountNum()">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                        Salin
-                    </button>
+                <!-- Info Grid -->
+                <div class="details-grid" id="detailsGrid"></div>
+
+                <!-- Payment Info -->
+                <div class="payment-card">
+                    <h3 style="margin-top:0;font-size:1.25rem;font-weight:800;margin-bottom:.5rem">Metode Pembayaran</h3>
+                    <p style="color:#64748b;font-size:var(--fs-sm);margin-bottom:1.5rem">Silakan lakukan transfer investasi ke rekening resmi berikut:</p>
+                    
+                    <div class="bank-info">
+                        <div style="font-size:11px;font-weight:800;color:var(--navy-bright);text-transform:uppercase;letter-spacing:1px;margin-bottom:.5rem" id="payBankName">BANK BRI</div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem">
+                            <span class="account-num" id="payAccountNum">—</span>
+                            <button class="copy-btn" onclick="copyAccountNum()">Salin</button>
+                        </div>
+                        <div style="color:#64748b;font-size:13px;margin-top:.75rem;font-weight:600" id="payAccountHolder">a.n. —</div>
+                    </div>
+
+                    <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid #f1f5f9;">
+                        <p style="font-size:13px;color:#64748b;margin-bottom:.75rem">Kirim bukti transfer untuk konfirmasi pendaftaran:</p>
+                        <a id="payWaLink" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:.6rem;color:#16a34a;text-decoration:none;font-weight:800;font-size:var(--fs-base)">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.998 0C5.372 0 0 5.372 0 12c0 2.12.558 4.103 1.525 5.828L.057 24l6.345-1.428A11.935 11.935 0 0012 23.999c6.627 0 12-5.372 12-12S18.625.001 12 .001z"/></svg>
+                            <span id="payWaDisplay">—</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="account-holder" id="payAccountHolder">a.n. —</div>
-            </div>
-            <p style="font-size:var(--fs-sm);color:var(--gray-mid);margin-top:.75rem">
-                Bukti transfer konfirmasi ke Admin:
-                <a id="payWaLink" href="#" target="_blank" class="wa-confirm">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.998 0C5.372 0 0 5.372 0 12c0 2.12.558 4.103 1.525 5.828L.057 24l6.345-1.428A11.935 11.935 0 0012 23.999c6.627 0 12-5.372 12-12S18.625.001 12 .001z"/></svg>
-                    <span id="payWaDisplay">—</span>
-                </a>
-            </p>
-            <div class="copy-toast" id="copyToast">✓ Nomor rekening disalin!</div>
-        </div>
 
-        <!-- Registration Form -->
-        <div class="form-section">
-            <h2>Formulir Pendaftaran</h2>
-            <form id="registrationForm">
-                <div id="dynamicFormFields"></div>
-                <button type="submit" class="submit-btn" id="submitBtn">Daftar Sekarang</button>
-            </form>
-            <div class="success-msg" id="successMsg">
-                <h3>✅ Pendaftaran Berhasil!</h3>
-                <p>Terima kasih! Panitia akan menghubungi kamu melalui WhatsApp/Email untuk konfirmasi lebih lanjut.</p>
-            </div>
-            <div class="error-msg" id="errorMsg">
-                <h3>❌ Terjadi Kesalahan</h3>
-                <p>Mohon maaf, gagal mengirim data. Silakan coba lagi atau hubungi admin.</p>
+                <!-- Registration Form -->
+                <div class="form-section">
+                    <h2>Formulir Pendaftaran</h2>
+                    <form id="registrationForm">
+                        <div id="dynamicFormFields"></div>
+                        <button type="submit" class="submit-btn" id="submitBtn">Daftar Sekarang</button>
+                    </form>
+                    <div class="success-msg" id="successMsg" style="display:none;text-align:center;padding:2rem 0;">
+                        <div style="font-size:3rem;margin-bottom:1rem">✅</div>
+                        <h3 style="font-size:1.5rem;font-weight:800;color:#0f172a;margin-bottom:.5rem">Pendaftaran Berhasil!</h3>
+                        <p style="color:#64748b;">Terima kasih! Panitia akan segera menghubungi kamu melalui WhatsApp untuk konfirmasi.</p>
+                    </div>
+                    <div id="errorMsg" style="display:none;color:#ef4444;text-align:center;margin-top:1.5rem;font-weight:600;">
+                        Terjadi kesalahan. Silakan coba lagi atau hubungi admin.
+                    </div>
+                </div>
+
+                <footer style="margin-top:4rem;padding-top:2rem;border-top:1px solid #f1f5f9;color:#94a3b8;font-size:12px;text-align:center">
+                    &copy; 2026 Legalspot. All rights reserved.
+                </footer>
             </div>
         </div>
-
-    </div><!-- /content-col -->
-</div><!-- /event-layout -->
-</div><!-- /#eventContent -->
+    </div>
 
 <style>
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -421,9 +383,14 @@ document.getElementById('registrationForm').addEventListener('submit', async (e)
 function copyAccountNum() {
     const num = document.getElementById('payAccountNum').textContent;
     navigator.clipboard.writeText(num).then(() => {
-        const t = document.getElementById('copyToast');
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 2500);
+        const btn = document.querySelector('.payment-card .copy-btn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Tersalin!';
+        btn.style.background = '#16a34a';
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = '';
+        }, 2000);
     });
 }
 

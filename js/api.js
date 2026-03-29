@@ -182,11 +182,34 @@ const LegalspotAPI = {
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(formData)
             });
-            return { status: 'success' };
-        } catch (err) {
-            console.error('submitEventRegistration error:', err);
-            throw err;
-        }
+            return { status: 'OK' };
+        } catch (err) { throw err; }
+    },
+
+    async uploadFile(gasEndpoint, file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = async () => {
+                const base64 = reader.result.split(',')[1];
+                try {
+                    const res = await fetch(gasEndpoint, {
+                        method: 'POST',
+                        mode: 'cors', // Upload needs response for ID
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'uploadPoster',
+                            fileBase64: base64,
+                            fileName: file.name,
+                            mimeType: file.type
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.status === 'OK') resolve(data.fileId);
+                    else reject(new Error(data.message));
+                } catch (err) { reject(err); }
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
     }
 };
-

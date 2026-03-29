@@ -20,6 +20,17 @@ function doPost(e) {
       data = e.parameter || {};
     }
 
+    // --- ACTION: uploadPoster ---
+    if (data.action === 'uploadPoster') {
+      const folderId = '1ctywoxyBu44pGeh8TbK_qfCZSOAcVm6I';
+      const folder   = DriveApp.getFolderById(folderId);
+      const fileName = data.fileName || ('poster_' + new Date().getTime());
+      const blob     = Utilities.newBlob(Utilities.base64Decode(data.fileBase64), data.mimeType, fileName);
+      const file     = folder.createFile(blob);
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      return _response({ status: 'OK', fileId: file.getId() });
+    }
+
     // Ambil Spreadsheet ID dan Sheet (Tab) Name secara dinamis dari request
     const spreadsheetId = data.spreadsheet_id || data.spreadsheetId || '13fjU1cVYPHFg4m5yfzBjae9Q8P3WDn89wGxVuINTnSI';
     const sheetName     = data.sheet_name || data.sheetName || data.event_name || 'EventRegistrations';

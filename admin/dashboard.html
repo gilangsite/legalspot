@@ -64,7 +64,25 @@
         .add-btn { background: rgba(26,61,143,.15); border: 1px solid rgba(26,61,143,.3); color: var(--navy-bright); border-radius: var(--radius-sm); padding: .5rem 1rem; cursor: pointer; font-size: var(--fs-sm); font-family: inherit; margin-top: .5rem; }
         .section-divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
         .ec-section-label { font-size: var(--fs-xs); font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--navy-bright); margin-bottom: .75rem; }
-        .poster-note { font-size: var(--fs-xs); color: var(--gray-mid); margin-top: .4rem; }
+        .poster-drop-zone {
+            border: 2px dashed rgba(255,255,255,.1);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all .2s ease;
+            background: rgba(255,255,255,.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+        .poster-drop-zone:hover, .poster-drop-zone.dragover {
+            border-color: var(--navy-bright);
+            background: rgba(26,61,143,.05);
+        }
+        .poster-note { font-size: 10px; color: var(--gray-mid); margin-top: .4rem; line-height: 1.4; }
         .toggle-wrap { display: flex; align-items: center; gap: .75rem; margin-top: .5rem; }
         .toggle-switch { position: relative; width: 44px; height: 24px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
@@ -325,12 +343,31 @@
 
     <!-- POSTER & GAS -->
     <p class="ec-section-label">Poster & Technical Setup</p>
-    <div class="ec-grid">
-        <div class="form-group">
-            <label class="form-label">Google Drive File ID (Poster)</label>
-            <input type="text" id="ecPosterId" class="form-input" placeholder="1ABC...xyz" />
-            <p class="poster-note">Cara ambil: buka file di Google Drive → klik kanan → "Get link" → salin ID dari URL (bagian setelah /d/)</p>
+
+    <!-- Poster Upload Zone -->
+    <div class="form-group" style="margin-bottom:1.5rem">
+        <label class="form-label">Event Poster (Upload ke Google Drive)</label>
+        <div id="posterDropZone" class="poster-drop-zone" onclick="document.getElementById('posterFileInput').click()">
+            <div id="posterPreviewWrap" style="display:none;margin-bottom:.75rem">
+                <img id="posterPreviewImg" src="" style="max-height:120px;border-radius:var(--radius-sm);object-fit:contain" />
+            </div>
+            <div id="posterUploadPrompt">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:.5rem"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                <p style="font-size:var(--fs-xs);margin:0">Klik atau seret gambar ke sini untuk upload</p>
+            </div>
+            <div id="posterUploadProgress" style="display:none;width:100%;text-align:center">
+                <div style="width:100%;height:4px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden;margin-bottom:.5rem">
+                    <div id="posterProgressBar" style="width:0%;height:100%;background:var(--navy-bright);transition:width .3s"></div>
+                </div>
+                <p style="font-size:10px;color:var(--gray-mid)">Mengunggah ke Google Drive...</p>
+            </div>
         </div>
+        <input type="file" id="posterFileInput" style="display:none" accept="image/*" onchange="handlePosterSelect(event)" />
+        <input type="hidden" id="ecPosterId" />
+        <p class="poster-note" style="margin-top:.4rem">File otomatis tersimpan di folder Google Drive Legalspot.</p>
+    </div>
+
+    <div class="ec-grid">
         <div class="form-group">
             <label class="form-label">Apps Script URL (Web App)</label>
             <input type="text" id="ecGasUrl" class="form-input" placeholder="https://script.google.com/macros/s/..." />
@@ -580,14 +617,82 @@ document.addEventListener('input', e => {
 });
 
 // ---- OPEN MODAL ----
-function openEventCreator(id) {
+// --- POSTER UPLOAD HELPERS ---
+function handlePosterSelect(e) {
+    const file = e.target.files[0];
+    if (file) uploadPosterFile(file);
+}
+
+async function uploadPosterFile(file) {
+    const prompt = document.getElementById('posterUploadPrompt');
+    const progress = document.getElementById('posterUploadProgress');
+    const bar = document.getElementById('posterProgressBar');
+    const preview = document.getElementById('posterPreviewWrap');
+    const previewImg = document.getElementById('posterPreviewImg');
+    const gasUrl = document.getElementById('ecGasUrl').value || LEGALSPOT_CONFIG.DEFAULT_GAS_ENDPOINT;
+
+    if (!gasUrl) { alert('Apps Script URL belum diisi di Technical Setup.'); return; }
+
+    prompt.style.display = 'none';
+    progress.style.display = 'block';
+    bar.style.width = '0%';
+
+    try {
+        // Mock progress for better UX
+        const interval = setInterval(() => {
+            const cur = parseInt(bar.style.width);
+            if (cur < 90) bar.style.width = (cur + 10) + '%';
+        }, 200);
+
+        const fileId = await LegalspotAPI.uploadFile(gasUrl, file);
+        clearInterval(interval);
+        bar.style.width = '100%';
+
+        document.getElementById('ecPosterId').value = fileId;
+        previewImg.src = `https://lh3.googleusercontent.com/d/${fileId}`;
+        preview.style.display = 'block';
+
+        setTimeout(() => {
+            progress.style.display = 'none';
+            prompt.style.display = 'block';
+            document.getElementById('posterUploadPrompt').innerHTML = `<p style="font-size:var(--fs-xs);color:var(--success)">✓ Poster terunggah</p>`;
+        }, 500);
+    } catch (err) {
+        alert('Gagal upload poster: ' + err.message);
+        progress.style.display = 'none';
+        prompt.style.display = 'block';
+    }
+}
+
+// Drag & Drop Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const zone = document.getElementById('posterDropZone');
+    if (!zone) return;
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(name => {
+        zone.addEventListener(name, e => { e.preventDefault(); e.stopPropagation(); });
+    });
+    zone.addEventListener('dragover', () => zone.classList.add('dragover'));
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', e => {
+        zone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) uploadPosterFile(file);
+    });
+});
+
+async function openEventCreator(eventId = null) {
     const modal = document.getElementById('eventCreatorModal');
     modal.classList.add('open');
     document.getElementById('formFieldsContainer').innerHTML = '';
     document.getElementById('materialsContainer').innerHTML  = '';
 
-    if (id) {
-        const ev = allEvents.find(e => e.id === id);
+    // Reset Upload UI
+    document.getElementById('posterPreviewWrap').style.display = 'none';
+    document.getElementById('posterUploadPrompt').style.display = 'block';
+    document.getElementById('posterUploadPrompt').innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:.5rem"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg><p style="font-size:var(--fs-xs);margin:0">Klik atau seret gambar ke sini untuk upload</p>`;
+
+    if (eventId) {
+        const ev = allEvents.find(e => e.id === eventId);
         if (!ev) return;
         document.getElementById('ecModalTitle').textContent = 'Edit Event';
         document.getElementById('ecId').value           = ev.id;

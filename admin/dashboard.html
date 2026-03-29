@@ -629,9 +629,6 @@ async function uploadPosterFile(file) {
     const bar = document.getElementById('posterProgressBar');
     const preview = document.getElementById('posterPreviewWrap');
     const previewImg = document.getElementById('posterPreviewImg');
-    const gasUrl = LEGALSPOT_CONFIG.DEFAULT_GAS_ENDPOINT || document.getElementById('ecGasUrl').value;
-
-    if (!gasUrl) { alert('Apps Script URL belum diisi di Technical Setup.'); return; }
 
     prompt.style.display = 'none';
     preview.style.display = 'none';
@@ -645,12 +642,15 @@ async function uploadPosterFile(file) {
             if (cur < 90) bar.style.width = (cur + 10) + '%';
         }, 200);
 
-        const fileId = await LegalspotAPI.uploadFile(gasUrl, file);
+        // DIRECT UPLOAD TO SUPABASE STORAGE (No more Drive permissions error!)
+        const publicUrl = await LegalspotAPI.uploadFile(file);
+        
         clearInterval(interval);
         bar.style.width = '100%';
 
-        document.getElementById('ecPosterId').value = fileId;
-        previewImg.src = `https://lh3.googleusercontent.com/d/${fileId}`;
+        // Simpan URL publik ke input field
+        document.getElementById('ecPosterId').value = publicUrl;
+        previewImg.src = publicUrl;
         
         setTimeout(() => {
             progress.style.display = 'none';
@@ -718,8 +718,18 @@ async function openEventCreator(eventId = null) {
         document.getElementById('ecSpreadsheetId').value = ev.spreadsheet_id || '13fjU1cVYPHFg4m5yfzBjae9Q8P3WDn89wGxVuINTnSI';
         document.getElementById('ecPublished').checked  = ev.is_published || false;
         (ev.materials || []).forEach(m => addMaterial(m.text || m));
-        const fields = (ev.form_fields && ev.form_fields.length) ? ev.form_fields : DEFAULT_FIELDS;
         fields.forEach(f => addFormFieldFromData(f));
+
+        // Preview Poster
+        if (ev.poster_drive_id) {
+            const isUrl = ev.poster_drive_id.startsWith('http');
+            document.getElementById('posterPreviewImg').src = isUrl ? ev.poster_drive_id : `https://lh3.googleusercontent.com/d/${ev.poster_drive_id}`;
+            document.getElementById('posterPreviewWrap').style.display = 'block';
+            document.getElementById('posterUploadPrompt').innerHTML = `<p style="font-size:11px;color:#28a05a;margin:0;font-weight:700">✓ Poster Terpasang (Klik untuk ganti)</p>`;
+        } else {
+            document.getElementById('posterPreviewWrap').style.display = 'none';
+            document.getElementById('posterUploadPrompt').innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:.5rem"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg><p style="font-size:var(--fs-xs);margin:0">Klik atau seret gambar ke sini untuk upload</p>`;
+        }
     } else {
         document.getElementById('ecModalTitle').textContent = 'Buat Event Baru';
         document.getElementById('ecId').value             = '';

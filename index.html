@@ -750,8 +750,12 @@
       const grid    = document.getElementById('eventsGrid');
 
       grid.innerHTML = events.map(ev => {
-        const posterHtml = ev.poster_drive_id
-          ? `<img src="https://lh3.googleusercontent.com/d/${ev.poster_drive_id}" alt="Poster ${esc(ev.event_name)}" style="width:100%;display:block;aspect-ratio:3/4;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0" onerror="this.style.display='none'" loading="lazy" />`
+        const val = ev.poster_drive_id;
+        const isUrl = val && val.startsWith('http');
+        const posterSrc = isUrl ? val : (val ? `https://drive.google.com/thumbnail?id=${val}&sz=w800` : null);
+        
+        const posterHtml = posterSrc
+          ? `<img src="${posterSrc}" alt="Poster ${esc(ev.event_name)}" style="width:100%;display:block;aspect-ratio:3/4;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0" onerror="this.style.display='none'" loading="lazy" />`
           : `<div style="width:100%;aspect-ratio:3/4;background:var(--black-card);border-radius:var(--radius-lg) var(--radius-lg) 0 0;display:flex;align-items:center;justify-content:center;color:var(--gray-mid);font-size:var(--fs-sm)">Poster</div>`;
         const dateStr = ev.date ? new Date(ev.date).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}) : '';
         return `<div class="card" style="padding:0;overflow:hidden;cursor:pointer;transition:transform .25s ease,box-shadow .25s ease" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 50px rgba(0,0,0,.7)'" onmouseout="this.style.transform='';this.style.boxShadow=''">

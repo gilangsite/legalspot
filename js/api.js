@@ -186,38 +186,42 @@ const LegalspotAPI = {
         } catch (err) { throw err; }
     },
 
-    async uploadFile(gasEndpoint, file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = async () => {
-                const base64 = reader.result.split(',')[1];
-                try {
-                    // REMOVE application/json header to avoid CORS preflight (OPTIONS)
-                    // Google Apps Script doesn't support OPTIONS for custom headers.
-                    const res = await fetch(gasEndpoint, {
-                        method: 'POST',
-                        mode: 'cors', 
-                        redirect: 'follow',
-                        body: JSON.stringify({
-                            action: 'uploadPoster',
-                            fileBase64: base64,
-                            fileName: file.name,
-                            mimeType: file.type
-                        })
-                    });
-                    
-                    const text = await res.text();
-                    const data = JSON.parse(text);
-                    
-                    if (data.status === 'OK') resolve(data.fileId);
-                    else reject(new Error(data.message || 'Gagal upload ke Drive'));
-                } catch (err) { 
-                    console.error('Upload Error:', err);
-                    reject(new Error('Koneksi ke Apps Script gagal atau diblokir CORS.'));
-                }
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
+    /** 
+     * Upload file to Supabase Storage
+     * @param {File} file - File object from input/drop
+     * @returns {Promise<string>} - Public URL of the uploaded file
+     */
+    async uploadFile(file) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+        const filePath = `event-posters/${fileName}`;
+
+        try {
+            // 1. Upload to Supabase Storage bucket 'posters'
+            const uploadUrl = `${LEGALSPOT_CONFIG.SUPABASE_URL}/storage/v1/object/posters/${filePath}`;
+            
+            const res = await fetch(uploadUrl, {
+                method: 'POST',
+                headers: {
+                    'apikey': LEGALSPOT_CONFIG.SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${LEGALSPOT_CONFIG.SUPABASE_ANON_KEY}`,
+                    'Content-Type': file.type,
+                    'x-upsert': 'true'
+                },
+                body: file
+            });
+
+            if (!res.ok) {
+                const err = await res.text();
+                throw new Error(`Upload gagal: ${err}`);
+            }
+
+            // 2. Construct Public URL
+            // Format: https://[project-id].supabase.co/storage/v1/object/public/[bucket]/[path]
+            return `${LEGALSPOT_CONFIG.SUPABASE_URL}/storage/v1/object/public/posters/${filePath}`;
+        } catch (err) {
+            console.error('Supabase Upload Error:', err);
+            throw new Error('Gagal upload ke Supabase Storage. Pastikan bucket "posters" sudah dibuat dan diset ke Public.');
+        }
     }
 };

@@ -274,14 +274,20 @@ function renderEvent(ev) {
     // Poster
     const posterWrap = document.getElementById('posterWrap');
     if (ev.poster_drive_id) {
-        const id = ev.poster_drive_id;
-        // Thumbnail proxy is much more reliable than /d/ or /uc links
-        const thumbUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
-        const fallbackUrl = `https://drive.google.com/uc?id=${id}&export=download`;
+        const val = ev.poster_drive_id;
+        const isUrl = val.startsWith('http');
         
-        posterWrap.innerHTML = `<img src="${thumbUrl}" 
-            class="poster-img" alt="Poster ${ev.event_name}" 
-            onerror="if(!this.dataset.tried){this.dataset.tried=true;this.src='${fallbackUrl}';}else{this.parentElement.innerHTML='<div class=poster-placeholder>Poster tidak tersedia</div>'}" />`;
+        if (isUrl) {
+            posterWrap.innerHTML = `<img src="${val}" class="poster-img" alt="Poster ${ev.event_name}" />`;
+        } else {
+            // Thumbnail proxy is much more reliable than /d/ or /uc links
+            const thumbUrl = `https://drive.google.com/thumbnail?id=${val}&sz=w1200`;
+            const fallbackUrl = `https://drive.google.com/uc?id=${val}&export=download`;
+            
+            posterWrap.innerHTML = `<img src="${thumbUrl}" 
+                class="poster-img" alt="Poster ${ev.event_name}" 
+                onerror="if(!this.dataset.tried){this.dataset.tried=true;this.src='${fallbackUrl}';}else{this.parentElement.innerHTML='<div class=poster-placeholder>Poster tidak tersedia</div>'}" />`;
+        }
     } else {
         posterWrap.innerHTML = `<div class="poster-placeholder">Poster belum diunggah</div>`;
     }

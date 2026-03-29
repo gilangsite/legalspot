@@ -1,0 +1,343 @@
+// FULL APPS SCRIPT (DO NOT MODIFY UNLESS YOU KNOW WHAT YOU'RE DOING)
+const SHEET_NAME = 'Februari';
+
+// Main entrypoint untuk menerima POST dari form (FormData / x-www-form-urlencoded)
+function doPost(e) {
+try {
+// Ambil parameter dari request (form encoded)
+const data = e.parameter || {};
+
+// Required fields sesuai nama input di HTML
+const requiredFields = [
+'Nama',
+'Jabatan',
+'Instansi',
+'Domisili',
+'WA',
+'Email',
+'Sumber'
+];
+
+// Validasi required
+for (let field of requiredFields) {
+if (!data[field] || String(data[field]).trim() === '') {
+return responseError(`Field ${field} wajib diisi`);
+}
+}
+
+// Optional: basic WA format sanitization (bersihkan spasi)
+data.WA = String(data.WA || '').replace(/\s+/g, '');
+
+// Baca sheet (pastikan nama sheet persis sama)
+const ss = SpreadsheetApp.getActiveSpreadsheet();
+const sheet = ss.getSheetByName(SHEET_NAME);
+if (!sheet) {
+return responseError(`Sheet tidak ditemukan: ${SHEET_NAME}`);
+}
+
+// Prepare value untuk Sumber jika 'Lainnya'
+const sumberValue = (data.Sumber === 'Lainnya') ? (data.Sumber_Manual || 'Lainnya') : data.Sumber;
+
+// Append row ke sheet
+sheet.appendRow([
+new Date(),
+data.Nama || '',
+data.Jabatan || '',
+data.Instansi || '',
+data.Domisili || '',
+data.WA || '',
+data.Email || '',
+data.Pesan || '',
+sumberValue
+]);
+
+// ------------------------
+// KIRIM EMAIL KONFIRMASI
+// ------------------------
+const emailPeserta = String(data.Email).trim();
+const subject = 'Pendaftaran Webinar Coretax Mastery Berhasil! 🎉';
+
+// Fungsi bantu escape HTML agar aman
+function esc(s) {
+return String(s || '')
+.replace(/&/g, '&amp;')
+.replace(/</g, '&lt;' ) .replace( />/g, '&gt;')
+.replace(/"/g, '&quot;')
+.replace(/'/g, '&#39;');
+}
+
+// Build html body (Integrated from email_template.html)
+const htmlBody = `
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Webinar Coretax Mastery Berhasil!</title>
+    <!--[if mso]>
+    <style type="text/css">
+        body, table, td, p, a, h1, h2, h3 { font-family: Arial, sans-serif !important; }
+    </style>
+    <![endif]-->
+    <style>
+        /* Reset styles */
+        body,
+        table,
+        td,
+        a {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table,
+        td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            outline: none;
+            text-decoration: none;
+        }
+
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 40px 0;
+            color: #111827;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-collapse: collapse;
+        }
+
+        .header {
+            background-color: #0b5ed7;
+            padding: 24px 32px;
+            text-align: left;
+        }
+
+        .header img {
+            display: block;
+            border: 0;
+            outline: none;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        .poster-container {
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .poster-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 32px 0;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #0b5ed7;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+
+        .wa-button {
+            display: block;
+            background-color: #25D366;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .details-box {
+            background-color: #f9fafb;
+            border-left: 3px solid #0b5ed7;
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 4px;
+        }
+
+        .info-label {
+            display: block;
+            font-size: 10px;
+            color: #4b5563;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: #111827;
+            font-weight: 700;
+        }
+
+        .footer {
+            padding: 32px;
+            text-align: center;
+            font-size: 11px;
+            color: #4b5563;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#f3f4f6">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" class="container">
+                    <tr>
+                        <td class="header">
+                            <img src="https://res.cloudinary.com/dr1hbseck/image/upload/v1768720240/logo-legalspot_udwweq.png"
+                                alt="LEGALSPOT" width="130">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content">
+                            <p style="font-size: 16px; margin-top: 0; color: #4b5563;">Halo
+                                <strong>${esc(data.Nama)}</strong>,</p>
+                            <p style="font-size: 15px; color: #4b5563;">Terima kasih telah mendaftar di <strong>Webinar
+                                    Coretax Mastery</strong>. Pendaftaran kamu berhasil kami terima! 🎉</p>
+                            <p style="font-size: 15px; color: #4b5563;">Saat ini, tim Legalspot sedang memproses
+                                verifikasi pembayaran kamu. Harap pastikan kamu sudah mengirimkan bukti transfer melalui
+                                WhatsApp admin kami agar segera diproses.</p>
+                            <div class="button-container">
+                                <a href="https://wa.me/6287893268929?text=Halo%20Admin%20Legalspot%2C%20aku%20sudah%20daftar%20Webinar%20Coretax%20Mastery%2C%20berikut%20aku%20kirim%20bukti%20pembayarannya."
+                                    class="button">Konfirmasi Pembayaran</a>
+                            </div>
+                            <div style="margin: 40px 0;">
+                                <h1
+                                    style="font-size: 32px; font-weight: 800; line-height: 1.1; margin: 0 0 8px 0; text-transform: uppercase; color: #111827;">
+                                    CORETAX MASTERY</h1>
+                                <h2 style="color: #0b5ed7; font-size: 18px; font-weight: 700; margin-bottom: 24px;">
+                                    SUKSES LAPOR SPT TAHUNAN 2025</h2>
+                                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td width="50%" valign="top" style="padding-bottom: 15px;">
+                                            <span class="info-label">Narasumber</span>
+                                            <span class="info-value">Ulphi Suhendra, M.M.,M.H</span>
+                                            <div style="font-size: 12px; color: #6b7280; font-style: italic;">Fungsional
+                                                Penyuluh Ahli Pajak</div>
+                                        </td>
+                                        <td width="50%" valign="top" style="padding-bottom: 15px;">
+                                            <span class="info-label">Pelaksanaan</span>
+                                            <span class="info-value">Zoom Meeting (Online)</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="50%" valign="top">
+                                            <span class="info-label">Hari / Tanggal</span>
+                                            <span class="info-value">Sabtu, 21 Februari 2026</span>
+                                        </td>
+                                        <td width="50%" valign="top">
+                                            <span class="info-label">Kontak Admin</span>
+                                            <span class="info-value">0878-9326-8929</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="poster-container">
+                                <img src="https://res.cloudinary.com/dr1hbseck/image/upload/v1770359826/poster_hfs5hm.png"
+                                    alt="Poster Webinar" width="100%">
+                            </div>
+                            <p style="font-size: 14px; color: #4b5563; margin-top: 32px;">Pastikan untuk selalu mengecek
+                                WhatsApp dan email kamu untuk update informasi terbaru dari kami. Sampai jumpa di
+                                webinar!</p>
+                            <div
+                                style="padding-top: 32px; border-top: 1px solid rgba(0, 0, 0, 0.08); font-size: 14px; color: #4b5563;">
+                                Salam hangat,<br>
+                                <strong style="color: #111827; font-weight: 700; margin-top: 8px; display: block;">Tim
+                                    Legalspot</strong>
+                            </div>
+                            <a href="https://wa.me/6287893268929" class="wa-button">Hubungi Admin Legalspot</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="footer">
+                            &copy; 2026 LEGALSPOT.id — PT Integrasia Solusi Nusantara.<br>
+                            Jl. Mabes Hankam No. 71, Jl. Sawo No.II, Cipayung, Jakarta Timur
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>`;
+
+const textBody =
+`Halo ${data.Nama},\n\n` +
+`Terima kasih telah mendaftar Webinar LegalSpot.\n\n` +
+`Informasi lanjutan akan kami kirimkan menjelang acara.\n\n` +
+`Tim LegalSpot`;
+
+// Kirim email (MailApp membutuhkan permission, pastikan sudah di-authorize)
+MailApp.sendEmail({
+to: emailPeserta,
+subject: subject,
+body: textBody,
+htmlBody: htmlBody
+});
+
+// Return sukses ke frontend
+return ContentService
+.createTextOutput(JSON.stringify({ status: 'OK' }))
+.setMimeType(ContentService.MimeType.JSON);
+
+} catch (err) {
+// Kembalikan pesan error (berguna untuk debugging di client)
+return responseError(err.toString());
+}
+}
+
+// Util: response error konsisten
+function responseError(msg) {
+return ContentService
+.createTextOutput(JSON.stringify({
+status: 'ERROR',
+message: String(msg)
+}))
+.setMimeType(ContentService.MimeType.JSON);
+}
+
+// Debug helper: jalankan sekali untuk meminta permission MailApp (authorize)
+function testSendEmail() {
+const recipient = Session.getActiveUser && Session.getActiveUser().getEmail ? Session.getActiveUser().getEmail() :
+Session.getEffectiveUser().getEmail();
+MailApp.sendEmail({
+to: recipient,
+subject: 'Test - Grant MailApp Permission',
+body: 'Ini email test untuk memberikan permission MailApp pada project Apps Script.'
+});
+}

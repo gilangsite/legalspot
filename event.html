@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitle">Event — Legalspot</title>
+    <meta name="description" id="pageDesc" content="Pendaftaran event Legalspot" />
+    <link rel="icon" type="image/png" href="/assets/images/legalspot-logo.png" />
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <style>
+        body { background: var(--black); color: var(--white); }
+
+        /* ---------- NAVBAR minimal ---------- */
+        .event-nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(8,8,12,.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: .9rem var(--space-lg);
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .event-nav a { color: var(--gray-mid); font-size: var(--fs-sm); text-decoration: none; transition: var(--transition); }
+        .event-nav a:hover { color: var(--white); }
+        .event-nav .sep { color: var(--gray-dark); }
+
+        /* ---------- LAYOUT ---------- */
+        .event-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem var(--space-lg);
+            align-items: start;
+        }
+
+        /* ---------- POSTER COLUMN ---------- */
+        .poster-col { position: sticky; top: 80px; }
+        .poster-img {
+            width: 100%; border-radius: var(--radius-lg);
+            box-shadow: 0 20px 60px rgba(0,0,0,.6), var(--shadow-navy);
+            display: block;
+        }
+        .poster-placeholder {
+            width: 100%; aspect-ratio: 3/4;
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gray-mid); font-size: var(--fs-sm);
+        }
+
+        /* ---------- CONTENT COLUMN ---------- */
+        .event-tag {
+            display: inline-block;
+            background: rgba(26,61,143,.15);
+            color: var(--navy-bright);
+            border: 1px solid rgba(26,61,143,.3);
+            border-radius: 50px;
+            padding: .3rem .85rem;
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .event-title { font-size: clamp(2rem,5vw,3.2rem); font-weight: 700; line-height: 1.1; margin-bottom: .5rem; }
+        .event-title span { background: var(--grad-headline-gray); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; }
+        .event-sub { font-size: var(--fs-lg); color: var(--navy-bright); font-weight: 600; margin-bottom: 1.5rem; }
+        .event-desc { color: var(--gray-light); line-height: 1.8; margin-bottom: 1.5rem; }
+        .event-desc h3 { color: var(--white); font-size: var(--fs-base); font-weight: 700; margin-bottom: .75rem; }
+        .benefit-list { list-style: none; margin: 0 0 1rem; padding: 0; }
+        .benefit-list li {
+            display: flex; gap: .75rem; align-items: flex-start;
+            color: var(--gray-light); font-size: var(--fs-sm); line-height: 1.6;
+            padding: .45rem 0; border-bottom: 1px solid rgba(255,255,255,.05);
+        }
+        .benefit-list li:last-child { border-bottom: none; }
+        .benefit-list li::before { content: ''; display: block; width: 16px; height: 16px; border-radius: 50%; background: rgba(26,61,143,.2); border: 1px solid rgba(26,61,143,.4); flex-shrink: 0; margin-top: 2px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a3d8f' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); background-size: 10px; background-repeat: no-repeat; background-position: center; }
+        .impact-note {
+            background: rgba(26,61,143,.08);
+            border: 1px solid rgba(26,61,143,.2);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            font-style: italic;
+            color: var(--gray-light);
+            font-size: var(--fs-sm);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ---------- DETAILS GRID ---------- */
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 2rem; }
+        .detail-item {
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            display: flex; gap: .75rem; align-items: flex-start;
+        }
+        .detail-item.highlight { border-color: rgba(26,61,143,.4); background: rgba(26,61,143,.08); }
+        .detail-icon { width: 36px; height: 36px; background: rgba(26,61,143,.15); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .detail-icon svg { width: 18px; height: 18px; stroke: var(--navy-bright); fill: none; stroke-width: 2; }
+        .detail-label { font-size: var(--fs-xs); color: var(--gray-mid); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+        .detail-val { font-size: var(--fs-sm); color: var(--white); font-weight: 600; margin-top: .15rem; }
+
+        /* ---------- PAYMENT ---------- */
+        .payment-section { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem; }
+        .payment-section h3 { font-size: var(--fs-base); font-weight: 700; margin-bottom: .35rem; }
+        .payment-section > p { font-size: var(--fs-sm); color: var(--gray-mid); margin-bottom: 1rem; }
+        .bank-card { background: rgba(26,61,143,.08); border: 1px solid rgba(26,61,143,.25); border-radius: var(--radius-md); padding: 1rem 1.25rem; }
+        .bank-name { font-size: var(--fs-xs); font-weight: 700; letter-spacing: .15em; color: var(--navy-bright); margin-bottom: .5rem; }
+        .account-row { display: flex; align-items: center; gap: .75rem; }
+        .account-number { font-size: var(--fs-xl); font-weight: 700; letter-spacing: .05em; font-family: monospace; }
+        .copy-btn { background: rgba(26,61,143,.2); border: 1px solid rgba(26,61,143,.3); color: var(--navy-bright); padding: .4rem .85rem; border-radius: var(--radius-sm); cursor: pointer; font-size: var(--fs-xs); font-weight: 700; display: flex; align-items: center; gap: .35rem; transition: var(--transition); }
+        .copy-btn:hover { background: rgba(26,61,143,.35); }
+        .account-holder { font-size: var(--fs-sm); color: var(--gray-mid); margin-top: .5rem; }
+        .wa-confirm { display: inline-flex; align-items: center; gap: .5rem; color: #25D366; font-size: var(--fs-sm); text-decoration: none; font-weight: 600; margin-top: .75rem; }
+        .wa-confirm:hover { opacity: .8; }
+        .copy-toast { display: none; background: rgba(40,160,90,.15); border: 1px solid rgba(40,160,90,.3); color: #28a05a; padding: .4rem 1rem; border-radius: 50px; font-size: var(--fs-xs); margin-top: .5rem; }
+        .copy-toast.show { display: inline-block; }
+
+        /* ---------- FORM ---------- */
+        .form-section { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.75rem; }
+        .form-section h2 { font-size: var(--fs-xl); font-weight: 700; margin-bottom: 1.25rem; }
+        .form-section .form-input,
+        .form-section .form-textarea {
+            background: var(--black) !important;
+            color: var(--white) !important;
+            border-color: var(--border) !important;
+        }
+        .form-section .form-select {
+            background-color: var(--black) !important;
+            color: var(--white) !important;
+            border-color: var(--border) !important;
+        }
+        .form-section .form-select option {
+            background: var(--black-card) !important;
+            color: var(--white) !important;
+        }
+        .form-section .form-label { color: var(--gray-light) !important; }
+        .submit-btn { width: 100%; padding: 1rem; background: var(--grad-navy-button); color: #fff; border: none; border-radius: var(--radius-md); font-size: var(--fs-base); font-weight: 700; cursor: pointer; letter-spacing: .04em; transition: var(--transition); margin-top: .5rem; }
+        .submit-btn:hover { opacity: .9; transform: translateY(-2px); }
+        .submit-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+        .success-msg { display: none; background: rgba(40,160,90,.12); border: 1px solid rgba(40,160,90,.3); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; color: #28a05a; margin-top: 1rem; }
+        .success-msg h3 { font-size: var(--fs-lg); font-weight: 700; margin-bottom: .5rem; }
+        .error-msg { display: none; background: rgba(224,82,82,.1); border: 1px solid rgba(224,82,82,.3); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; color: #f08080; margin-top: 1rem; }
+
+        /* Loading state */
+        #eventLoadingState { padding: 6rem 2rem; text-align: center; color: var(--gray-mid); }
+        #eventContent { display: none; }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 900px) {
+            .event-layout { grid-template-columns: 1fr; }
+            .poster-col { position: static; }
+            .details-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="event-nav">
+    <a href="/">
+        <img src="/assets/images/legalspot-logo.png" style="width:22px;vertical-align:middle;margin-right:4px" alt="Logo">
+        Legalspot
+    </a>
+    <span class="sep">›</span>
+    <a href="/product">Layanan</a>
+    <span class="sep">›</span>
+    <span id="navEventName" style="color:var(--white);font-size:var(--fs-sm)">Event</span>
+</nav>
+
+<!-- Loading State -->
+<div id="eventLoadingState">
+    <div style="width:36px;height:36px;border:3px solid rgba(59,130,246,.1);border-top-color:var(--navy-bright);border-radius:50%;animation:spin 1s infinite linear;margin:0 auto 1rem"></div>
+    <p>Memuat informasi event...</p>
+</div>
+
+<!-- Event Content (hidden until loaded) -->
+<div id="eventContent">
+<div class="event-layout">
+    <!-- LEFT: Poster -->
+    <div class="poster-col">
+        <div id="posterWrap">
+            <div class="poster-placeholder">Memuat poster...</div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Info + Form -->
+    <div class="content-col">
+
+        <!-- Event Info -->
+        <div class="event-tag" id="eventTag">Event Legalspot</div>
+        <h1 class="event-title"><span id="eventTitle">—</span></h1>
+        <p class="event-sub" id="eventSubTitle"></p>
+
+        <div class="event-desc">
+            <p id="eventDesc"></p>
+            <div id="eventMaterials"></div>
+            <div id="eventImpactNote" class="impact-note" style="display:none"></div>
+        </div>
+
+        <!-- Detail Grid -->
+        <div class="details-grid" id="detailsGrid"></div>
+
+        <!-- Payment -->
+        <div class="payment-section" id="paymentSection">
+            <h3>Metode Pembayaran</h3>
+            <p>Pendaftaran dilakukan dengan melakukan transfer ke:</p>
+            <div class="bank-card">
+                <div class="bank-name" id="payBankName">BANK BRI</div>
+                <div class="account-row">
+                    <span class="account-number" id="payAccountNum">—</span>
+                    <button class="copy-btn" onclick="copyAccountNum()">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                        Salin
+                    </button>
+                </div>
+                <div class="account-holder" id="payAccountHolder">a.n. —</div>
+            </div>
+            <p style="font-size:var(--fs-sm);color:var(--gray-mid);margin-top:.75rem">
+                Bukti transfer konfirmasi ke Admin:
+                <a id="payWaLink" href="#" target="_blank" class="wa-confirm">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.998 0C5.372 0 0 5.372 0 12c0 2.12.558 4.103 1.525 5.828L.057 24l6.345-1.428A11.935 11.935 0 0012 23.999c6.627 0 12-5.372 12-12S18.625.001 12 .001z"/></svg>
+                    <span id="payWaDisplay">—</span>
+                </a>
+            </p>
+            <div class="copy-toast" id="copyToast">✓ Nomor rekening disalin!</div>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="form-section">
+            <h2>Formulir Pendaftaran</h2>
+            <form id="registrationForm">
+                <div id="dynamicFormFields"></div>
+                <button type="submit" class="submit-btn" id="submitBtn">Daftar Sekarang</button>
+            </form>
+            <div class="success-msg" id="successMsg">
+                <h3>✅ Pendaftaran Berhasil!</h3>
+                <p>Terima kasih! Panitia akan menghubungi kamu melalui WhatsApp/Email untuk konfirmasi lebih lanjut.</p>
+            </div>
+            <div class="error-msg" id="errorMsg">
+                <h3>❌ Terjadi Kesalahan</h3>
+                <p>Mohon maaf, gagal mengirim data. Silakan coba lagi atau hubungi admin.</p>
+            </div>
+        </div>
+
+    </div><!-- /content-col -->
+</div><!-- /event-layout -->
+</div><!-- /#eventContent -->
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script>
+// Ambil slug dari URL path: /event/[slug]
+function getSlug() {
+    const parts = window.location.pathname.split('/');
+    // /event/slug or /event/slug/
+    for (let i = 0; i < parts.length; i++) {
+        if (parts[i] === 'event' && parts[i+1]) return parts[i+1];
+    }
+    // fallback: ?event=slug
+    return new URLSearchParams(window.location.search).get('event') || '';
+}
+
+const slug = getSlug();
+if (!slug) {
+    document.getElementById('eventLoadingState').innerHTML = '<p style="color:#f08080">Event tidak ditemukan.</p>';
+}
+
+let eventData = null;
+
+async function initEventPage() {
+    try {
+        const ev = await LegalspotAPI.fetchEventBySlug(slug);
+        if (!ev || !ev.id) throw new Error('Event tidak ditemukan.');
+        eventData = ev;
+        renderEvent(ev);
+    } catch (err) {
+        document.getElementById('eventLoadingState').innerHTML = `<p style="color:#f08080">${err.message}</p><p style="margin-top:1rem"><a href="/" style="color:var(--navy-bright)">← Kembali ke Beranda</a></p>`;
+    }
+}
+
+function renderEvent(ev) {
+    // SEO
+    document.title = `${ev.event_name} — Legalspot`;
+    document.getElementById('pageDesc').setAttribute('content', ev.description || '');
+    document.getElementById('pageTitle').textContent = `${ev.event_name} — Legalspot`;
+
+    // Navbar
+    document.getElementById('navEventName').textContent = ev.event_name;
+
+    // Poster
+    const posterWrap = document.getElementById('posterWrap');
+    if (ev.poster_drive_id) {
+        posterWrap.innerHTML = `<img src="https://lh3.googleusercontent.com/d/${ev.poster_drive_id}" class="poster-img" alt="Poster ${ev.event_name}" onerror="this.parentElement.innerHTML='<div class=poster-placeholder>Poster tidak tersedia</div>'" />`;
+    } else {
+        posterWrap.innerHTML = `<div class="poster-placeholder">Poster belum diunggah</div>`;
+    }
+
+    // Tag & Title
+    document.getElementById('eventTitle').textContent = ev.event_name;
+    document.getElementById('eventSubTitle').textContent = ev.event_sub_name || '';
+    document.getElementById('eventDesc').textContent = ev.description || '';
+
+    // Materials
+    const matContainer = document.getElementById('eventMaterials');
+    const materials = ev.materials || [];
+    if (materials.length) {
+        matContainer.innerHTML = `<h3>Materi Pembahasan Komprehensif:</h3>
+        <ul class="benefit-list">${materials.map(m => `<li>${esc(typeof m === 'string' ? m : m.text)}</li>`).join('')}</ul>`;
+    }
+
+    // Impact note
+    if (ev.impact_note) {
+        const el = document.getElementById('eventImpactNote');
+        el.textContent = ev.impact_note;
+        el.style.display = 'block';
+    }
+
+    // Details grid
+    const date = ev.date ? new Date(ev.date).toLocaleDateString('id-ID', {weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '-';
+    const timeStr = [ev.time_start, ev.time_end].filter(Boolean).join(' – ') || '-';
+    const details = [
+        { icon: calIcon(), label: 'Tanggal', val: date },
+        { icon: clockIcon(), label: 'Waktu', val: `${timeStr} WIB` },
+        { icon: placeIcon(), label: 'Tempat', val: ev.place || '-', highlight: false },
+        { icon: moneyIcon(), label: 'Investment Fee', val: ev.investment_fee || '-', highlight: true },
+    ];
+    document.getElementById('detailsGrid').innerHTML = details.map(d =>
+        `<div class="detail-item ${d.highlight ? 'highlight' : ''}">
+            <div class="detail-icon">${d.icon}</div>
+            <div><div class="detail-label">${d.label}</div><div class="detail-val">${esc(d.val)}</div></div>
+        </div>`
+    ).join('');
+
+    // Payment
+    document.getElementById('payBankName').textContent    = ev.bank_name    || 'BANK BRI';
+    document.getElementById('payAccountNum').textContent  = ev.bank_account || '—';
+    document.getElementById('payAccountHolder').textContent = 'a.n. ' + (ev.bank_holder || '—');
+    const waNum = ev.wa_admin || '6287893268929';
+    const waFormatted = waNum.replace(/(\d{4})(\d{4})(\d{4,})/, '$1-$2-$3');
+    document.getElementById('payWaDisplay').textContent = `${waFormatted} (Legalspot)`;
+    document.getElementById('payWaLink').href = `https://wa.me/${waNum}`;
+
+    // Dynamic Form Fields
+    const fields = (ev.form_fields && ev.form_fields.length) ? ev.form_fields : getDefaultFields();
+    renderFormFields(fields);
+
+    // Show content
+    document.getElementById('eventLoadingState').style.display = 'none';
+    document.getElementById('eventContent').style.display     = 'block';
+}
+
+function renderFormFields(fields) {
+    const container = document.getElementById('dynamicFormFields');
+    container.innerHTML = fields.map((f, i) => {
+        const id = `ff_${i}`;
+        const req = f.required ? '<span style="color:#f08080">*</span>' : '';
+        const name = f.label.replace(/[^a-zA-Z0-9]/g,'_') || `field_${i}`;
+        if (f.type === 'textarea') {
+            return `<div class="form-group"><label class="form-label" for="${id}">${esc(f.label)} ${req}</label><textarea id="${id}" name="${name}" class="form-input form-textarea" ${f.required?'required':''} placeholder="${esc(f.placeholder)}" rows="3"></textarea></div>`;
+        }
+        if (f.type === 'dropdown') {
+            const opts = (f.options||[]).map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
+            const otherField = f.options && f.options.includes('Lainnya')
+                ? `<input type="text" id="${id}_other" name="${name}_Manual" class="form-input" placeholder="Tuliskan sumber informasi..." style="display:none;margin-top:.5rem" />`
+                : '';
+            return `<div class="form-group"><label class="form-label" for="${id}">${esc(f.label)} ${req}</label><select id="${id}" name="${name}" class="form-select" ${f.required?'required':''} onchange="handleOtherOpt('${id}')"><option value="" disabled selected>${f.placeholder||'Pilih salah satu'}</option>${opts}</select>${otherField}</div>`;
+        }
+        return `<div class="form-group"><label class="form-label" for="${id}">${esc(f.label)} ${req}</label><input type="${f.type||'text'}" id="${id}" name="${name}" class="form-input" ${f.required?'required':''} placeholder="${esc(f.placeholder)}" /></div>`;
+    }).join('');
+}
+
+function handleOtherOpt(selectId) {
+    const sel = document.getElementById(selectId);
+    const other = document.getElementById(selectId + '_other');
+    if (other) other.style.display = sel.value === 'Lainnya' ? 'block' : 'none';
+}
+
+// Form Submit
+document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!eventData || !eventData.gas_endpoint) {
+        alert('Konfigurasi event belum lengkap. Hubungi admin Legalspot.');
+        return;
+    }
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = 'Mengirim...';
+
+    const formData = { action: 'submitRegistration', eventSlug: slug };
+    const form = document.getElementById('registrationForm');
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(inp => { if (inp.name) formData[inp.name] = inp.value; });
+
+    try {
+        await LegalspotAPI.submitEventRegistration(eventData.gas_endpoint, formData);
+        document.getElementById('registrationForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+    } catch (err) {
+        document.getElementById('errorMsg').style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Daftar Sekarang';
+    }
+});
+
+// Copy account number
+function copyAccountNum() {
+    const num = document.getElementById('payAccountNum').textContent;
+    navigator.clipboard.writeText(num).then(() => {
+        const t = document.getElementById('copyToast');
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+    });
+}
+
+// Default fields (fallback jika event belum set custom fields)
+function getDefaultFields() {
+    return [
+        {label:'Nama Peserta',type:'text',placeholder:'Nama Lengkap beserta Gelar',required:true,options:[]},
+        {label:'Jabatan / Posisi',type:'text',placeholder:'Contoh: Staff Finance',required:true,options:[]},
+        {label:'Nama Perusahaan / Instansi',type:'text',placeholder:'Nama Perusahaan Anda',required:true,options:[]},
+        {label:'Domisili Peserta',type:'text',placeholder:'Kota Domisili',required:true,options:[]},
+        {label:'Nomor Whatsapp',type:'tel',placeholder:'08xxxxxxxxxx',required:true,options:[]},
+        {label:'Email Peserta',type:'email',placeholder:'email@perusahaan.com',required:true,options:[]},
+        {label:'Mengetahui informasi event dari?',type:'dropdown',placeholder:'Pilih salah satu',required:true,options:['Instagram','Email Perusahaan','WA Group','Lainnya']},
+        {label:'Pesan khusus Panitia (Optional)',type:'textarea',placeholder:'Ada pertanyaan atau request khusus?',required:false,options:[]},
+    ];
+}
+
+// SVG icons
+function calIcon()   { return `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`; }
+function clockIcon() { return `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`; }
+function placeIcon() { return `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`; }
+function moneyIcon() { return `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`; }
+function esc(s)      { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+initEventPage();
+</script>
+</body>
+</html>

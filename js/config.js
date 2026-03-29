@@ -16,4 +16,8 @@ const LEGALSPOT_CONFIG = {
 
   // Admin email (for display purposes only; real auth is on GAS)
   ADMIN_EMAIL: 'admin@legalspot.id',
+
+  // Supabase (public anon key — safe for frontend)
+  SUPABASE_URL: 'GANTI_SUPABASE_URL',
+  SUPABASE_ANON_KEY: 'GANTI_SUPABASE_ANON_KEY',
 };

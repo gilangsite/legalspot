@@ -9,573 +9,710 @@
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/components.css" />
     <style>
-        :root {
-            --sidebar-width: 260px;
-        }
-
-        body {
-            background-color: var(--black);
-            display: flex;
-            min-height: 100vh;
-            color: var(--white);
-        }
+        :root { --sidebar-width: 260px; }
+        body { background-color: var(--black); display: flex; min-height: 100vh; color: var(--white); }
 
         /* --- Sidebar --- */
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--black-soft);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: var(--space-md);
-            position: fixed;
-            height: 100vh;
-            left: 0;
-            top: 0;
-            z-index: 100;
-        }
+        .sidebar { width: var(--sidebar-width); background: var(--black-soft); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: var(--space-md); position: fixed; height: 100vh; left: 0; top: 0; z-index: 100; overflow-y: auto; }
+        .sidebar-brand { display: flex; align-items: center; gap: .75rem; margin-bottom: var(--space-xl); padding: 0 .5rem; }
+        .sidebar-nav { flex: 1; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: .85rem 1rem; color: var(--gray-mid); border-radius: var(--radius-md); transition: var(--transition); margin-bottom: .4rem; cursor: pointer; font-size: var(--fs-sm); }
+        .nav-item:hover, .nav-item.active { background: rgba(59,130,246,.1); color: var(--white); }
+        .nav-item svg { width: 18px; height: 18px; stroke-width: 2; }
+        .sidebar-footer { border-top: 1px solid var(--border); padding-top: var(--space-md); }
 
-        .sidebar-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: var(--space-xl);
-            padding: 0 0.5rem;
-        }
+        /* --- Main --- */
+        .main-content { flex: 1; margin-left: var(--sidebar-width); padding: var(--space-lg); max-width: calc(100vw - var(--sidebar-width)); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xl); }
+        .user-pill { display: flex; align-items: center; gap: 12px; padding: .5rem 1rem; background: var(--black-card); border: 1px solid var(--border); border-radius: 50px; }
+        .user-pill .avatar { width: 28px; height: 28px; background: var(--grad-navy-button); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
 
-        .sidebar-nav {
-            flex: 1;
-        }
+        /* --- Stats --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: var(--space-md); margin-bottom: var(--space-xl); }
+        .stat-card { background: var(--black-card); border: 1px solid var(--border); padding: var(--space-md); border-radius: var(--radius-lg); }
+        .stat-card .label { font-size: var(--fs-xs); color: var(--gray-mid); text-transform: uppercase; letter-spacing: 1px; margin-bottom: .5rem; }
+        .stat-card .value { font-size: var(--fs-xl); font-weight: 700; }
 
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0.85rem 1rem;
-            color: var(--gray-mid);
-            border-radius: var(--radius-md);
-            transition: var(--transition);
-            margin-bottom: 0.4rem;
-            cursor: pointer;
-            font-size: var(--fs-sm);
-        }
+        /* --- Tables --- */
+        .table-container { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: var(--space-xl); }
+        .table-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+        th { text-align: left; padding: 1rem 1.5rem; color: var(--gray-mid); font-weight: 700; border-bottom: 1px solid var(--border); background: rgba(255,255,255,.02); }
+        td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .status-pill { padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
 
-        .nav-item:hover,
-        .nav-item.active {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--white);
-        }
+        /* --- Sections --- */
+        .dashboard-section { display: none; }
+        .dashboard-section.active { display: block; }
 
-        .nav-item svg {
-            width: 18px;
-            height: 18px;
-            stroke-width: 2;
-        }
+        /* --- Event Creator --- */
+        .event-creator-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8); backdrop-filter: blur(6px); z-index: 500; overflow-y: auto; padding: 2rem 1rem; }
+        .event-creator-modal.open { display: flex; align-items: flex-start; justify-content: center; }
+        .event-creator-box { background: var(--black-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; width: 100%; max-width: 860px; margin: auto; }
+        .event-creator-box h2 { font-size: var(--fs-xl); font-weight: 700; margin-bottom: 1.5rem; }
+        .ec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .ec-full { grid-column: 1 / -1; }
+        .material-item { display: flex; gap: .5rem; align-items: center; margin-bottom: .5rem; }
+        .material-item input { flex: 1; }
+        .material-item .rm-btn { background: rgba(224,82,82,.15); border: 1px solid rgba(224,82,82,.3); color: #f08080; border-radius: var(--radius-sm); padding: .4rem .7rem; cursor: pointer; font-size: 13px; }
+        .form-field-item { background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: .75rem 1rem; margin-bottom: .5rem; display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+        .form-field-item input, .form-field-item select { background: var(--black); border: 1px solid var(--border); color: var(--white); padding: .5rem .75rem; border-radius: var(--radius-sm); font-size: var(--fs-sm); font-family: inherit; }
+        .form-field-item select { color: var(--white); background-color: var(--black) !important; }
+        .form-field-item select option { background: var(--black-card); color: var(--white); }
+        .add-btn { background: rgba(26,61,143,.15); border: 1px solid rgba(26,61,143,.3); color: var(--navy-bright); border-radius: var(--radius-sm); padding: .5rem 1rem; cursor: pointer; font-size: var(--fs-sm); font-family: inherit; margin-top: .5rem; }
+        .section-divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+        .ec-section-label { font-size: var(--fs-xs); font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--navy-bright); margin-bottom: .75rem; }
+        .poster-note { font-size: var(--fs-xs); color: var(--gray-mid); margin-top: .4rem; }
+        .toggle-wrap { display: flex; align-items: center; gap: .75rem; margin-top: .5rem; }
+        .toggle-switch { position: relative; width: 44px; height: 24px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: var(--gray-dark); border-radius: 24px; transition: .3s; }
+        .toggle-slider:before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: .3s; }
+        .toggle-switch input:checked + .toggle-slider { background: var(--navy-bright); }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+        .event-card-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); }
+        .event-card-row:last-child { border-bottom: none; }
+        .event-poster-thumb { width: 60px; height: 60px; border-radius: var(--radius-sm); object-fit: cover; background: var(--black); flex-shrink: 0; }
+        .event-info { flex: 1; }
+        .event-info h4 { font-size: var(--fs-sm); font-weight: 700; margin-bottom: .2rem; }
+        .event-info p { font-size: var(--fs-xs); color: var(--gray-mid); }
+        .pill-published { background: rgba(40,160,90,.15); color: #28a05a; border: 1px solid rgba(40,160,90,.3); }
+        .pill-draft { background: rgba(200,150,40,.15); color: #c8a830; border: 1px solid rgba(200,150,40,.3); }
 
-        .sidebar-footer {
-            border-top: 1px solid var(--border);
-            padding-top: var(--space-md);
-        }
-
-        /* --- Main Content --- */
-        .main-content {
-            flex: 1;
-            margin-left: var(--sidebar-width);
-            padding: var(--space-lg);
-            max-width: calc(100vw - var(--sidebar-width));
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-xl);
-        }
-
-        .user-pill {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0.5rem 1rem;
-            background: var(--black-card);
-            border: 1px solid var(--border);
-            border-radius: 50px;
-        }
-
-        .user-pill .avatar {
-            width: 28px;
-            height: 28px;
-            background: var(--grad-navy-button);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        /* --- Dashboard Stats --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: var(--space-md);
-            margin-bottom: var(--space-xl);
-        }
-
-        .stat-card {
-            background: var(--black-card);
-            border: 1px solid var(--border);
-            padding: var(--space-md);
-            border-radius: var(--radius-lg);
-        }
-
-        .stat-card .label {
-            font-size: var(--fs-xs);
-            color: var(--gray-mid);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-card .value {
-            font-size: var(--fs-xl);
-            font-weight: 700;
-        }
-
-        /* --- Data Tables --- */
-        .table-container {
-            background: var(--black-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            margin-bottom: var(--space-xl);
-        }
-
-        .table-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: var(--fs-sm);
-        }
-
-        th {
-            text-align: left;
-            padding: 1rem 1.5rem;
-            color: var(--gray-mid);
-            font-weight: 700;
-            border-bottom: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        td {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .status-pill {
-            padding: 4px 10px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        /* --- Sections Visibility --- */
-        .dashboard-section {
-            display: none;
-        }
-
-        .dashboard-section.active {
-            display: block;
-        }
-
-        /* Loading Overlay */
-        #loadingOverlay {
-            position: fixed;
-            inset: 0;
-            background: var(--black);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(59, 130, 246, 0.1);
-            border-top-color: var(--navy-bright);
-            border-radius: 50%;
-            animation: spin 1s infinite linear;
-            margin-bottom: 1rem;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        /* --- Loading --- */
+        #loadingOverlay { position: fixed; inset: 0; background: var(--black); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity .5s; }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(59,130,246,.1); border-top-color: var(--navy-bright); border-radius: 50%; animation: spin 1s infinite linear; margin-bottom: 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         @media (max-width: 1024px) {
-            .sidebar {
-                width: 80px;
-            }
-
-            .sidebar .sidebar-brand-name,
-            .sidebar .nav-item span {
-                display: none;
-            }
-
-            .main-content {
-                margin-left: 80px;
-                max-width: calc(100vw - 80px);
-            }
+            .sidebar { width: 80px; }
+            .sidebar .sidebar-brand-name, .sidebar .nav-item span { display: none; }
+            .main-content { margin-left: 80px; max-width: calc(100vw - 80px); }
+            .ec-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 
 <body>
+<div id="loadingOverlay">
+    <div class="spinner"></div>
+    <p style="color:var(--gray-mid);font-size:var(--fs-sm)">Menyiapkan Dashboard...</p>
+</div>
 
-    <div id="loadingOverlay">
-        <div class="spinner"></div>
-        <p style="color:var(--gray-mid); font-size:var(--fs-sm);">Menyiapkan Dashboard...</p>
+<!-- Sidebar -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <img src="/assets/images/legalspot-logo.png" style="width:30px" alt="Logo" />
+        <span class="navbar-brand-name sidebar-brand-name">Legal<span>spot</span></span>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="nav-item active" id="navOverview" onclick="switchSection('overview')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+            <span>Overview</span>
+        </div>
+        <div class="nav-item" id="navEvents" onclick="switchSection('events')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>Events</span>
+        </div>
+        <div class="nav-item" id="navPartners" onclick="switchSection('partners')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            <span>Partners</span>
+        </div>
+        <div class="nav-item" id="navOrders" onclick="switchSection('orders')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            <span>Orders</span>
+        </div>
+        <div class="nav-item" id="navLogs" onclick="switchSection('logs')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+            <span>Admin Logs</span>
+        </div>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="nav-item" onclick="logout()" style="color:#f87171">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Logout</span>
+        </div>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+    <header class="header">
+        <div>
+            <h2 style="font-size:var(--fs-xl);font-weight:700">Dashboard Admin</h2>
+            <p style="color:var(--gray-mid);font-size:var(--fs-sm)">Selamat datang kembali, <span id="adminRole">Admin</span>.</p>
+        </div>
+        <div class="user-pill">
+            <div class="avatar">A</div>
+            <div style="font-size:var(--fs-xs)">admin@legalspot.id</div>
+        </div>
+    </header>
+
+    <!-- OVERVIEW -->
+    <section id="overviewSection" class="dashboard-section active">
+        <div class="stats-grid">
+            <div class="stat-card"><div class="label">Total Partners</div><div class="value" id="statsTotalPartners">0</div></div>
+            <div class="stat-card"><div class="label">Pending Orders</div><div class="value" style="color:var(--navy-bright)" id="statsTotalOrders">0</div></div>
+            <div class="stat-card"><div class="label">Events Aktif</div><div class="value" style="color:#28a05a" id="statsActiveEvents">0</div></div>
+        </div>
+        <div class="table-container">
+            <div class="table-header">
+                <h3 style="font-size:var(--fs-base)">Pendaftaran Menunggu Review</h3>
+                <a href="javascript:void(0)" onclick="switchSection('partners')" class="btn btn-ghost btn-sm">Lihat Semua</a>
+            </div>
+            <div style="overflow-x:auto"><table id="overviewPartnersTable"><thead><tr><th>Tanggal</th><th>Nama</th><th>Domisili</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+        </div>
+    </section>
+
+    <!-- EVENTS SECTION -->
+    <section id="eventsSection" class="dashboard-section">
+        <div class="table-container">
+            <div class="table-header">
+                <h3 style="font-size:var(--fs-base)">Manajemen Event</h3>
+                <button onclick="openEventCreator(null)" class="btn btn-primary btn-sm">+ Buat Event Baru</button>
+            </div>
+            <div id="eventsList" style="padding:.5rem 0">
+                <div style="padding:2rem;text-align:center;color:var(--gray-mid)">Memuat data event...</div>
+            </div>
+        </div>
+        <div style="background:rgba(26,61,143,.1);border:1px solid rgba(26,61,143,.3);border-radius:var(--radius-md);padding:1.25rem 1.5rem;margin-bottom:1rem;">
+            <p style="font-size:var(--fs-sm);color:var(--navy-bright);font-weight:700;margin-bottom:.5rem">📋 Cara Deploy Apps Script untuk Event Baru</p>
+            <ol style="font-size:var(--fs-xs);color:var(--gray-mid);line-height:2;padding-left:1.25rem">
+                <li>Buka <a href="https://script.google.com" target="_blank" style="color:var(--navy-bright)">script.google.com</a> → New Project</li>
+                <li>Copy isi file <code>webinar-page/appscript-template.js</code> di repo ini</li>
+                <li>Ubah 3 variabel: <code>SPREADSHEET_ID</code>, <code>SHEET_NAME</code>, <code>EVENT_NAME</code></li>
+                <li>Klik <strong>Deploy → New Deployment → Web App → Execute as Me → Anyone</strong></li>
+                <li>Copy URL Web App → paste ke field "Apps Script URL" di form event</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- PARTNERS -->
+    <section id="partnersSection" class="dashboard-section">
+        <div class="table-container">
+            <div class="table-header">
+                <h3 style="font-size:var(--fs-base)">Data Pendaftar Mitra</h3>
+                <button onclick="fetchData()" class="btn btn-outline btn-sm">Refresh Data</button>
+            </div>
+            <div style="overflow-x:auto"><table id="fullPartnersTable"><thead><tr><th>Tanggal</th><th>Nama</th><th>Kontak</th><th>Background</th><th>Status</th><th>Aksi</th></tr></thead><tbody></tbody></table></div>
+        </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section id="ordersSection" class="dashboard-section">
+        <div class="table-container">
+            <div class="table-header"><h3 style="font-size:var(--fs-base)">Daftar Transaksi Client</h3></div>
+            <div style="overflow-x:auto"><table id="fullOrdersTable"><thead><tr><th>Tanggal</th><th>Nama / Bisnis</th><th>Layanan</th><th>Omzet</th><th>Total Bayar</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+        </div>
+    </section>
+
+    <!-- LOGS -->
+    <section id="logsSection" class="dashboard-section">
+        <div class="table-container">
+            <div class="table-header"><h3 style="font-size:var(--fs-base)">Activity Logs</h3></div>
+            <div style="padding:2rem;color:var(--gray-mid);text-align:center">Fitur monitoring log real-time akan tersedia segera.<br>Cek log sistem di Google Sheets <code>admin_logs</code>.</div>
+        </div>
+    </section>
+</main>
+
+<!-- ===================== EVENT CREATOR MODAL ===================== -->
+<div id="eventCreatorModal" class="event-creator-modal">
+<div class="event-creator-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+        <h2 style="margin:0" id="ecModalTitle">Buat Event Baru</h2>
+        <button onclick="closeEventCreator()" style="background:transparent;border:none;color:var(--gray-mid);font-size:1.5rem;cursor:pointer;line-height:1">×</button>
     </div>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-brand">
-            <img src="/assets/images/legalspot-logo.png" style="width:30px;" alt="Logo" />
-            <span class="navbar-brand-name sidebar-brand-name">Legal<span>spot</span></span>
+    <input type="hidden" id="ecId" />
+
+    <!-- EVENT INFO -->
+    <p class="ec-section-label">Informasi Event</p>
+    <div class="ec-grid">
+        <div class="form-group">
+            <label class="form-label">Event Name *</label>
+            <input type="text" id="ecName" class="form-input" placeholder="Coretax Mastery" />
         </div>
-
-        <nav class="sidebar-nav">
-            <div class="nav-item active" onclick="switchSection('overview')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <rect x="3" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="14" width="7" height="7" rx="1" />
-                    <rect x="3" y="14" width="7" height="7" rx="1" />
-                </svg>
-                <span>Overview</span>
-            </div>
-            <div class="nav-item" onclick="switchSection('partners')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-                </svg>
-                <span>Partners</span>
-            </div>
-            <div class="nav-item" onclick="switchSection('orders')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <path d="M16 10a4 4 0 01-8 0" />
-                </svg>
-                <span>Orders</span>
-            </div>
-            <div class="nav-item" onclick="switchSection('logs')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z" />
-                    <polyline points="13 2 13 9 20 9" />
-                </svg>
-                <span>Admin Logs</span>
-            </div>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="nav-item" onclick="logout()" style="color:#f87171;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" y1="12" x2="9" y2="12" />
-                </svg>
-                <span>Logout</span>
-            </div>
+        <div class="form-group">
+            <label class="form-label">Event Sub-Name</label>
+            <input type="text" id="ecSubName" class="form-input" placeholder="Sukses Lapor SPT Tahunan 2025" />
         </div>
-    </aside>
+        <div class="ec-full form-group">
+            <label class="form-label">Slug URL (otomatis dari nama) *</label>
+            <input type="text" id="ecSlug" class="form-input" placeholder="coretax-mastery" />
+            <div class="form-hint">URL: legalspot.vercel.app/event/<span id="ecSlugPreview">...</span></div>
+        </div>
+        <div class="ec-full form-group">
+            <label class="form-label">Deskripsi Event *</label>
+            <textarea id="ecDesc" class="form-input form-textarea" rows="3" placeholder="Sesi khusus untuk..."></textarea>
+        </div>
+    </div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <header class="header">
-            <div>
-                <h2 style="font-size:var(--fs-xl); font-weight:700;">Dashboard Admin</h2>
-                <p style="color:var(--gray-mid); font-size:var(--fs-sm);">Selamat datang kembali, <span
-                        id="adminRole">Admin</span>.</p>
-            </div>
-            <div class="user-pill">
-                <div class="avatar">A</div>
-                <div style="font-size:var(--fs-xs);">admin@legalspot.id</div>
-            </div>
-        </header>
+    <hr class="section-divider" />
 
-        <!-- OVERVIEW SECTION -->
-        <section id="overviewSection" class="dashboard-section active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="label">Total Partners</div>
-                    <div class="value" id="statsTotalPartners">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">Pending Orders</div>
-                    <div class="value" style="color:var(--navy-bright);" id="statsTotalOrders">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">Today's Activity</div>
-                    <div class="value" style="color:#28a05a;">Running</div>
-                </div>
-            </div>
+    <!-- MATERI -->
+    <p class="ec-section-label">Materi / Poin Pembahasan</p>
+    <div id="materialsContainer"></div>
+    <button class="add-btn" onclick="addMaterial()">+ Tambah Materi</button>
+    <div class="form-group" style="margin-top:1rem">
+        <label class="form-label">Catatan Impact (teks italic dalam box)</label>
+        <input type="text" id="ecImpact" class="form-input" placeholder="Sesi ini dirancang untuk memastikan anda mampu..." />
+    </div>
 
-            <div class="table-container">
-                <div class="table-header">
-                    <h3 style="font-size:var(--fs-base);">Pendaftaran Menunggu Review</h3>
-                    <a href="javascript:void(0)" onclick="switchSection('partners')" class="btn btn-ghost btn-sm">Lihat
-                        Semua</a>
-                </div>
-                <div style="overflow-x:auto;">
-                    <table id="overviewPartnersTable">
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Nama</th>
-                                <th>Domisili</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Data injected here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+    <hr class="section-divider" />
 
-        <!-- PARTNERS SECTION -->
-        <section id="partnersSection" class="dashboard-section">
-            <div class="table-container">
-                <div class="table-header">
-                    <h3 style="font-size:var(--fs-base);">Data Pendaftar Mitra</h3>
-                    <button onclick="fetchData()" class="btn btn-outline btn-sm">Refresh Data</button>
-                </div>
-                <div style="overflow-x:auto;">
-                    <table id="fullPartnersTable">
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Nama</th>
-                                <th>Kontak</th>
-                                <th>Background</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Data injected here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+    <!-- DETAIL EVENT -->
+    <p class="ec-section-label">Detail Pelaksanaan</p>
+    <div class="ec-grid">
+        <div class="form-group">
+            <label class="form-label">Tanggal</label>
+            <input type="date" id="ecDate" class="form-input" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Waktu Mulai</label>
+            <input type="time" id="ecTimeStart" class="form-input" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Waktu Selesai</label>
+            <input type="time" id="ecTimeEnd" class="form-input" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Tempat / Platform</label>
+            <input type="text" id="ecPlace" class="form-input" placeholder="Zoom Meeting (Online)" />
+        </div>
+        <div class="ec-full form-group">
+            <label class="form-label">Investment Fee</label>
+            <input type="text" id="ecFee" class="form-input" placeholder="Rp150.000,- per peserta" />
+        </div>
+    </div>
 
-        <!-- ORDERS SECTION -->
-        <section id="ordersSection" class="dashboard-section">
-            <div class="table-container">
-                <div class="table-header">
-                    <h3 style="font-size:var(--fs-base);">Daftar Transaksi Client</h3>
-                </div>
-                <div style="overflow-x:auto;">
-                    <table id="fullOrdersTable">
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Nama / Bisnis</th>
-                                <th>Layanan</th>
-                                <th>Omzet</th>
-                                <th>Total Bayar</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Data injected here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+    <hr class="section-divider" />
 
-        <!-- LOGS SECTION -->
-        <section id="logsSection" class="dashboard-section">
-            <div class="table-container">
-                <div class="table-header">
-                    <h3 style="font-size:var(--fs-base);">Activity Logs</h3>
-                </div>
-                <div style="padding: 2rem; color:var(--gray-mid); text-align:center;">
-                    Fitur monitoring log real-time akan tersedia segera.
-                    <br>Cek log sistem saat ini di Google Sheets `admin_logs`.
-                </div>
-            </div>
-        </section>
+    <!-- PAYMENT -->
+    <p class="ec-section-label">Metode Pembayaran</p>
+    <div class="ec-grid">
+        <div class="form-group">
+            <label class="form-label">Nama Bank</label>
+            <input type="text" id="ecBankName" class="form-input" value="BANK BRI" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Nomor Rekening</label>
+            <input type="text" id="ecBankAccount" class="form-input" value="114801010102504" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Nama Pemilik Rekening</label>
+            <input type="text" id="ecBankHolder" class="form-input" value="Zain Patra Caraka" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">No WA Admin Konfirmasi</label>
+            <input type="text" id="ecWaAdmin" class="form-input" value="6287893268929" />
+        </div>
+    </div>
 
-    </main>
+    <hr class="section-divider" />
 
-    <script src="../js/config.js"></script>
-    <script src="../js/api.js"></script>
-    <script>
-        // Check Auth
-        const authStat = localStorage.getItem('adminAuth');
-        if (authStat !== 'true') {
-            window.location.href = 'login';
+    <!-- FORM BUILDER -->
+    <p class="ec-section-label">Form Pendaftaran (Kustomisasi Pertanyaan)</p>
+    <p style="font-size:var(--fs-xs);color:var(--gray-mid);margin-bottom:.75rem">Default pertanyaan sudah terisi. Kamu bisa tambah, hapus, atau ubah urutannya.</p>
+    <div id="formFieldsContainer"></div>
+    <div style="display:flex;gap:.5rem;margin-top:.5rem">
+        <button class="add-btn" onclick="addFormField('text')">+ Text Field</button>
+        <button class="add-btn" onclick="addFormField('dropdown')">+ Dropdown</button>
+        <button class="add-btn" onclick="addFormField('textarea')">+ Textarea</button>
+    </div>
+
+    <hr class="section-divider" />
+
+    <!-- POSTER & GAS -->
+    <p class="ec-section-label">Poster & Technical Setup</p>
+    <div class="ec-grid">
+        <div class="form-group">
+            <label class="form-label">Google Drive File ID (Poster)</label>
+            <input type="text" id="ecPosterId" class="form-input" placeholder="1ABC...xyz" />
+            <p class="poster-note">Cara ambil: buka file di Google Drive → klik kanan → "Get link" → salin ID dari URL (bagian setelah /d/)</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Apps Script URL (Web App)</label>
+            <input type="text" id="ecGasUrl" class="form-input" placeholder="https://script.google.com/macros/s/..." />
+            <p class="poster-note">Buat Apps Script baru dari template, deploy, lalu paste URL-nya di sini.</p>
+        </div>
+        <div class="ec-full form-group">
+            <label class="form-label">Spreadsheet ID (opsional)</label>
+            <input type="text" id="ecSpreadsheetId" class="form-input" placeholder="13fjU1cVYPHFg4m5yfzBjae9Q8P3WDn89wGxVuINTnSI" value="13fjU1cVYPHFg4m5yfzBjae9Q8P3WDn89wGxVuINTnSI" />
+        </div>
+    </div>
+
+    <!-- PUBLISH TOGGLE -->
+    <hr class="section-divider" />
+    <div class="toggle-wrap">
+        <label class="toggle-switch">
+            <input type="checkbox" id="ecPublished" />
+            <span class="toggle-slider"></span>
+        </label>
+        <div>
+            <div style="font-size:var(--fs-sm);font-weight:700">Publish Event</div>
+            <div style="font-size:var(--fs-xs);color:var(--gray-mid)">Jika aktif, event akan muncul di halaman utama website</div>
+        </div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div style="display:flex;gap:.75rem;margin-top:2rem;justify-content:flex-end">
+        <button onclick="closeEventCreator()" class="btn btn-outline">Batal</button>
+        <button onclick="saveEvent()" class="btn btn-primary" id="ecSaveBtn">Simpan Event</button>
+    </div>
+</div>
+</div>
+<!-- ============================================================ -->
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script>
+// ---- AUTH CHECK ----
+const authStat = localStorage.getItem('adminAuth');
+if (authStat !== 'true') window.location.href = 'login';
+const adminPass = localStorage.getItem('adminPass') || '';
+let cachedData = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('adminRole').innerText = localStorage.getItem('adminRole') || 'Admin';
+    fetchData();
+    loadEvents();
+    initDefaultFormFields();
+    document.getElementById('ecName').addEventListener('input', autoSlug);
+});
+
+// ---- SECTION SWITCH ----
+function switchSection(id) {
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.dashboard-section').forEach(el => el.classList.remove('active'));
+    const nav = document.getElementById('nav' + id.charAt(0).toUpperCase() + id.slice(1));
+    if (nav) nav.classList.add('active');
+    document.getElementById(id + 'Section').classList.add('active');
+    if (id === 'events') loadEvents();
+}
+
+// ---- FETCH GAS DATA ----
+async function fetchData() {
+    try {
+        const data = await LegalspotAPI.getDashboardData(adminPass);
+        if (data.status === 'success') { cachedData = data; renderDashboard(data); }
+        else alert('Gagal: ' + data.message);
+    } catch (err) {
+        console.error(err);
+        alert('Error: ' + (err.message || 'Koneksi gagal.'));
+        if (err.message && err.message.includes('login kembali')) logout();
+    } finally {
+        document.getElementById('loadingOverlay').style.opacity = '0';
+        setTimeout(() => document.getElementById('loadingOverlay').style.display = 'none', 500);
+    }
+}
+
+function renderDashboard(data) {
+    const partners = data.partners || [];
+    const orders   = data.orders   || [];
+    document.getElementById('statsTotalPartners').innerText = partners.length;
+    document.getElementById('statsTotalOrders').innerText   = orders.filter(o => o.status === 'PENDING').length;
+    const pending = partners.filter(p => p.status === 'PENDING').slice(0, 5);
+    renderTable('overviewPartnersTable', pending, 'overview');
+    renderTable('fullPartnersTable', partners, 'full-partners');
+    renderTable('fullOrdersTable', orders, 'full-orders');
+}
+
+function renderTable(id, data, type) {
+    const tb = document.querySelector(`#${id} tbody`);
+    tb.innerHTML = '';
+    if (!data.length) { tb.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:2rem;color:var(--gray-mid)">Tidak ada data.</td></tr>`; return; }
+    data.forEach(item => {
+        const tr = document.createElement('tr');
+        const date = new Date(item.timestamp).toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
+        if (type === 'overview') {
+            tr.innerHTML = `<td>${date}</td><td>${item.nama}</td><td>${item.domisili}</td><td><span class="status-pill badge-${item.status.toLowerCase()}">${item.status}</span></td>`;
+        } else if (type === 'full-partners') {
+            tr.innerHTML = `<td>${date}</td><td>${item.nama}</td><td>${item.email}<br><span style="color:var(--navy-bright);font-size:11px">${item.whatsapp}</span></td><td>${item.pendidikan}<br><span style="color:var(--gray-mid);font-size:11px">${item.universitas}</span></td><td><span class="status-pill badge-${item.status.toLowerCase()}">${item.status}</span></td><td><div class="actions">${item.status==='PENDING'?`<button class="btn btn-primary btn-sm" onclick="updateMitra('${item.email}','ACCEPTED')">Accept</button><button class="btn btn-outline btn-sm" onclick="updateMitra('${item.email}','DECLINED')">Decline</button>`:'-'}</div></td>`;
+        } else if (type === 'full-orders') {
+            const price = Number(item.harga_final).toLocaleString('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0});
+            tr.innerHTML = `<td>${date}</td><td>${item.nama}<br><span style="color:var(--gray-mid);font-size:11px">${item.bisnis}</span></td><td>${item.produk}</td><td>${item.omzet}</td><td style="font-weight:700">${price}</td><td><span class="status-pill badge-pending">${item.status}</span></td>`;
         }
+        tb.appendChild(tr);
+    });
+}
 
-        const adminPass = localStorage.getItem('adminPass') || "";
-        // Actual password stored in backend is "Legalspot2026$$"
+async function updateMitra(email, status) {
+    if (!confirm(`Ubah status menjadi ${status}?`)) return;
+    try {
+        await LegalspotAPI.adminAction({ actionType:'updateMitraStatus', userEmail:email, status, auth:adminPass });
+        alert('Berhasil memperbarui status.');
+        fetchData();
+    } catch { alert('Gagal memperbarui status.'); }
+}
 
-        let cachedData = null;
+// ========================
+// EVENT MANAGEMENT
+// ========================
+let allEvents = [];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('adminRole').innerText = localStorage.getItem('adminRole') || 'Admin';
-            fetchData();
-        });
+async function loadEvents() {
+    try {
+        const events = await LegalspotAPI.fetchAllEvents();
+        allEvents = events || [];
+        renderEventsList(allEvents);
+        document.getElementById('statsActiveEvents').innerText = allEvents.filter(e => e.is_published).length;
+    } catch (err) {
+        document.getElementById('eventsList').innerHTML = `<div style="padding:2rem;text-align:center;color:#f08080">Gagal memuat events. Pastikan Supabase sudah dikonfigurasi di config.js</div>`;
+    }
+}
 
-        async function fetchData() {
-            try {
-                const data = await LegalspotAPI.getDashboardData(adminPass);
-                if (data.status === 'success') {
-                    cachedData = data;
-                    renderDashboard(data);
-                } else {
-                    alert('Gagal: ' + data.message);
-                }
-            } catch (err) {
-                console.error('Detailed Error:', err);
-                const errorDetail = err.message || 'Terjadi kesalahan koneksi ke backend.';
-                alert(`Error: ${errorDetail}\n\nTips:\n1. Pastikan AppScript sudah dideploy sebagai "Anyone".\n2. Gunakan "Manage Deployments" > "Edit" > "New Version" agar URL tetap sama.`);
-                if (err.message && err.message.includes('login kembali')) {
-                    logout();
-                }
-            } finally {
-                document.getElementById('loadingOverlay').style.opacity = '0';
-                setTimeout(() => document.getElementById('loadingOverlay').style.display = 'none', 500);
-            }
+function renderEventsList(events) {
+    const el = document.getElementById('eventsList');
+    if (!events.length) { el.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--gray-mid)">Belum ada event. Klik "+ Buat Event Baru" untuk memulai.</div>`; return; }
+    el.innerHTML = events.map(ev => {
+        const posterSrc = ev.poster_drive_id
+            ? `https://lh3.googleusercontent.com/d/${ev.poster_drive_id}`
+            : 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="%231a1a2e"><rect width="24" height="24" rx="2" fill="%231a1a2e"/></svg>';
+        const statusClass = ev.is_published ? 'pill-published' : 'pill-draft';
+        const statusLabel = ev.is_published ? 'Published' : 'Draft';
+        return `<div class="event-card-row">
+            <img src="${posterSrc}" class="event-poster-thumb" alt="Poster" onerror="this.style.background='var(--black)'">
+            <div class="event-info">
+                <h4>${escHtml(ev.event_name)}</h4>
+                <p>${ev.date || '-'} &nbsp;|&nbsp; <span class="status-pill ${statusClass}">${statusLabel}</span></p>
+                <p style="margin-top:.25rem;font-size:11px;color:var(--navy-bright)">legalspot.vercel.app/event/${escHtml(ev.slug)}</p>
+            </div>
+            <div class="actions">
+                <button class="btn btn-outline btn-sm" onclick="openEventCreator('${ev.id}')">Edit</button>
+                <button class="btn btn-primary btn-sm" onclick="togglePublishEvent('${ev.id}', ${ev.is_published})">${ev.is_published ? 'Unpublish' : 'Publish'}</button>
+                <button class="btn btn-sm" style="background:rgba(224,82,82,.15);border:1px solid rgba(224,82,82,.3);color:#f08080" onclick="deleteEvent('${ev.id}')">Hapus</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ---- MATERIALS ----
+function addMaterial(text = '') {
+    const container = document.getElementById('materialsContainer');
+    const div = document.createElement('div');
+    div.className = 'material-item';
+    div.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--navy-bright)" stroke-width="2" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>
+        <input type="text" class="form-input material-text" value="${escHtml(text)}" placeholder="Tuliskan poin materi..." />
+        <button class="rm-btn" onclick="this.parentElement.remove()">×</button>`;
+    container.appendChild(div);
+}
+
+// ---- FORM FIELD BUILDER ----
+const DEFAULT_FIELDS = [
+    { label: 'Nama Peserta', type: 'text', placeholder: 'Nama Lengkap beserta Gelar', required: true, options: [] },
+    { label: 'Jabatan / Posisi', type: 'text', placeholder: 'Contoh: Staff Finance', required: true, options: [] },
+    { label: 'Nama Perusahaan / Instansi', type: 'text', placeholder: 'Nama Perusahaan Anda', required: true, options: [] },
+    { label: 'Domisili Peserta', type: 'text', placeholder: 'Kota Domisili', required: true, options: [] },
+    { label: 'Nomor Whatsapp', type: 'tel', placeholder: '08xxxxxxxxxx', required: true, options: [] },
+    { label: 'Email Peserta', type: 'email', placeholder: 'email@perusahaan.com', required: true, options: [] },
+    { label: 'Mengetahui informasi event dari?', type: 'dropdown', placeholder: '', required: true, options: ['Instagram','Email Perusahaan','WA Group','Lainnya'] },
+    { label: 'Pesan khusus Panitia (Optional)', type: 'textarea', placeholder: 'Ada pertanyaan atau request khusus?', required: false, options: [] },
+];
+
+function initDefaultFormFields() {
+    const container = document.getElementById('formFieldsContainer');
+    container.innerHTML = '';
+    DEFAULT_FIELDS.forEach(f => addFormFieldFromData(f));
+}
+
+function addFormField(type) {
+    addFormFieldFromData({ label: '', type, placeholder: '', required: false, options: [] });
+}
+
+function addFormFieldFromData(field) {
+    const container = document.getElementById('formFieldsContainer');
+    const div = document.createElement('div');
+    div.className = 'form-field-item';
+    const reqChecked = field.required ? 'checked' : '';
+    const typeOptions = ['text','email','tel','textarea','dropdown'].map(t => `<option value="${t}" ${field.type===t?'selected':''}>${t}</option>`).join('');
+    div.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:180px">
+            <input type="text" placeholder="Label pertanyaan" value="${escHtml(field.label)}" class="ff-label" />
+        </div>
+        <select class="ff-type">${typeOptions}</select>
+        <input type="text" placeholder="Placeholder" value="${escHtml(field.placeholder)}" class="ff-placeholder" style="flex:1" />
+        <div style="display:flex;align-items:center;gap:4px;white-space:nowrap">
+            <input type="checkbox" class="ff-required" ${reqChecked} title="Wajib diisi" />
+            <span style="font-size:11px;color:var(--gray-mid)">Wajib</span>
+        </div>
+        <button class="rm-btn" onclick="this.parentElement.remove()">×</button>
+    `;
+    const typeSelect = div.querySelector('.ff-type');
+    if (field.type === 'dropdown') {
+        const optDiv = document.createElement('div');
+        optDiv.style.cssText = 'grid-column:1/-1;width:100%';
+        optDiv.innerHTML = `<input type="text" placeholder="Opsi dropdown, dipisah koma" value="${escHtml((field.options||[]).join(','))}" class="ff-options" style="width:100%" />`;
+        div.appendChild(optDiv);
+    }
+    typeSelect.addEventListener('change', () => {
+        const existing = div.querySelector('.ff-options')?.parentElement;
+        if (typeSelect.value === 'dropdown' && !existing) {
+            const optDiv = document.createElement('div');
+            optDiv.style.cssText = 'width:100%';
+            optDiv.innerHTML = `<input type="text" placeholder="Opsi dropdown, dipisah koma" class="ff-options" style="width:100%" />`;
+            div.appendChild(optDiv);
+        } else if (typeSelect.value !== 'dropdown' && existing) {
+            existing.remove();
         }
+    });
+    container.appendChild(div);
+}
 
-        function renderDashboard(data) {
-            const partners = data.partners || [];
-            const orders = data.orders || [];
+function getFormFields() {
+    return Array.from(document.querySelectorAll('.form-field-item')).map(div => ({
+        label:       div.querySelector('.ff-label')?.value?.trim() || '',
+        type:        div.querySelector('.ff-type')?.value || 'text',
+        placeholder: div.querySelector('.ff-placeholder')?.value?.trim() || '',
+        required:    div.querySelector('.ff-required')?.checked || false,
+        options:     (div.querySelector('.ff-options')?.value || '').split(',').map(s=>s.trim()).filter(Boolean)
+    }));
+}
 
-            // Stats
-            document.getElementById('statsTotalPartners').innerText = partners.length;
-            document.getElementById('statsTotalOrders').innerText = orders.filter(o => o.status === 'PENDING').length;
+// ---- SLUG ----
+function autoSlug() {
+    const slug = document.getElementById('ecName').value.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-');
+    document.getElementById('ecSlug').value = slug;
+    document.getElementById('ecSlugPreview').textContent = slug || '...';
+}
+document.addEventListener('input', e => {
+    if (e.target.id === 'ecSlug') document.getElementById('ecSlugPreview').textContent = e.target.value || '...';
+});
 
-            // Overview Table (Top 5 Pending)
-            const pendingPartners = partners.filter(p => p.status === 'PENDING').slice(0, 5);
-            renderTable('overviewPartnersTable', pendingPartners, 'overview');
+// ---- OPEN MODAL ----
+function openEventCreator(id) {
+    const modal = document.getElementById('eventCreatorModal');
+    modal.classList.add('open');
+    document.getElementById('formFieldsContainer').innerHTML = '';
+    document.getElementById('materialsContainer').innerHTML  = '';
 
-            // Full Tables
-            renderTable('fullPartnersTable', partners, 'full-partners');
-            renderTable('fullOrdersTable', orders, 'full-orders');
-        }
+    if (id) {
+        const ev = allEvents.find(e => e.id === id);
+        if (!ev) return;
+        document.getElementById('ecModalTitle').textContent = 'Edit Event';
+        document.getElementById('ecId').value           = ev.id;
+        document.getElementById('ecName').value         = ev.event_name || '';
+        document.getElementById('ecSubName').value      = ev.event_sub_name || '';
+        document.getElementById('ecSlug').value         = ev.slug || '';
+        document.getElementById('ecSlugPreview').textContent = ev.slug || '';
+        document.getElementById('ecDesc').value         = ev.description || '';
+        document.getElementById('ecImpact').value       = ev.impact_note || '';
+        document.getElementById('ecDate').value         = ev.date || '';
+        document.getElementById('ecTimeStart').value    = ev.time_start || '';
+        document.getElementById('ecTimeEnd').value      = ev.time_end || '';
+        document.getElementById('ecPlace').value        = ev.place || '';
+        document.getElementById('ecFee').value          = ev.investment_fee || '';
+        document.getElementById('ecBankName').value     = ev.bank_name || 'BANK BRI';
+        document.getElementById('ecBankAccount').value  = ev.bank_account || '114801010102504';
+        document.getElementById('ecBankHolder').value   = ev.bank_holder || 'Zain Patra Caraka';
+        document.getElementById('ecWaAdmin').value      = ev.wa_admin || '6287893268929';
+        document.getElementById('ecPosterId').value     = ev.poster_drive_id || '';
+        document.getElementById('ecGasUrl').value       = ev.gas_endpoint || '';
+        document.getElementById('ecSpreadsheetId').value = ev.spreadsheet_id || '13fjU1cVYPHFg4m5yfzBjae9Q8P3WDn89wGxVuINTnSI';
+        document.getElementById('ecPublished').checked  = ev.is_published || false;
+        (ev.materials || []).forEach(m => addMaterial(m.text || m));
+        const fields = (ev.form_fields && ev.form_fields.length) ? ev.form_fields : DEFAULT_FIELDS;
+        fields.forEach(f => addFormFieldFromData(f));
+    } else {
+        document.getElementById('ecModalTitle').textContent = 'Buat Event Baru';
+        document.getElementById('ecId').value             = '';
+        document.getElementById('ecName').value           = '';
+        document.getElementById('ecSubName').value        = '';
+        document.getElementById('ecSlug').value           = '';
+        document.getElementById('ecSlugPreview').textContent = '...';
+        document.getElementById('ecDesc').value           = '';
+        document.getElementById('ecImpact').value         = '';
+        document.getElementById('ecDate').value           = '';
+        document.getElementById('ecTimeStart').value      = '';
+        document.getElementById('ecTimeEnd').value        = '';
+        document.getElementById('ecPlace').value          = '';
+        document.getElementById('ecFee').value            = '';
+        document.getElementById('ecBankName').value       = 'BANK BRI';
+        document.getElementById('ecBankAccount').value    = '114801010102504';
+        document.getElementById('ecBankHolder').value     = 'Zain Patra Caraka';
+        document.getElementById('ecWaAdmin').value        = '6287893268929';
+        document.getElementById('ecPosterId').value       = '';
+        document.getElementById('ecGasUrl').value         = '';
+        document.getElementById('ecSpreadsheetId').value  = '13fjU1cVYPHFg4m5yfzBjae9Q8P3WDn89wGxVuINTnSI';
+        document.getElementById('ecPublished').checked    = false;
+        initDefaultFormFields();
+    }
+}
 
-        function renderTable(id, data, type) {
-            const tb = document.querySelector(`#${id} tbody`);
-            tb.innerHTML = '';
+function closeEventCreator() {
+    document.getElementById('eventCreatorModal').classList.remove('open');
+}
 
-            if (data.length === 0) {
-                tb.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 2rem; color:var(--gray-mid);">Tidak ada data ditemukan.</td></tr>`;
-                return;
-            }
+// ---- SAVE EVENT ----
+async function saveEvent() {
+    const name = document.getElementById('ecName').value.trim();
+    const slug = document.getElementById('ecSlug').value.trim();
+    if (!name || !slug) { alert('Event Name dan Slug wajib diisi.'); return; }
 
-            data.forEach(item => {
-                const tr = document.createElement('tr');
-                const date = new Date(item.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    const materials = Array.from(document.querySelectorAll('.material-text')).map(inp => ({ text: inp.value.trim() })).filter(m => m.text);
+    const form_fields = getFormFields();
 
-                if (type === 'overview') {
-                    tr.innerHTML = `
-                        <td>${date}</td>
-                        <td>${item.nama}</td>
-                        <td>${item.domisili}</td>
-                        <td><span class="status-pill badge-${item.status.toLowerCase()}">${item.status}</span></td>
-                    `;
-                } else if (type === 'full-partners') {
-                    tr.innerHTML = `
-                        <td>${date}</td>
-                        <td>${item.nama}</td>
-                        <td>${item.email}<br><span style="color:var(--navy-bright); font-size:11px;">${item.whatsapp}</span></td>
-                        <td>${item.pendidikan}<br><span style="color:var(--gray-mid); font-size:11px;">${item.universitas}</span></td>
-                        <td><span class="status-pill badge-${item.status.toLowerCase()}">${item.status}</span></td>
-                        <td>
-                            <div class="actions">
-                                ${item.status === 'PENDING' ? `
-                                    <button class="btn btn-primary btn-sm" onclick="updateMitra('${item.email}', 'ACCEPTED')">Accept</button>
-                                    <button class="btn btn-outline btn-sm" onclick="updateMitra('${item.email}', 'DECLINED')">Decline</button>
-                                ` : '-'}
-                            </div>
-                        </td>
-                    `;
-                } else if (type === 'full-orders') {
-                    const price = Number(item.harga_final).toLocaleString('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 });
-                    tr.innerHTML = `
-                        <td>${date}</td>
-                        <td>${item.nama}<br><span style="color:var(--gray-mid); font-size:11px;">${item.bisnis}</span></td>
-                        <td>${item.produk}</td>
-                        <td>${item.omzet}</td>
-                        <td style="font-weight:700; color:var(--white);">${price}</td>
-                        <td><span class="status-pill badge-pending">${item.status}</span></td>
-                    `;
-                }
-                tb.appendChild(tr);
-            });
-        }
+    const payload = {
+        event_name:    name,
+        event_sub_name: document.getElementById('ecSubName').value.trim(),
+        slug,
+        description:   document.getElementById('ecDesc').value.trim(),
+        impact_note:   document.getElementById('ecImpact').value.trim(),
+        materials,
+        form_fields,
+        date:          document.getElementById('ecDate').value,
+        time_start:    document.getElementById('ecTimeStart').value,
+        time_end:      document.getElementById('ecTimeEnd').value,
+        place:         document.getElementById('ecPlace').value.trim(),
+        investment_fee: document.getElementById('ecFee').value.trim(),
+        bank_name:     document.getElementById('ecBankName').value.trim(),
+        bank_account:  document.getElementById('ecBankAccount').value.trim(),
+        bank_holder:   document.getElementById('ecBankHolder').value.trim(),
+        wa_admin:      document.getElementById('ecWaAdmin').value.trim(),
+        poster_drive_id: document.getElementById('ecPosterId').value.trim(),
+        gas_endpoint:  document.getElementById('ecGasUrl').value.trim(),
+        spreadsheet_id: document.getElementById('ecSpreadsheetId').value.trim(),
+        is_published:  document.getElementById('ecPublished').checked
+    };
 
-        async function updateMitra(email, status) {
-            if (!confirm(`Apakah Anda yakin ingin mengubah status pendaftar ini menjadi ${status}?`)) return;
+    const existingId = document.getElementById('ecId').value;
+    if (existingId) payload.id = existingId;
 
-            try {
-                const res = await LegalspotAPI.adminAction({
-                    actionType: 'updateMitraStatus',
-                    userEmail: email,
-                    status: status,
-                    auth: adminPass
-                });
-                alert('Berhasil memperbarui status. Email notifikasi akan dikirimkan.');
-                fetchData();
-            } catch (err) {
-                alert('Gagal memperbarui status.');
-            }
-        }
+    const btn = document.getElementById('ecSaveBtn');
+    btn.disabled = true; btn.textContent = 'Menyimpan...';
 
-        function switchSection(id) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.dashboard-section').forEach(el => el.classList.remove('active'));
+    try {
+        await LegalspotAPI.saveEvent(payload);
+        closeEventCreator();
+        await loadEvents();
+        alert('Event berhasil disimpan!');
+    } catch (err) {
+        alert('Gagal menyimpan event: ' + err.message);
+    } finally {
+        btn.disabled = false; btn.textContent = 'Simpan Event';
+    }
+}
 
-            event.currentTarget.classList.add('active');
-            document.getElementById(id + 'Section').classList.add('active');
-        }
+async function togglePublishEvent(id, currentState) {
+    try {
+        await LegalspotAPI.togglePublish(id, !currentState);
+        await loadEvents();
+    } catch (err) { alert('Gagal mengubah status publish: ' + err.message); }
+}
 
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'login';
-        }
-    </script>
+async function deleteEvent(id) {
+    if (!confirm('Hapus event ini? Tindakan tidak dapat dibatalkan.')) return;
+    try {
+        await LegalspotAPI.deleteEvent(id);
+        await loadEvents();
+    } catch (err) { alert('Gagal menghapus event: ' + err.message); }
+}
+
+// ---- UTIL ----
+function escHtml(str) { return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function logout() { localStorage.clear(); window.location.href = 'login'; }
+</script>
 </body>
-
 </html>

@@ -101,5 +101,92 @@ const LegalspotAPI = {
             action: 'adminAction',
             ...actionConfig
         });
+    },
+
+    // -------------------------------------------------------
+    // SUPABASE EVENT MANAGEMENT
+    // -------------------------------------------------------
+    _supabaseHeaders() {
+        return {
+            'apikey': LEGALSPOT_CONFIG.SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${LEGALSPOT_CONFIG.SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+        };
+    },
+
+    async _supabaseFetch(path, options = {}) {
+        const url = `${LEGALSPOT_CONFIG.SUPABASE_URL}/rest/v1/${path}`;
+        const res = await fetch(url, { ...options, headers: { ...this._supabaseHeaders(), ...(options.headers || {}) } });
+        if (!res.ok) {
+            const err = await res.text();
+            throw new Error(`Supabase error: ${err}`);
+        }
+        const text = await res.text();
+        return text ? JSON.parse(text) : null;
+    },
+
+    /** Ambil semua event yang published (untuk homepage & event page) */
+    async fetchPublishedEvents() {
+        return await this._supabaseFetch('events?is_published=eq.true&order=created_at.desc&select=*');
+    },
+
+    /** Ambil 1 event by slug (untuk event page) */
+    async fetchEventBySlug(slug) {
+        const arr = await this._supabaseFetch(`events?slug=eq.${encodeURIComponent(slug)}&select=*`);
+        return arr && arr.length > 0 ? arr[0] : null;
+    },
+
+    /** Ambil semua event (untuk admin — termasuk draft) */
+    async fetchAllEvents() {
+        return await this._supabaseFetch('events?order=created_at.desc&select=*');
+    },
+
+    /** Simpan / update event dari admin dashboard */
+    async saveEvent(eventData) {
+        if (eventData.id) {
+            // Update existing
+            const { id, ...rest } = eventData;
+            return await this._supabaseFetch(`events?id=eq.${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(rest)
+            });
+        } else {
+            // Insert new
+            return await this._supabaseFetch('events', {
+                method: 'POST',
+                body: JSON.stringify(eventData)
+            });
+        }
+    },
+
+    /** Hapus event */
+    async deleteEvent(id) {
+        return await this._supabaseFetch(`events?id=eq.${id}`, { method: 'DELETE' });
+    },
+
+    /** Toggle published status */
+    async togglePublish(id, isPublished) {
+        return await this._supabaseFetch(`events?id=eq.${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ is_published: isPublished })
+        });
+    },
+
+    /** Submit form pendaftaran event → kirim ke Apps Script URL event tsb */
+    async submitEventRegistration(gasEndpoint, formData) {
+        try {
+            await fetch(gasEndpoint, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(formData)
+            });
+            return { status: 'success' };
+        } catch (err) {
+            console.error('submitEventRegistration error:', err);
+            throw err;
+        }
     }
 };
+

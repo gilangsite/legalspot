@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Webinar - Coretax Mastery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="main-container">
+        <!-- Left Column: Poster -->
+        <div class="poster-column">
+            <div class="poster-wrapper">
+                <img src="poster.png" alt="Poster Webinar Coretax Mastery" class="poster-image" id="posterImage">
+            </div>
+        </div>
+
+        <!-- Right Column: Content & Form -->
+        <div class="content-column">
+
+            <!-- Header / Info Section -->
+            <header class="webinar-info">
+                <span class="tag">Workshop Eksklusif</span>
+                <h1 class="title">Coretax Mastery</h1>
+                <p class="subtitle">Sukses Lapor SPT Tahunan 2025</p>
+
+                <div class="description">
+                    <p>Sesi khusus untuk mengupas tuntas tata cara pelaporan SPT Tahunan terkini menggunakan aplikasi
+                        Coretax oleh narasumber professional dan tersertifikasi.</p>
+
+                    <h3>Materi Pembahasan Komprehensif:</h3>
+                    <ul class="benefit-list">
+                        <li>Tata cara pelaporan SPT Tahunan Orang Pribadi dan Badan melalui aplikasi Coretax</li>
+                        <li>Pembuatan bukti potong PPh Pasal 21 sesuai ketentuan terbaru PER-11/PJ/2025</li>
+                        <li>Overview laporan keuangan sebagai pendukung laporan SPT Tahunan</li>
+                    </ul>
+
+                    <p class="impact-text">Sesi ini dirancang untuk memastikan anda mampu menerapkan ketentuan
+                        perpajakan terbaru guna meminimalisir sanksi pajak.</p>
+                </div>
+
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="icon">📅</span>
+                        <div>
+                            <strong>Tanggal</strong>
+                            <p>Sabtu, 21 Februari 2026</p>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="icon">⏰</span>
+                        <div>
+                            <strong>Waktu</strong>
+                            <p>10.00 WIB - Selesai</p>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="icon">💻</span>
+                        <div>
+                            <strong>Tempat</strong>
+                            <p>Zoom Meeting (Online)</p>
+                        </div>
+                    </div>
+                    <div class="detail-item highlight">
+                        <span class="icon">💰</span>
+                        <div>
+                            <strong>Investment Fee</strong>
+                            <p>Rp150.000,- per peserta</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Section -->
+                <div class="payment-section">
+                    <h3>Metode Pembayaran</h3>
+                    <p>Pendaftaran dilakukan dengan melakukan transfer ke:</p>
+                    <div class="bank-card">
+                        <div class="bank-logo">BANK BRI</div>
+                        <div class="account-info">
+                            <span class="account-number" id="scopy-text">114801010102504</span>
+                            <button type="button" class="copy-btn" onclick="copyToClipboard()">
+                                <span class="copy-icon">📋</span> Salin
+                            </button>
+                        </div>
+                        <div class="account-name">a.n. Zain Patra Caraka</div>
+                    </div>
+                    <p class="payment-note">
+                        Bukti transfer konfirmasi ke Admin:
+                        <a href="https://wa.me/6287893268929" target="_blank" class="wa-link">0878-9326-8929
+                            (Legalspot)</a>
+                    </p>
+                    <div id="copy-toast" class="toast">Berhasil disalin ke clipboard!</div>
+                </div>
+            </header>
+
+            <hr class="divider">
+
+            <!-- Registration Form -->
+            <section class="registration-form-section">
+                <h2>Formulir Pendaftaran</h2>
+                <form id="registrationForm" name="submit-to-google-sheet">
+                    <!-- Nama Peserta -->
+                    <div class="form-group">
+                        <label for="nama">Nama Peserta <span class="required">*</span></label>
+                        <input type="text" id="nama" name="Nama" required placeholder="Nama Lengkap beserta Gelar">
+                    </div>
+
+                    <!-- Jabatan -->
+                    <div class="form-group">
+                        <label for="jabatan">Jabatan / Posisi <span class="required">*</span></label>
+                        <input type="text" id="jabatan" name="Jabatan" required placeholder="Contoh: Staff Finance">
+                    </div>
+
+                    <!-- Instansi -->
+                    <div class="form-group">
+                        <label for="instansi">Nama Perusahaan / Instansi <span class="required">*</span></label>
+                        <input type="text" id="instansi" name="Instansi" required placeholder="Nama Perusahaan Anda">
+                    </div>
+
+                    <!-- Domisili -->
+                    <div class="form-group">
+                        <label for="domisili">Domisili Peserta <span class="required">*</span></label>
+                        <input type="text" id="domisili" name="Domisili" required placeholder="Kota Domisili">
+                    </div>
+
+                    <!-- Whatsapp -->
+                    <div class="form-group">
+                        <label for="wa">Nomor Whatsapp <span class="required">*</span></label>
+                        <input type="tel" id="wa" name="WA" required placeholder="08xxxxxxxxxx" pattern="[0-9]*"
+                            inputmode="numeric">
+                        <small>Pastikan nomor aktif dan terhubung dengan WhatsApp.</small>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">Email Peserta <span class="required">*</span></label>
+                        <input type="email" id="email" name="Email" required placeholder="email@perusahaan.com">
+                    </div>
+
+                    <!-- Sumber Info -->
+                    <div class="form-group">
+                        <label for="sumber">Mengetahui informasi webinar dari? <span class="required">*</span></label>
+                        <select id="sumber" name="Sumber" required onchange="handleSumberChange()">
+                            <option value="" disabled selected>Pilih salah satu</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="Email Perusahaan">Email Perusahaan</option>
+                            <option value="WA Group">WA Group</option>
+                            <option value="Lainnya">Yang lain</option>
+                        </select>
+                        <input type="text" id="sumber_manual" name="Sumber_Manual" class="input-manual hidden"
+                            placeholder="Tuliskan sumber informasi...">
+                    </div>
+
+                    <!-- Pesan -->
+                    <div class="form-group">
+                        <label for="pesan">Pesan khusus Panitia (Optional)</label>
+                        <textarea id="pesan" name="Pesan" rows="3"
+                            placeholder="Ada pertanyaan atau request khusus?"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <button type="submit" id="submitBtn" class="submit-btn">Daftar Sekarang</button>
+                    </div>
+                </form>
+
+                <!-- Status Messages -->
+                <div id="successMessage" class="status-message success hidden">
+                    <h3>✅ Registrasi Berhasil!</h3>
+                    <p>Terima kasih telah mendaftar. Panitia akan segera menghubungi Anda melalui WhatsApp/Email.</p>
+                </div>
+                <div id="errorMessage" class="status-message error hidden">
+                    <h3>❌ Terjadi Kesalahan</h3>
+                    <p>Mohon maaf, gagal mengirim data. Silakan coba lagi atau hubungi admin.</p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

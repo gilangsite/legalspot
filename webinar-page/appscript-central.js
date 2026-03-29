@@ -220,3 +220,17 @@ function _sendConfirmationEmail(recipientEmail, data, eventName, waAdmin) {
   const body = `Halo ${attendeeName},\n\nPendaftaran ${eventName} berhasil diterima. Terima kasih!`;
   MailApp.sendEmail({ to: recipientEmail, subject: subject, body: body });
 }
+
+// -------------------------------------------------------
+// AUTHORIZATION TRIGGER
+// -------------------------------------------------------
+// JIKA MUNCUL ERROR "TIDAK MEMILIKI IZIN" (PERMISSION DENIED):
+// 1. Pilih fungsi "authorizeAllServices" di toolbar atas Apps Script editor
+// 2. Klik tombol "Run" (ikon ▶️)
+// 3. Ikuti jendela pop-up untuk memberikan izin akses Google Drive & Sheets
+function authorizeAllServices() {
+  const me = Session.getActiveUser().getEmail();
+  const root = DriveApp.getRootFolder().getName();
+  const ss = SpreadsheetApp.openById(CONFIG.SS_ID).getName();
+  Logger.log('Authorized for: ' + me + '. Access to Drive (' + root + ') and Sheets (' + ss + ') is OK.');
+}

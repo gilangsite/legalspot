@@ -634,6 +634,7 @@ async function uploadPosterFile(file) {
     if (!gasUrl) { alert('Apps Script URL belum diisi di Technical Setup.'); return; }
 
     prompt.style.display = 'none';
+    preview.style.display = 'none';
     progress.style.display = 'block';
     bar.style.width = '0%';
 
@@ -650,14 +651,15 @@ async function uploadPosterFile(file) {
 
         document.getElementById('ecPosterId').value = fileId;
         previewImg.src = `https://lh3.googleusercontent.com/d/${fileId}`;
-        preview.style.display = 'block';
-
+        
         setTimeout(() => {
             progress.style.display = 'none';
+            preview.style.display = 'block';
             prompt.style.display = 'block';
-            document.getElementById('posterUploadPrompt').innerHTML = `<p style="font-size:var(--fs-xs);color:var(--success)">✓ Poster terunggah</p>`;
+            document.getElementById('posterUploadPrompt').innerHTML = `<p style="font-size:11px;color:#28a05a;margin:0;font-weight:700">✓ Poster Terunggah (Klik untuk ganti)</p>`;
         }, 500);
     } catch (err) {
+        console.error('Upload Error:', err);
         alert('Gagal upload poster: ' + err.message);
         progress.style.display = 'none';
         prompt.style.display = 'block';

@@ -18,8 +18,8 @@ const LEGALSPOT_CONFIG = {
   ADMIN_EMAIL: 'admin@legalspot.id',
 
   // Supabase (public anon key — safe for frontend)
-  SUPABASE_URL: 'GANTI_SUPABASE_URL',
-  SUPABASE_ANON_KEY: 'GANTI_SUPABASE_ANON_KEY',
+  SUPABASE_URL: 'https://jcqbnqjtjjneyldwikua.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_aV4_-Wj-TATvRyL_cFSn6g_e35iK0ve',
 
   // Centralized Apps Script (One for all events)
   DEFAULT_GAS_ENDPOINT: 'https://script.google.com/macros/s/AKfycbJ-6_SUuH5gPlfLRt0hblRK2YuoP-N_TvazcRB5qva-gQryyMT-q4Wh-NVxeFyQQ7V/exec',

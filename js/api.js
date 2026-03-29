@@ -221,7 +221,7 @@ const LegalspotAPI = {
             return `${LEGALSPOT_CONFIG.SUPABASE_URL}/storage/v1/object/public/posters/${filePath}`;
         } catch (err) {
             console.error('Supabase Upload Error:', err);
-            throw new Error('Gagal upload ke Supabase Storage. Pastikan bucket "posters" sudah dibuat dan diset ke Public.');
+            throw err; // Show the actual error to the user for debugging
         }
     }
 };

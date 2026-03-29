@@ -197,8 +197,8 @@ const LegalspotAPI = {
         const filePath = `event-posters/${fileName}`;
 
         try {
-            // 1. Upload to Supabase Storage bucket 'posters'
-            const uploadUrl = `${LEGALSPOT_CONFIG.SUPABASE_URL}/storage/v1/object/posters/${filePath}`;
+            // 1. Upload to Supabase Storage bucket 'poster'
+            const uploadUrl = `${LEGALSPOT_CONFIG.SUPABASE_URL}/storage/v1/object/poster/${filePath}`;
             
             const res = await fetch(uploadUrl, {
                 method: 'POST',
@@ -218,7 +218,7 @@ const LegalspotAPI = {
 
             // 2. Construct Public URL
             // Format: https://[project-id].supabase.co/storage/v1/object/public/[bucket]/[path]
-            return `${LEGALSPOT_CONFIG.SUPABASE_URL}/storage/v1/object/public/posters/${filePath}`;
+            return `${LEGALSPOT_CONFIG.SUPABASE_URL}/storage/v1/object/public/poster/${filePath}`;
         } catch (err) {
             console.error('Supabase Upload Error:', err);
             throw err; // Show the actual error to the user for debugging

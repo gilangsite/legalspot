@@ -222,15 +222,30 @@ function _sendConfirmationEmail(recipientEmail, data, eventName, waAdmin) {
 }
 
 // -------------------------------------------------------
-// AUTHORIZATION TRIGGER
+// AUTHORIZATION & DIAGNOSTIC
 // -------------------------------------------------------
-// JIKA MUNCUL ERROR "TIDAK MEMILIKI IZIN" (PERMISSION DENIED):
-// 1. Pilih fungsi "authorizeAllServices" di toolbar atas Apps Script editor
-// 2. Klik tombol "Run" (ikon ▶️)
-// 3. Ikuti jendela pop-up untuk memberikan izin akses Google Drive & Sheets
+// JIKA MUNCUL ERROR "AKSES DITOLAK: DRIVEAPP" (ACCESS DENIED):
+// 1. Pilih fungsi "authorizeAllServices" di menu atas (sebelah tombol Run)
+// 2. Klik RUN (▶️). WAJIB sampai muncul jendela "Review Permissions".
+// 3. Jika muncul "Google hasn't verified this app", klik "Advanced" -> "Go to ... (unsafe)".
+// 4. Klik "Allow".
 function authorizeAllServices() {
   const me = Session.getActiveUser().getEmail();
-  const root = DriveApp.getRootFolder().getName();
-  const ss = SpreadsheetApp.openById(CONFIG.SS_ID).getName();
-  Logger.log('Authorized for: ' + me + '. Access to Drive (' + root + ') and Sheets (' + ss + ') is OK.');
+  Logger.log('Memulai pengecekan untuk: ' + me);
+  
+  try {
+    const folder = DriveApp.getFolderById(CONFIG.EVENT_POSTERS_FOLDER_ID);
+    Logger.log('✅ Akses DRIVE OK. Folder ditemukan: ' + folder.getName());
+  } catch (e) {
+    Logger.log('❌ Akses DRIVE GAGAL: ' + e.toString());
+  }
+  
+  try {
+    const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
+    Logger.log('✅ Akses SHEETS OK. Spreadsheet ditemukan: ' + ss.getName());
+  } catch (e) {
+    Logger.log('❌ Akses SHEETS GAGAL: ' + e.toString());
+  }
+  
+  Logger.log('Pengecekan selesai. Jika semua centang hijau, silakan coba upload lagi di dashboard.');
 }

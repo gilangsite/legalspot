@@ -182,9 +182,10 @@ function _sendConfirmationEmail(recipientEmail, data, eventName, waAdmin) {
 // UTIL
 // -------------------------------------------------------
 function _response(obj) {
+  // Use TEXT mime-type for better CORS/Redirect reliability in some browsers
   return ContentService
     .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
+    .setMimeType(ContentService.MimeType.TEXT);
 }
 
 // Run once to authorize MailApp

@@ -192,10 +192,12 @@ const LegalspotAPI = {
             reader.onload = async () => {
                 const base64 = reader.result.split(',')[1];
                 try {
+                    // REMOVE application/json header to avoid CORS preflight (OPTIONS)
+                    // Google Apps Script doesn't support OPTIONS for custom headers.
                     const res = await fetch(gasEndpoint, {
                         method: 'POST',
-                        mode: 'cors', // Upload needs response for ID
-                        headers: { 'Content-Type': 'application/json' },
+                        mode: 'cors', 
+                        redirect: 'follow',
                         body: JSON.stringify({
                             action: 'uploadPoster',
                             fileBase64: base64,
@@ -203,10 +205,16 @@ const LegalspotAPI = {
                             mimeType: file.type
                         })
                     });
-                    const data = await res.json();
+                    
+                    const text = await res.text();
+                    const data = JSON.parse(text);
+                    
                     if (data.status === 'OK') resolve(data.fileId);
-                    else reject(new Error(data.message));
-                } catch (err) { reject(err); }
+                    else reject(new Error(data.message || 'Gagal upload ke Drive'));
+                } catch (err) { 
+                    console.error('Upload Error:', err);
+                    reject(new Error('Koneksi ke Apps Script gagal atau diblokir CORS.'));
+                }
             };
             reader.onerror = reject;
             reader.readAsDataURL(file);

@@ -629,7 +629,7 @@ async function uploadPosterFile(file) {
     const bar = document.getElementById('posterProgressBar');
     const preview = document.getElementById('posterPreviewWrap');
     const previewImg = document.getElementById('posterPreviewImg');
-    const gasUrl = document.getElementById('ecGasUrl').value || LEGALSPOT_CONFIG.DEFAULT_GAS_ENDPOINT;
+    const gasUrl = LEGALSPOT_CONFIG.DEFAULT_GAS_ENDPOINT || document.getElementById('ecGasUrl').value;
 
     if (!gasUrl) { alert('Apps Script URL belum diisi di Technical Setup.'); return; }
 
@@ -714,7 +714,7 @@ async function openEventCreator(eventId = null) {
         document.getElementById('ecBankHolder').value   = ev.bank_holder || 'Zain Patra Caraka';
         document.getElementById('ecWaAdmin').value      = ev.wa_admin || '6287893268929';
         document.getElementById('ecPosterId').value     = ev.poster_drive_id || '';
-        document.getElementById('ecGasUrl').value       = ev.gas_endpoint || '';
+        document.getElementById('ecGasUrl').value       = ev.gas_endpoint || LEGALSPOT_CONFIG.DEFAULT_GAS_ENDPOINT;
         document.getElementById('ecSpreadsheetId').value = ev.spreadsheet_id || '13fjU1cVYPHFg4m5yfzBjae9Q8P3WDn89wGxVuINTnSI';
         document.getElementById('ecPublished').checked  = ev.is_published || false;
         (ev.materials || []).forEach(m => addMaterial(m.text || m));

@@ -6,7 +6,7 @@
 
 const LEGALSPOT_CONFIG = {
   // Google Apps Script Web App URL (deploy and paste here)
-  GAS_ENDPOINT: 'https://script.google.com/macros/s/AKfycbwhORH0YnH6kasw773f1AJ65iqU1-IotgTvkMfc519NI-5Z2AfmfKgqbES1zeTvxrsJLg/exec',
+  GAS_ENDPOINT: 'https://script.google.com/macros/s/AKfycbxAwdk1dWqGgGiwO2y976ULCA77ro4h7k5ePT5lL-7K6QqkTf6WjEX8yZp-Bx8PDX0m/exec',
 
   // Google reCAPTCHA v3 Site Key (public key, safe for frontend)
   RECAPTCHA_SITE_KEY: 'YOUR_RECAPTCHA_SITE_KEY',
@@ -22,5 +22,5 @@ const LEGALSPOT_CONFIG = {
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjcWJucWp0ampuZXlsZHdpa3VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3ODU5MzQsImV4cCI6MjA5MDM2MTkzNH0.DXmQITKiNhkUYk09RHrpxC5kRBP8eQMHquIVk3V-2j4',
 
   // Centralized Apps Script (One for all events)
-  DEFAULT_GAS_ENDPOINT: 'https://script.google.com/macros/s/AKfycbJ-6_SUuH5gPlfLRt0hblRK2YuoP-N_TvazcRB5qva-gQryyMT-q4Wh-NVxeFyQQ7V/exec',
+  DEFAULT_GAS_ENDPOINT: 'https://script.google.com/macros/s/AKfycbxAwdk1dWqGgGiwO2y976ULCA77ro4h7k5ePT5lL-7K6QqkTf6WjEX8yZp-Bx8PDX0m/exec',
 };

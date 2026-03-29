@@ -239,14 +239,19 @@
 }
 
 .section-light .form-input,
-.section-light .form-select,
 .section-light .form-textarea,
 .card-light .form-input,
-.card-light .form-select,
 .card-light .form-textarea {
   background: transparent !important;
   border: 1px solid var(--border) !important;
   color: #000000 !important;
+}
+
+.section-light .form-select,
+.card-light .form-select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid var(--border) !important;
 }
 
 .section-light .form-input:focus,
@@ -601,19 +606,23 @@ b {
 }
 
 .form-select {
-  background-color: #ffffff;
-  color: #000000;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  padding-right: 2.5rem;
-  appearance: none;
-  -webkit-appearance: none;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  padding-right: 2.5rem !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
 
 .form-select option {
-  background: #ffffff;
-  color: #000000;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .form-textarea {

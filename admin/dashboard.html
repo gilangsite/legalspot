@@ -178,13 +178,12 @@
             </div>
         </div>
         <div style="background:rgba(26,61,143,.1);border:1px solid rgba(26,61,143,.3);border-radius:var(--radius-md);padding:1.25rem 1.5rem;margin-bottom:1rem;">
-            <p style="font-size:var(--fs-sm);color:var(--navy-bright);font-weight:700;margin-bottom:.5rem">📋 Cara Deploy Apps Script untuk Event Baru</p>
+            <p style="font-size:var(--fs-sm);color:var(--navy-bright);font-weight:700;margin-bottom:.5rem">🚀 Cara Automasi Penjadwalan Event</p>
             <ol style="font-size:var(--fs-xs);color:var(--gray-mid);line-height:2;padding-left:1.25rem">
-                <li>Buka <a href="https://script.google.com" target="_blank" style="color:var(--navy-bright)">script.google.com</a> → New Project</li>
-                <li>Copy isi file <code>webinar-page/appscript-template.js</code> di repo ini</li>
-                <li>Ubah 3 variabel: <code>SPREADSHEET_ID</code>, <code>SHEET_NAME</code>, <code>EVENT_NAME</code></li>
-                <li>Klik <strong>Deploy → New Deployment → Web App → Execute as Me → Anyone</strong></li>
-                <li>Copy URL Web App → paste ke field "Apps Script URL" di form event</li>
+                <li>Deploy file <code>webinar-page/appscript-central.js</code> satu kali saja di <a href="https://script.google.com" target="_blank" style="color:var(--navy-bright)">script.google.com</a></li>
+                <li>Gunakan URL hasil deploy tersebut di <code>js/config.js</code> variabel <code>DEFAULT_GAS_ENDPOINT</code></li>
+                <li>Sekarang, setiap buat event baru: cukup tentukan <strong>Spreadsheet ID</strong> dan <strong>Nama Tab</strong> di form ini.</li>
+                <li>Data pendaftar akan otomatis masuk ke tab tersebut tanpa perlu coding lagi!</li>
             </ol>
         </div>
     </section>
@@ -633,7 +632,7 @@ function openEventCreator(id) {
         document.getElementById('ecBankHolder').value     = 'Zain Patra Caraka';
         document.getElementById('ecWaAdmin').value        = '6287893268929';
         document.getElementById('ecPosterId').value       = '';
-        document.getElementById('ecGasUrl').value         = '';
+        document.getElementById('ecGasUrl').value         = LEGALSPOT_CONFIG.DEFAULT_GAS_ENDPOINT || '';
         document.getElementById('ecSpreadsheetId').value  = '13fjU1cVYPHFg4m5yfzBjae9Q8P3WDn89wGxVuINTnSI';
         document.getElementById('ecPublished').checked    = false;
         initDefaultFormFields();

@@ -20,4 +20,7 @@ const LEGALSPOT_CONFIG = {
   // Supabase (public anon key — safe for frontend)
   SUPABASE_URL: 'GANTI_SUPABASE_URL',
   SUPABASE_ANON_KEY: 'GANTI_SUPABASE_ANON_KEY',
+
+  // Centralized Apps Script (One for all events)
+  DEFAULT_GAS_ENDPOINT: 'https://script.google.com/macros/s/AKfycbwhORH0YnH6kasw773f1AJ65iqU1-IotgTvkMfc519NI-5Z2AfmfKgqbES1zeTvxrsJLg/exec',
 };

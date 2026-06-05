@@ -104,10 +104,11 @@ function doGet(e) {
 function registerPartner(data) {
   try {
     const sheet = getOrCreateSheet("mitra_submissions", [
-      "timestamp", "nama", "pendidikan", "universitas", "usia", "domisili", "sumber_info", "referral", "email", "whatsapp", "status"
+      "timestamp", "nama", "pendidikan", "universitas", "usia", "domisili", "sumber_info", "referral", "email", "whatsapp", "status", "daftar_sebagai"
     ]);
     
     const timestamp = new Date();
+    const daftar_sebagai = data.daftar_sebagai || data.daftarSebagai || "";
     const nama = data.nama_lengkap || data.nama || "";
     const pendidikan = data.background_pendidikan || data.pendidikan || "";
     const universitas = data.universitas || "";
@@ -119,7 +120,7 @@ function registerPartner(data) {
     const wa = data.whatsapp || "";
 
     sheet.appendRow([
-      timestamp, nama, pendidikan, universitas, usia, domisili, sumber, referral, email, wa, "PENDING"
+      timestamp, nama, pendidikan, universitas, usia, domisili, sumber, referral, email, wa, "PENDING", daftar_sebagai
     ]);
     
     if (email) {

@@ -187,7 +187,7 @@ Detail Transfer:
 
 * Bank: BRI
 * No Rekening: 114801010102504
-* a.n Zain Patra Caraka
+* a.n Founder
 * Button Copy Nomor Rekening
 
 Checkbox:

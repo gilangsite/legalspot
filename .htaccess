@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /
+
+# 1. Menangani URL tanpa .html (misal /product -> product.html)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [NC,L]
+
+# 2. Menangani routing event (dari vercel.json)
+RewriteRule ^event/([^/]+)$ event.html?event=$1 [L,QSA]

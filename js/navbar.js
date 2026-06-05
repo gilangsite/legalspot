@@ -13,7 +13,18 @@
 
     <ul class="navbar-nav">
       <li><a href="/" class="nav-link" data-page="home">Main</a></li>
-      <li><a href="/product" class="nav-link" data-page="product">Service</a></li>
+      <li class="nav-dropdown">
+        <a class="nav-link dropdown-toggle" data-page="product">
+          Service
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </a>
+        <div class="dropdown-menu">
+          <a href="/product" class="dropdown-item">Perpajakan</a>
+          <a href="#" class="dropdown-item" onclick="lsNavbar.showToast('Layanan ini akan segera hadir.', 'info'); event.preventDefault();">Hukum</a>
+          <a href="#" class="dropdown-item" onclick="lsNavbar.showToast('Layanan ini akan segera hadir.', 'info'); event.preventDefault();">Legalitas dan Perizinan</a>
+          <a href="#" class="dropdown-item" onclick="lsNavbar.showToast('Layanan ini akan segera hadir.', 'info'); event.preventDefault();">Manajemen Keuangan dan Administrasi Bisnis</a>
+        </div>
+      </li>
       <li><a href="/partner" class="nav-link" data-page="partner">Partner</a></li>
       <li><a href="/insight" class="nav-link" data-page="insight">Insight</a></li>
       <li class="nav-dropdown">
@@ -45,10 +56,23 @@
 
   <div class="navbar-mobile" id="navMobile">
     <a href="/" class="nav-link" data-page="home">Main</a>
-    <a href="/product" class="nav-link" data-page="product">Service</a>
+    
+    <div class="nav-mobile-dropdown">
+      <a href="#" class="nav-link" id="mobileServiceToggle" style="display:flex; justify-content:space-between; align-items:center;">
+        Service
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="mobileServiceIcon" style="transition: transform 0.3s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </a>
+      <div id="mobileServiceMenu" style="display:none; flex-direction:column; padding-left:1rem; border-bottom: 1px solid rgba(0, 0, 0, 0.1); background: rgba(0,0,0,0.02);">
+        <a href="/product" class="nav-link" style="border:none; font-size:0.9rem; padding:0.5rem 0;">Perpajakan</a>
+        <a href="#" class="nav-link" style="border:none; font-size:0.9rem; padding:0.5rem 0;" onclick="lsNavbar.showToast('Layanan ini akan segera hadir.', 'info'); event.preventDefault();">Hukum</a>
+        <a href="#" class="nav-link" style="border:none; font-size:0.9rem; padding:0.5rem 0;" onclick="lsNavbar.showToast('Layanan ini akan segera hadir.', 'info'); event.preventDefault();">Legalitas dan Perizinan</a>
+        <a href="#" class="nav-link" style="border:none; font-size:0.9rem; padding:0.5rem 0;" onclick="lsNavbar.showToast('Layanan ini akan segera hadir.', 'info'); event.preventDefault();">Manajemen Keuangan & Administrasi</a>
+      </div>
+    </div>
+
     <a href="/partner" class="nav-link" data-page="partner">Partner</a>
     <a href="/insight" class="nav-link" data-page="insight">Insight</a>
-    <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin:0.5rem 0;">
+    <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); margin:0.5rem 0;">
     <a href="/admin/login" class="nav-link">Login Admin</a>
     <a href="/partner" class="btn btn-outline">Partner</a>
     <a href="/product" class="btn btn-primary">Service</a>
@@ -145,6 +169,19 @@
         toggle.classList.remove('open');
       }
     });
+
+    // Mobile service dropdown toggle
+    const mobileSvcToggle = document.getElementById('mobileServiceToggle');
+    const mobileSvcMenu = document.getElementById('mobileServiceMenu');
+    const mobileSvcIcon = document.getElementById('mobileServiceIcon');
+    if (mobileSvcToggle) {
+      mobileSvcToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isOpen = mobileSvcMenu.style.display === 'flex';
+        mobileSvcMenu.style.display = isOpen ? 'none' : 'flex';
+        mobileSvcIcon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+      });
+    }
 
     // Active link
     const page = document.body.dataset.page;

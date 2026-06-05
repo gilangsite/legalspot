@@ -19,15 +19,15 @@
     content="Solusi pajak digital profesional untuk individu dan pelaku usaha Indonesia." />
   <meta name="twitter:image" content="https://legalspot.vercel.app/assets/images/picture-profile.png" />
   <link rel="icon" type="image/png" href="/assets/images/legalspot-logo.png" />
-  <link rel="stylesheet" href="css/global.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/home.css" />
+  <link rel="stylesheet" href="css/global.css?v=10" />
+  <link rel="stylesheet" href="css/components.css?v=10" />
+  <link rel="stylesheet" href="css/home.css?v=10" />
 </head>
 
 <body data-page="home">
 
   <!-- ============== HERO ============== -->
-  <section class="hero section">
+  <section class="hero section section-light">
     <div class="container">
       <div class="hero-inner">
         <div class="hero-eyebrow">Platform Pajak Digital</div>
@@ -75,6 +75,38 @@
             <div class="stat-label">Beroperasi Di Bawah</div>
           </div>
         </div>
+
+        <div style="margin-top:var(--space-xl); text-align:center;">
+          <h3 class="section-title" style="font-size:var(--fs-lg); margin-bottom:var(--space-md);">
+            <span class="text-gradient-navy">Legalspot Melayani</span>
+          </h3>
+          <div class="hero-services-grid">
+            <a href="product" class="card card-light service-card" style="padding:var(--space-md); text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:0.5rem; text-decoration:none;">
+              <div class="feature-icon-wrap" style="width:40px; height:40px; margin-bottom:0.25rem;">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--navy-bright)" stroke-width="1.8" fill="none"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg>
+              </div>
+              <span style="font-size:var(--fs-sm); font-weight:700;">Perpajakan</span>
+            </a>
+            <a href="#" onclick="lsNavbar.showToast('Layanan ini akan segera hadir.', 'info'); event.preventDefault();" class="card card-light service-card" style="padding:var(--space-md); text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:0.5rem; text-decoration:none; cursor:pointer;">
+              <div class="feature-icon-wrap" style="width:40px; height:40px; margin-bottom:0.25rem;">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--navy-bright)" stroke-width="1.8" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18" /><path d="M15 3v18" /></svg>
+              </div>
+              <span style="font-size:var(--fs-sm); font-weight:700;">Hukum</span>
+            </a>
+            <a href="#" onclick="lsNavbar.showToast('Layanan ini akan segera hadir.', 'info'); event.preventDefault();" class="card card-light service-card" style="padding:var(--space-md); text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:0.5rem; text-decoration:none; cursor:pointer;">
+              <div class="feature-icon-wrap" style="width:40px; height:40px; margin-bottom:0.25rem;">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--navy-bright)" stroke-width="1.8" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+              </div>
+              <span style="font-size:var(--fs-sm); font-weight:700;">Legalitas dan Perizinan</span>
+            </a>
+            <a href="#" onclick="lsNavbar.showToast('Layanan ini akan segera hadir.', 'info'); event.preventDefault();" class="card card-light service-card" style="padding:var(--space-md); text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:0.5rem; text-decoration:none; cursor:pointer;">
+              <div class="feature-icon-wrap" style="width:40px; height:40px; margin-bottom:0.25rem;">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--navy-bright)" stroke-width="1.8" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+              </div>
+              <span style="font-size:var(--fs-sm); font-weight:700;">Manajemen Keuangan dan Administrasi Bisnis</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -107,14 +139,15 @@
                 Berbasis Coretax
               </div>
             </div>
-            <div class="about-card-inner about-card-main">
-              <div class="about-tag">
+            <div class="about-card-inner about-card-main" style="border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: absolute; padding: 1rem;">
+              <img src="/assets/images/about-visual.png" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;" alt="Client Legalspot" />
+              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 50%); z-index: 1;"></div>
+              <div style="position: relative; z-index: 2; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; color: #ffffff; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
                 PT Integrasia Solusi Nusantara
               </div>
-              <div class="about-card-title">Solusi pajak digital<br />untuk semua skala bisnis</div>
             </div>
           </div>
         </div>
@@ -187,10 +220,10 @@
       <div class="ceo-landscape-card">
         <div class="ceo-identity-aside">
           <div class="ceo-photo-circle">
-            <img src="/assets/images/picture-profile.png" alt="Zain Patra Caraka">
+            <img src="/assets/images/picture-profile.png" alt="Founder">
           </div>
           <div class="ceo-identity-text">
-            <div class="ceo-name-small">Zain Patra Caraka</div>
+            <div class="ceo-name-small">Founder</div>
             <div class="ceo-role-small">Founder</div>
             <div class="badge badge-navy" style="margin-top:0.5rem; font-size:10px;">Legalspot</div>
           </div>
@@ -226,7 +259,7 @@
         <!-- Text -->
         <div style="display:flex; flex-direction:column; justify-content:center;">
           <h2 class="section-title" style="font-size:3.5rem; margin-bottom:1rem;">
-            <span class="text-gradient-navy">Mr. L</span>
+            <span class="text-gradient-navy">Mr. IH</span>
           </h2>
           <p style="font-size:1.25rem; font-weight:600; color:var(--gray-dark); margin-bottom:1rem;">
             Eks - Direktorat Jenderal Pajak
@@ -771,7 +804,7 @@
 
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
-  <script src="js/navbar.js"></script>
+  <script src="js/navbar.js?v=11"></script>
   <script src="js/home.js"></script>
   <script>
   // Load published events and render event section
